@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link type="text/css" rel="stylesheet" href="">
+  <script type="text/javascript" src=""></script>
+</head>
+
+<body>
+  
+  <!-- 创建一个视图容器 -->
+  <div id="app">
+    <span v-text="message"></span> <br>
+    {{ message }} <br>
+    <input type="text" v-model="message">
+  </div>
+
+  <!-- 引入框架 -->
+  <!-- <script src="https://cdn.bootcss.com/vue/2.6.11/vue.js"></script> -->
+  <script src="./js/observer.js"></script>
+  <script src="./js/TemplateCompiler.js"></script>
+  <script src="./js/watcher.js"></script>
+  <script src="./js/mvvm.js"></script>
+
+  <!-- 编写脚本 -->
+  <script>
+    let vm = new MVVM({
+      // 挂载视图
+      el: "#app",
+      // 定义数据
+      data: {
+        message: '今天有一点小于'
+      }
+    })
+  </script>
+
+
+
+</body>
+
+</html>
