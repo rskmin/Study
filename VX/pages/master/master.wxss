@@ -1,0 +1,2 @@
+/* pages/master/master.wxss */
+@import "../../templates/message.wxss"

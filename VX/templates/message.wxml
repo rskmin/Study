@@ -1,0 +1,6 @@
+<template name='message'>
+  <view class='message-group'>
+    <text class='content'>{{message}}</text>
+    <text class='friend'>{{name}}</text>
+  </view>
+</template>

@@ -1,0 +1,3 @@
+<import src="../../templates/message.wxml" />
+
+<template is="message" wx:for="{{notice}}" data="{{...item}}" wx:key="index"/>
