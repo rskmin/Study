@@ -1,6 +1,6 @@
 //产品信息
 const ABCStock = (function() {
-  let name = "ABC"
+  let name = 'ABC'
   let quantity = 10
   return class {
     buy() {
@@ -49,7 +49,7 @@ const Broker = (function() {
     }
     //处理请求
     placeOrders() {
-      for(let order of _orderList) {
+      for (let order of _orderList) {
         order.execute()
       }
       //清空列表
