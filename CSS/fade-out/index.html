@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>滚动淡出</title>
+  <link type="text/css" rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <section>
+    <img src="./green.jpg" alt="草原">
+  </section>
+  <section>
+    <div class="content">
+      <h2>龟兔赛跑故事新编作文</h2>
+
+      <p>
+            自从龟兔赛跑，兔子输了以后，就一直想找乌龟再比一次。
+
+      一天，兔子对乌龟说：“你敢不敢跟我再比一次？时间你定！”乌龟说：“好啊，明天清晨山下见。”兔子心想：明天就是我扬眉吐气的日子，等着瞧吧！接着便邀请了德高望重的大雁做裁判，还邀请了森林里所有的动物都来观赛。
+
+      第二天清晨，兔子和乌龟早早地来到山坡下。兔子对乌龟说：“这一次，我一定要赢你！”乌龟没理它。兔子一边说，一边开始压腿，做起了准备活动。只听枪声一响，兔子就像离弦的箭一样飞了出去。而乌龟也开始一步一步地往前爬。
+
+      兔子跑着跑着，快到终点时，突然，听到远方有哭声。它跑过去一看，原来是一只小鸟不小心落入了水中，它很想去帮忙，但想到上次比赛的失败，顾不了这些，继续向终点冲去。
+
+      过了好一会儿，乌龟终于爬到了山坡上。它听到哭声，便马上跑过去。看到小鸟就要沉入水底，毫不犹豫地跳下水，驼起小鸟，把它救了上来。惊魂未定的小鸟抱着乌龟说：“你救了我的命，谢谢你！”乌龟微笑着说：“不用谢，你现在安全了，赶紧回家去吧！”说罢，转身向终点爬去。
+
+      当乌龟到达终点时，兔子早已在终点等了。它骄傲的等着大雁公布名次。大雁大声地宣布：“乌龟获胜！”兔子说：“这，不可能！”大雁回答道：“你自己好好想想吧，我们一致认定乌龟获胜，它是个大英雄。”兔子感到非常的沮丧。
+
+      这一次，兔子又输掉了比赛，看着小动物们围着乌龟欢呼，兔子更加伤心，不好意思地低下了头。从此以后，兔子再也不提比赛的事了！
+      </p>
+    </div>
+  </section>
+  <script>
+    const img = document.querySelector('img')
+    globalThis.addEventListener('scroll', function() {
+      let value = 1 + globalThis.scrollY / -600
+      img.style.opacity = value
+    })
+  </script>
+</body>
+
+</html>
