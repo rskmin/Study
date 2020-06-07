@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mix {
+  width: 600px;
+  height: 400px;
+  background: url('./img-bigsize.jpg') no-repeat, #0ff {
+    size: 100% 100%;
+  }; 
+  background-blend-mode: lighten;
+  &::after {
+    content: '';
+    position: absolute;
+    margin-left: 10px;
+    width: 600px;
+    height: 400px;
+    background: url('./img-bigsize.jpg') no-repeat, #f00 {
+      size: 100% 100%;
+    }; 
+    background-blend-mode: lighten;
+    mix-blend-mode: darken;
+  }
+}

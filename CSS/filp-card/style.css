@@ -1,0 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.body {
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100vh;
+}
+
+.flip {
+  position: relative;
+  width: 60px;
+  height: 100px;
+  line-height: 100px;
+  border: solid 1px #000;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 66px;
+  color: #fff;
+  -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.flip .digital::before, .flip .digital::after {
+  content: attr(card-number);
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: #000;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.flip .digital::before {
+  top: 0;
+  bottom: 50%;
+  border-radius: 10px 10px 0 0;
+  border-bottom: solid 1px #666;
+}
+
+.flip .digital::after {
+  top: 50%;
+  bottom: 0;
+  border-radius: 0 0 10px 10px;
+  line-height: 0;
+}
+
+.flip.down .front::before {
+  z-index: 3;
+  -webkit-transform-origin: 50% 100%;
+          transform-origin: 50% 100%;
+  -webkit-box-shadow: 0 -2px 6px rgba(255, 255, 255, 0.3);
+          box-shadow: 0 -2px 6px rgba(255, 255, 255, 0.3);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+.flip.down .back::after {
+  z-index: 2;
+  -webkit-transform: perspective(160px) rotateX(180deg);
+          transform: perspective(160px) rotateX(180deg);
+  -webkit-transform-origin: 50% 0%;
+          transform-origin: 50% 0%;
+}
+
+.flip.down .front::after, .flip.down .back::before {
+  z-index: 1;
+}
+
+.flip.down.go .front::before {
+  -webkit-animation: frontFlipDown 1s ease-in-out both;
+          animation: frontFlipDown 1s ease-in-out both;
+}
+
+.flip.down.go .back::after {
+  -webkit-animation: backFlipDown 1s ease-in-out both;
+          animation: backFlipDown 1s ease-in-out both;
+}
+
+@-webkit-keyframes frontFlipDown {
+  0% {
+    -webkit-transform: perspective(160px) rotateX(0deg);
+            transform: perspective(160px) rotateX(0deg);
+  }
+  100% {
+    -webkit-transform: perspective(160px) rotateX(-180deg);
+            transform: perspective(160px) rotateX(-180deg);
+  }
+}
+
+@keyframes frontFlipDown {
+  0% {
+    -webkit-transform: perspective(160px) rotateX(0deg);
+            transform: perspective(160px) rotateX(0deg);
+  }
+  100% {
+    -webkit-transform: perspective(160px) rotateX(-180deg);
+            transform: perspective(160px) rotateX(-180deg);
+  }
+}
+
+@-webkit-keyframes backFlipDown {
+  0% {
+    -webkit-transform: perspective(160px) rotateX(180deg);
+            transform: perspective(160px) rotateX(180deg);
+  }
+  100% {
+    -webkit-transform: perspective(160px) rotateX(0);
+            transform: perspective(160px) rotateX(0);
+  }
+}
+
+@keyframes backFlipDown {
+  0% {
+    -webkit-transform: perspective(160px) rotateX(180deg);
+            transform: perspective(160px) rotateX(180deg);
+  }
+  100% {
+    -webkit-transform: perspective(160px) rotateX(0);
+            transform: perspective(160px) rotateX(0);
+  }
+}
+/*# sourceMappingURL=style.css.map */

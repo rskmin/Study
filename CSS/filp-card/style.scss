@@ -1,0 +1,102 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.body {
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.flip {
+  position: relative;
+  width: 60px;
+  height: 100px;
+  line-height: 100px;
+  border: solid 1px #000 {
+    radius: 10px;
+  }
+  background: #fff;
+  font-size: 66px;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, .5);
+  text-align: center;
+
+  .digital {
+    &::before, &::after {
+      content: attr(card-number);
+      position: absolute;
+      left: 0;
+      right: 0;
+      background: #000;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    &::before {
+      top: 0;
+      bottom: 50%;
+      border-radius: 10px 10px 0 0;
+      border-bottom: solid 1px #666;
+    }
+    &::after {
+      top: 50%;
+      bottom: 0;
+      border-radius: 0 0 10px 10px;
+      line-height: 0;
+    }
+  }
+
+  &.down {
+    .front::before {
+      z-index: 3;
+      transform-origin: 50% 100%;
+      box-shadow: 0 -2px 6px rgba(255, 255, 255, .3);
+      backface-visibility: hidden;
+    }
+
+    .back::after {
+      z-index: 2;
+      transform: perspective(160px) rotateX(180deg) {
+        origin: 50% 0%;
+      };
+    }
+
+    .front::after, .back::before {
+      z-index: 1;
+    }
+
+    &.go {
+      .front::before {
+        animation: frontFlipDown 1s ease-in-out both;
+      }
+      .back::after {
+        animation: backFlipDown 1s ease-in-out both;
+      }
+    }
+  }
+}
+
+@keyframes frontFlipDown {
+  0% {
+    transform: perspective(160px) rotateX(0deg);
+  }
+  100% {
+    transform: perspective(160px) rotateX(-180deg);
+  }
+}
+
+@keyframes backFlipDown {
+  0% {
+    transform: perspective(160px) rotateX(180deg);
+  }
+  100% {
+    transform: perspective(160px) rotateX(0);
+  }
+}
