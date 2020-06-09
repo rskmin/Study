@@ -1,0 +1,118 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  background: #2ec194;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  .box {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin: 40px 0;
+    background: #fff;
+    font-family: sans-serif;
+    font-size: 2.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.shadow1 {
+      box-shadow: -30px 30px 20px rgba(0, 0, 0, .3);
+    }
+
+    &.shadow2 {
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 10px;
+        left: 10%;
+        width: 90%;
+        height: 50px;
+        background: rgba(0, 0, 0, .3);
+        transform: skewY(5deg) {
+          origin: left;
+        };
+        z-index: -1;
+        filter: blur(5px);
+      }
+    }
+
+    &.shadow3 {
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        width: 50%;
+        height: 30px;
+        background: rgba(0, 0, 0, .3);
+        transform: skewY(-8deg) {
+          origin: right;
+        }
+        z-index: -1;
+        filter: blur(10px);
+      }
+      &::after {
+        @extend .shadow3::before;
+        left: 50%;
+        right: 0;
+        transform: skewY(8deg) {
+          origin: left;
+        }
+      }
+    }
+
+    &.shadow4 {
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: -50px;
+        left: 5%;
+        width: 90%;
+        height: 20px;
+        background: rgba(0, 0, 0, .3);
+        border-radius: 50%;
+        filter: blur(10px);
+      }
+    }
+
+    &.shadow5 {
+      &::before {
+        @extend .shadow4::before;
+        bottom: -15%;
+        height: 90%;
+        border-radius: 0;
+        z-index: -1;
+      }
+    }
+
+    &.shadow6 {
+      background: #2ec194;
+      border-radius: 15px;
+      box-shadow: -15px -15px 15px rgba(255, 255, 255, .2),
+                  15px 15px 15px rgba(0, 0, 0, .1);
+    }
+
+    &.shadow7 {
+      @extend .shadow6;
+      box-shadow: -15px -15px 15px rgba(255, 255, 255, .2),
+                  15px 15px 15px rgba(0, 0, 0, .1),
+                  inset -5px -5px 5px rgba(255, 255, 255, .2),
+                  inset 5px 5px 5px rgba(0, 0, 0, .1);
+    }
+  }
+}
+
