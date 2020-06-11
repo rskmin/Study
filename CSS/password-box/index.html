@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>密码框</title>
+  <link type="text/css" rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="inputBox">
+    <input type="password" placeholder="请输入密码" id="password">
+    <div id="toggle" onclick="showHide()"></div>
+  </div>
+
+  <script>
+    const password = document.getElementById('password')
+    const toggle = document.getElementById('toggle')
+    
+    function showHide() {
+      if (password.type === 'password') {
+        password.setAttribute('type', 'text')
+        toggle.classList.add('hide')
+      } else {
+        password.setAttribute('type', 'password')
+        toggle.classList.remove('hide')
+      }
+    }
+  </script>
+</body>
+
+</html>
