@@ -1,6 +1,7 @@
 package common;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PeekIteratorTests {
 
@@ -9,15 +10,15 @@ public class PeekIteratorTests {
         String source = "abcdefg";
         PeekIterator<Character> it = new PeekIterator<Character>(source.chars().mapToObj(c -> (char)c));
 
-        System.out.println(it.next());
-        System.out.println(it.next());
+        assertEquals('a', it.next());
+        assertEquals('b', it.next());
         it.next();
         it.next();
-        System.out.println(it.next());
-        System.out.println(it.peek());
-        System.out.println(it.peek());
-        System.out.println(it.next());
-        System.out.println(it.next());
+        assertEquals('e', it.next());
+        assertEquals('f', it.peek());
+        assertEquals('f', it.peek());
+        assertEquals('f', it.next());
+        assertEquals('g', it.next());
     }
 
     @Test
@@ -25,13 +26,13 @@ public class PeekIteratorTests {
         String source = "abcdefg";
         PeekIterator<Character> it = new PeekIterator<Character>(source.chars().mapToObj(c -> (char)c));
 
-        System.out.println(it.next());
-        System.out.println(it.next());
-        System.out.println(it.next());
+        assertEquals('a', it.next());
+        assertEquals('b', it.next());
+        assertEquals('c', it.next());
         it.putBack();
         it.putBack();
-        System.out.println(it.next());
-        System.out.println(it.next());
+        assertEquals('b', it.next());
+        assertEquals('c', it.next());
 
     }
 
@@ -43,9 +44,9 @@ public class PeekIteratorTests {
         int i = 0;
         while(it.hasNext()) {
             if (i == 7) {
-                System.out.println(it.next());
+                assertEquals((char)0, it.next());
             } else {
-                System.out.println(source.charAt(i++) == it.next());
+                assertEquals(source.charAt(i++), it.next());
             }
         }
     }

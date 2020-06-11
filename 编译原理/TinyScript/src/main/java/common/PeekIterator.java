@@ -4,14 +4,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
+/**
+ * 流视察器
+ * @param <T>
+ */
 public class PeekIterator<T> implements Iterator<T> {
 
-    private Iterator<T> it;
+    private Iterator<T> it;// 流
 
-    private LinkedList<T> queueCache = new LinkedList<>();
-    private LinkedList<T> stackPutBacks = new LinkedList<>();
-    private final static int CACHE_SIZE = 10;
-    private T _endToken = null;
+    private LinkedList<T> queueCache = new LinkedList<>();// 流缓存
+    private LinkedList<T> stackPutBacks = new LinkedList<>();// 流回退栈
+    private final static int CACHE_SIZE = 10;// 缓存大小
+    private T _endToken = null;// 流结束标记符
 
     public PeekIterator(Stream<T> stream) {
         it = stream.iterator();
@@ -21,6 +25,10 @@ public class PeekIterator<T> implements Iterator<T> {
         _endToken = endToken;
     }
 
+    /**
+     * 视察流的下一个内容
+     * @return
+     */
     public T peek() {
         if (this.stackPutBacks.size() > 0) {
             return this.stackPutBacks.getFirst();
@@ -33,19 +41,30 @@ public class PeekIterator<T> implements Iterator<T> {
         return val;
     }
 
-    // 缓存:A -> B -> C -> D
-    // 放回:D -> C -> B -> A
+    /**
+     * 流回退
+     * 缓存:A -> B -> C -> D
+     * 放回:D -> C -> B -> A
+     */
     public void putBack() {
         if (this.queueCache.size() > 0) {
             this.stackPutBacks.push(this.queueCache.pollLast());
         }
     }
 
+    /**
+     * 判断流中是否还有内容
+     * @return
+     */
     @Override
     public boolean hasNext() {
         return _endToken != null || this.stackPutBacks.size() > 0 || it.hasNext();
     }
 
+    /**
+     * 获取下一个流内容
+     * @return
+     */
     @Override
     public T next() {
         T val = null;
