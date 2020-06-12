@@ -1,0 +1,99 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: '微软雅黑', sans-serif;
+}
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  min-height: 100vh;
+  background: #000;
+}
+
+.container {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.container a {
+  position: relative;
+  width: 150px;
+  height: 55px;
+  text-align: center;
+  text-decoration: none;
+  line-height: 55px;
+  margin: 10px;
+  text-transform: uppercase;
+  background: #191919;
+  color: #fff;
+  letter-spacing: 2px;
+  overflow: hidden;
+}
+
+.container a:nth-child(2)::before {
+  bottom: 60px;
+}
+
+.container a:nth-child(2):hover::before {
+  bottom: -40px;
+}
+
+.container a::before {
+  content: '';
+  position: absolute;
+  bottom: -250px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 250px;
+  height: 250px;
+  background: #2299ff;
+  border-radius: 50%;
+  -webkit-transition: .4s ease-in;
+  transition: .4s ease-in;
+}
+
+.container a:hover::before {
+  bottom: -150px;
+}
+
+.container a:hover span {
+  -webkit-transition: .4s ease-in;
+  transition: .4s ease-in;
+  -webkit-transform: translateY(-100%);
+          transform: translateY(-100%);
+}
+
+.container a span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  -webkit-transition: 0s ease-in;
+  transition: 0s ease-in;
+}
+/*# sourceMappingURL=style.css.map */

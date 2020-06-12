@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  font-family: '微软雅黑', sans-serif;
+}
+
+section {
+  background: #000;
+  height: 100vh;
+  overflow: hidden;
+
+  p {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 24px;
+    letter-spacing: -1px;
+    line-height: .6em;
+    background: url(./green.jpg) {
+      size: cover;
+    };
+    -webkit-background-clip: text;
+    color: transparent;
+    text-align: justify;
+    filter: contrast(1);
+  }
+}
+
+#bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: url(./green.jpg) {
+    attachment: fixed;
+    size: cover;
+  };
+  filter: contrast(2);
+}
