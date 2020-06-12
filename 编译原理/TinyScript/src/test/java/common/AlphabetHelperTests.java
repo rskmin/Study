@@ -11,6 +11,7 @@ public class AlphabetHelperTests {
 
         assertEquals(true, AlphabetHelper.isLetter('a'));
         assertEquals(false, AlphabetHelper.isLetter('*'));
+        assertEquals(false, AlphabetHelper.isLetter('^'));
         assertEquals(true, AlphabetHelper.isLiteral('a'));
         assertEquals(true, AlphabetHelper.isLiteral('_'));
         assertEquals(true, AlphabetHelper.isLiteral('9'));
@@ -23,6 +24,7 @@ public class AlphabetHelperTests {
         assertEquals(true, AlphabetHelper.isOperator('+'));
         assertEquals(true, AlphabetHelper.isOperator('/'));
         assertEquals(true, AlphabetHelper.isOperator('='));
+        assertEquals(true, AlphabetHelper.isOperator('^'));
 
     }
 }

@@ -1,0 +1,21 @@
+digraph Lexer {
+  // 全局样式
+  edge [fontname="SimHei"]
+  node [fontname="SimHei"]
+
+  node1 [label="从字符流中取出一个字符c"]
+  node2 [label="switch(c)"]
+  node3 [label="删除注释程序"]
+  node4 [label="字符串关键字提取"]
+  node5 [label="数字"]
+  node6 [label="+-*/^&|=<>"]
+  node7 [label="{}()"]
+
+  node1 -> node2
+
+  node2 -> node3 [label="/"]
+  node2 -> node4 [label="_a-zA-Z"]
+  node2 -> node5 [label="0-9."]
+  node2 -> node6 [label="操作符"]
+  node2 -> node7 [label="提取括号"]
+}

@@ -29,7 +29,6 @@ public class Token {
 
     /**
      * 是否是变量
-     *
      * @return boolean
      */
     public boolean isVariable() {
@@ -38,12 +37,27 @@ public class Token {
 
     /**
      * 是否是值类型
-     *
      * @return boolean
      */
     public boolean isScalar() {
         return _type == TokenType.INTEGER || _type == TokenType.FLOAT ||
                 _type == TokenType.STRING || _type == TokenType.BOOLEAN;
+    }
+
+    /**
+     * 是否是数字类型
+     * @return boolean
+     */
+    public boolean isNumber() {
+        return this._type == TokenType.INTEGER || this._type == TokenType.FLOAT;
+    }
+
+    /**
+     * 是否是操作符类型
+     * @return boolean
+     */
+    public boolean isOperator() {
+        return this._type == TokenType.OPERATOR;
     }
 
     /**

@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class AlphabetHelper {
 
-    static Pattern ptnLetter = Pattern.compile("^[a-zA-z]$");// 字母
+    static Pattern ptnLetter = Pattern.compile("^[a-zA-Z]$");// 字母
     static Pattern ptnNumber = Pattern.compile("^[0-9]$");// 数字
     static Pattern ptnLiteral = Pattern.compile("^[_a-zA-z0-9]$");// 文本
     static Pattern ptnOperator = Pattern.compile("^[+-\\\\*<>=!&|^%/]$");// 运算符

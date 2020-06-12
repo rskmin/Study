@@ -1,7 +1,8 @@
 // 关键词 - 变量 状态机
 digraph KeywordVariableSm {
   // 全局样式
-  node [shape=circle]
+  edge [fontname="SimHei"]
+  node [shape=circle, fontname="SimHei"]
   // 状态样式
   node0 [label=0]
   node1 [label=1]
