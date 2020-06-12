@@ -1,0 +1,135 @@
+digraph OperatorSm {
+  // 全局样式
+  node [shape=circle]
+  // 状态样式
+  node0 [label=0]
+  node1 [label=1]
+  node2 [label=2]
+  node3 [label=3]
+  node4 [label=4]
+  node5 [label=5]
+  node6 [label=6]
+  node7 [label=7]
+  node8 [label=8]
+  node9 [label=9]
+  node10 [label=10]
+  node11 [label=11]
+  node12 [label=12]
+
+  node13 [label=",", peripheries=2]
+  node14 [label=";", peripheries=2]
+
+  node15 [label="++", peripheries=2]
+  node16 [label="+=", peripheries=2]
+  node17 [label="+", peripheries=2]
+
+  node18 [label="--", peripheries=2]
+  node19 [label="-=", peripheries=2]
+  node20 [label="-", peripheries=2]
+
+  node21 [label="*=", peripheries=2]
+  node22 [label="*", peripheries=2]
+
+  node23 [label="/=", peripheries=2]
+  node24 [label="/", peripheries=2]
+
+  node25 [label=">=" peripheries=2]
+  node26 [label=">>" peripheries=2]
+  node27 [label=">" peripheries=2]
+
+  node28 [label="<=" peripheries=2]
+  node29 [label="<<" peripheries=2]
+  node30 [label="<" peripheries=2]
+
+  node31 [label="==", peripheries=2]
+  node32 [label="=", peripheries=2]
+
+  node33 [label="!=", peripheries=2]
+  node34 [label="!", peripheries=2]
+
+  node35 [label="&=", peripheries=2]
+  node36 [label="&&", peripheries=2]
+  node37 [label="&", peripheries=2]
+
+  node38 [label="|=", peripheries=2]
+  node39 [label="||", peripheries=2]
+  node40 [label="|", peripheries=2]
+
+  node41 [label="^=", peripheries=2]
+  node42 [label="^^", peripheries=2]
+  node43 [label="^", peripheries=2]
+
+  node44 [label="%=", peripheries=2]
+  node45 [label="%", peripheries=2]
+
+  // 0 ->
+  node0 -> node1 [label="+"]
+  node0 -> node2 [label="-"]
+  node0 -> node3 [label="*"]
+  node0 -> node4 [label="/"]
+  node0 -> node5 [label=">"]
+  node0 -> node6 [label="<"]
+  node0 -> node7 [label="="]
+  node0 -> node8 [label="!"]
+  node0 -> node9 [label="&"]
+  node0 -> node10 [label="|"]
+  node0 -> node11 [label="^"]
+  node0 -> node12 [label="%"]
+  node0 -> node13 [label=","]
+  node0 -> node14 [label=";"]
+
+  // 1 ->
+  node1 -> node15 [label="+"]
+  node1 -> node16 [label="="]
+  node1 -> node17 [label="other"]
+
+  // 2 -> 
+  node2 -> node18 [label="-"]
+  node2 -> node19 [label="="]
+  node2 -> node20 [label="other"]
+
+  // 3 ->
+  node3 -> node21 [label="="]
+  node3 -> node22 [label="other"]
+  
+  // 4 ->
+  node4 -> node23 [label="="]
+  node4 -> node24 [label="other"]
+
+  // 5 ->
+  node5 -> node25 [label="="]
+  node5 -> node26 [label=">"]
+  node5 -> node27 [label="other"]
+
+  // 6 ->
+  node6 -> node28 [label="="]
+  node6 -> node29 [label="<"]
+  node6 -> node30 [label="other"]
+
+  // 7 ->
+  node7 -> node31 [label="="]
+  node7 -> node32 [label="other"]
+
+  // 8 ->
+  node8 -> node33 [label="="]
+  node8 -> node34 [label="other"]
+
+  // 9 ->
+  node9 -> node35 [label="="]
+  node9 -> node36 [label="&"]
+  node9 -> node37 [label="other"]
+
+  // 10 ->
+  node10 -> node38 [label="="]
+  node10 -> node39 [label="|"]
+  node10 -> node40 [label="other"]
+
+  // 11 ->
+  node11 -> node41 [label="="]
+  node11 -> node42 [label="^"]
+  node11 -> node43 [label="other"]
+
+  // 12 ->
+  node12 -> node44 [label="="]
+  node12 -> node45 [label="other"]
+}

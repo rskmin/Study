@@ -1,0 +1,23 @@
+// 字符串状态机
+digraph StringSm {
+  // 全局样式
+  node [shape=circle]
+  // 状态样式
+  node0 [label=0]
+  node1 [label=1]
+  node2 [label=2]
+  nodestr1 [label=str, peripheries=2]
+  nodestr2 [label=str, peripheries=2]
+
+  // 0 -> 
+  node0 -> node1 [label="\""]
+  node0 -> node2 [label="\'"]
+
+  // 1 -> 
+  node1 -> node1 [label="any not \""]
+  node1 -> nodestr1 [label="\""]
+
+  // 2 -> 
+  node2 -> node2 [label="any not \'"]
+  node2 -> nodestr2 [label="'"]
+}

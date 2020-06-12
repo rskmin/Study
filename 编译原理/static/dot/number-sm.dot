@@ -1,0 +1,57 @@
+// 数字状态机
+digraph NumberSm {
+  // 全局样式
+  node [shape=circle]
+  // 状态样式
+  node0 [label=0]
+  node1 [label=1]
+  node2 [label=2]
+  node3 [label=3]
+  node4 [label=4]
+  node5 [label=5]
+  node20 [label=20]
+  nodeint1 [label=int, peripheries=2, color=green, fontcolor=green]
+  nodeint2 [label=int, peripheries=2, color=green, fontcolor=green]
+  nodeErr1 [label=Err, peripheries=2, color=red, fontcolor=red]
+  nodeErr2 [label=Err, peripheries=2, color=red, fontcolor=red]
+  nodeErr3 [label=Err, peripheries=2, color=red, fontcolor=red]
+  nodeErr4 [label=Err, peripheries=2, color=red, fontcolor=red]
+  nodefloat1 [label=float, peripheries=2, color=green, fontcolor=green]
+  nodefloat2 [label=float, peripheries=2, color=green, fontcolor=green]
+
+  // 0 ->
+  node0 -> node1 [label="0"]
+  node0 -> node2 [label="1-9"]
+  node0 -> node3 [label="- or +"]
+  node0 -> node5 [label="."]
+
+  // 1 ->
+  node1 -> node1 [label="0"]
+  node1 -> nodeint1 [label="any"]
+  node1 -> node4 [label="."]
+  node1 -> node2 [label="1-9"]
+
+  // 3 ->
+  node3 -> node2 [label="0-9"]
+  node3 -> nodeErr1 [label="other"]
+  node3 -> node5 [label="."]
+
+  // 2 ->
+  node2 -> node2 [label="0-9"]
+  node2 -> node4 [label="."]
+  node2 -> nodeint2 [label="any"]
+
+  // 5 ->
+  node5 -> nodeErr2 [label="other"]
+  node5 -> node20 [label="0-9"]
+  
+  // 4 ->
+  node4 -> nodeErr3 [label="."]
+  node4 -> nodefloat1 [label="any"]
+  node3 -> node20 [label="0-9"]
+
+  // 20 ->
+  node20 -> node20 [label="0-9"]
+  node20 -> nodefloat2 [label="any"]
+  node20 -> nodeErr4 [label="."]
+}

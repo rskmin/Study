@@ -69,6 +69,7 @@ class PeekIterator {
 
     return val
   }
+
 }
 
 module.exports = PeekIterator
