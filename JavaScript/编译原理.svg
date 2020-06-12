@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="26cm" height="41cm" viewBox="729 199 518 813" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <text font-size="16.1883" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="810" y="213">
+    <tspan x="810" y="213">编译</tspan>
+  </text>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="776" y="320">
+    <tspan x="776" y="320">1.分词/词法分析</tspan>
+  </text>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="974" y="244">
+    <tspan x="974" y="244">var a = 2;</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="999" y1="253" x2="999.911" y2="298.529"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="994.756,290.866 999.955,300.764 1004.75,290.666 "/>
+  </g>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="962" y="322">
+    <tspan x="962" y="322">var 、a、=、2、；</tspan>
+  </text>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="769" y="416">
+    <tspan x="769" y="416">2.解析/语法分析</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="746" y1="258" x2="787.907" y2="301.77"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="778.926,299.62 789.454,303.385 786.149,292.704 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="874" y1="258" x2="854.926" y2="297.964"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="853.758,288.804 853.963,299.982 862.783,293.111 "/>
+  </g>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="729" y="248">
+    <tspan x="729" y="248">无状态</tspan>
+  </text>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="866" y="246">
+    <tspan x="866" y="246">有状态</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="875" y1="313" x2="984.735" y2="278.347"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="978.838,285.453 986.868,277.673 975.826,275.917 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="1002" y1="335" x2="1001.04" y2="447.528"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="996.105,439.722 1001.02,449.764 1006.1,439.807 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="869" y1="413" x2="989.644" y2="385.011"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="983.21,391.636 991.822,384.505 980.951,381.895 "/>
+  </g>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="1018" y="395">
+    <tspan x="1018" y="395">转换为“抽象语法树”(AST)</tspan>
+  </text>
+  <g>
+    <rect style="fill: #ffffff" x="922" y="471" width="168.95" height="42"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="922" y="471" width="168.95" height="42"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="1006.48" y="491">VariableDeclaration</text>
+    <text font-size="11.2" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="1006.48" y="506.2">变量声明</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="858" y="551" width="87" height="42"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="858" y="551" width="87" height="42"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="901.5" y="571">Identifier</text>
+    <text font-size="11.2" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="901.5" y="586.2">识别符</text>
+    <rect style="fill: #ffffff" x="858" y="593" width="87" height="20"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="858" y="593" width="87" height="20"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="861" y="606.2">+value = a</text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="967.417" y1="513.952" x2="905.399" y2="548.809"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="909.717,540.646 903.449,549.904 914.617,549.364 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="1029" y="562" width="191.75" height="42"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="1029" y="562" width="191.75" height="42"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="1124.88" y="582">AssignmentExpression</text>
+    <text font-size="11.2" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="1124.88" y="597.2">赋值表达式</text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="1043.59" y1="513.943" x2="1121.02" y2="559.724"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="1111.8,560.077 1122.95,560.862 1116.89,551.469 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="1089" y="666" width="129.15" height="42"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="1089" y="666" width="129.15" height="42"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="1153.58" y="686">NumericLiteral</text>
+    <text font-size="11.2" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="1153.58" y="701.2">数字</text>
+    <rect style="fill: #ffffff" x="1089" y="708" width="129.15" height="20"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="1089" y="708" width="129.15" height="20"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="1092" y="721.2">+value = 2</text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="1124.87" y1="604" x2="1151.7" y2="661.942"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="1143.9,656.997 1152.64,663.971 1152.97,652.796 "/>
+  </g>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="769" y="861">
+    <tspan x="769" y="861">3.代码生成</tspan>
+  </text>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="1006" y1="720" x2="1006" y2="926.528"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="1001,918.764 1006,928.764 1011,918.764 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="835" y1="859" x2="994.722" y2="810.304"/>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="988.754,817.351 996.861,809.652 985.838,807.786 "/>
+  </g>
+  <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="908" y="961">
+    <tspan x="908" y="961">将 AST 转换为可执行代码,</tspan>
+    <tspan x="908" y="977">有某种方法可以将 var a = 2; 的 AST 转化为一组机器指令，</tspan>
+    <tspan x="908" y="993">用来创建一个叫作 a 的变量（包括分配内存等）,</tspan>
+    <tspan x="908" y="1009">并将一个值储存在 a 中</tspan>
+  </text>
+</svg>

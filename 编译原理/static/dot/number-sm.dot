@@ -48,7 +48,7 @@ digraph NumberSm {
   // 4 ->
   node4 -> nodeErr3 [label="."]
   node4 -> nodefloat1 [label="any"]
-  node3 -> node20 [label="0-9"]
+  node4 -> node20 [label="0-9"]
 
   // 20 ->
   node20 -> node20 [label="0-9"]
