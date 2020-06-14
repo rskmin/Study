@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>粘性导航</title>
+  <link type="text/css" rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <header>
+    <a href="#" class="logo">Logo</a>
+    <ul>
+      <li><a href="#">首页</a></li>
+      <li><a href="#">关于</a></li>
+      <li><a href="#">服务</a></li>
+      <li><a href="#">作品</a></li>
+      <li><a href="#">联系</a></li>
+    </ul>
+  </header>
+  <section class="banner"></section>
+  <script>
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header')
+      header.classList.toggle('sticky', window.scrollY > 0)
+    })
+  </script>
+</body>
+
+</html>
