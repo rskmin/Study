@@ -10,7 +10,7 @@ class LexicalException extends Error {
   /**
    * 通过模板字符初始化异常类(工厂模式)
    */
-  static formChar(c) {
+  static fromChar(c) {
     return new LexicalException(`Unexpected char ${c}`)
   }
 

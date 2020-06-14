@@ -11,6 +11,12 @@ import java.util.stream.Stream;
  */
 public class Lexer {
 
+    /**
+     * 词法分析
+     * @param source
+     * @return
+     * @throws LexicalException
+     */
     public ArrayList<Token> analyse(Stream source) throws LexicalException {
         ArrayList<Token> tokens = new ArrayList<>();
         PeekIterator<Character> it = new PeekIterator<Character>(source, (char)0);

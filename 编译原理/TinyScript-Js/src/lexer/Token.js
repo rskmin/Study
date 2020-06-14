@@ -46,6 +46,28 @@ class Token {
   }
 
   /**
+   * 是否是数值或者变量类型
+   * @return {boolean}
+   */
+  isValue() {
+    return this.isScalar() || this.isVariable()
+  }
+
+  /**
+   * 是否是类型标记
+   * @return {boolean}
+   */
+  isType() {
+    return (
+      this._value === 'bool' ||
+      this._value === 'int' ||
+      this._value === 'float' ||
+      this._value === 'void' ||
+      this._value === 'string'
+    )
+  }
+
+  /**
    * @return {string}
    */
   toString() {
@@ -186,98 +208,98 @@ class Token {
           }
           break
         case 1:
-          if (lookahead == '+') {
+          if (lookahead === '+') {
             return new Token(TokenType.OPERATOR, "++")
-          } else if (lookahead == '=') {
+          } else if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "+=")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "+")
           }
         case 2:
-          if (lookahead == '-') {
+          if (lookahead === '-') {
             return new Token(TokenType.OPERATOR, "--")
-          } else if (lookahead == '=') {
+          } else if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "-=")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "-")
           }
         case 3:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "*=")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "*")
           }
         case 4:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "/=")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "/")
           }
         case 5:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, ">=")
-          } else if (lookahead == '>') {
+          } else if (lookahead === '>') {
             return new Token(TokenType.OPERATOR, ">>")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, ">")
           }
         case 6:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "<=")
-          } else if (lookahead == '<') {
+          } else if (lookahead === '<') {
             return new Token(TokenType.OPERATOR, "<<")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "<")
           }
         case 7:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "==")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "=")
           }
         case 8:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "!=")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "!")
           }
         case 9:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "&=")
-          } else if (lookahead == '&') {
+          } else if (lookahead === '&') {
             return new Token(TokenType.OPERATOR, "&&")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "&")
           }
         case 10:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "|=")
-          } else if (lookahead == '|') {
+          } else if (lookahead === '|') {
             return new Token(TokenType.OPERATOR, "||")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "|")
           }
         case 11:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "^=")
-          } else if (lookahead == '^') {
+          } else if (lookahead === '^') {
             return new Token(TokenType.OPERATOR, "^^")
           } else {
             it.putBack()
             return new Token(TokenType.OPERATOR, "^")
           }
         case 12:
-          if (lookahead == '=') {
+          if (lookahead === '=') {
             return new Token(TokenType.OPERATOR, "%=")
           } else {
             it.putBack()
@@ -304,22 +326,22 @@ class Token {
       const lookahead = it.peek()
       switch (state) {
         case 0:
-          if (lookahead == '0') {
+          if (lookahead === '0') {
             state = 1
           } else if (AlphabetHelper.isNumber(lookahead)) {
             state = 2
-          } else if (lookahead == '+' || lookahead == '-') {
+          } else if (lookahead === '+' || lookahead === '-') {
             state = 3
-          } else if (lookahead == '.') {
+          } else if (lookahead === '.') {
             state = 5
           }
           break
         case 1:
-          if (lookahead == '0') {
+          if (lookahead === '0') {
             state = 1
           } else if (AlphabetHelper.isNumber(lookahead)) {
             state = 2
-          } else if (lookahead == '.') {
+          } else if (lookahead === '.') {
             state = 4
           } else {
             return new Token(TokenType.INTEGER, s)
@@ -328,7 +350,7 @@ class Token {
         case 2:
           if (AlphabetHelper.isNumber(lookahead)) {
             state = 2
-          } else if (lookahead == '.') {
+          } else if (lookahead === '.') {
             state = 4
           } else {
             return new Token(TokenType.INTEGER, s)
@@ -337,14 +359,14 @@ class Token {
         case 3:
           if (AlphabetHelper.isNumber(lookahead)) {
             state = 2
-          } else if (lookahead == '.') {
+          } else if (lookahead === '.') {
             state = 5
           } else {
             throw LexicalException.formChar(lookahead)
           }
           break
         case 4:
-          if (lookahead == '.') {
+          if (lookahead === '.') {
             throw LexicalException.formChar(lookahead)
           } else if (AlphabetHelper.isNumber(lookahead)) {
             state = 20
@@ -362,7 +384,7 @@ class Token {
         case 20:
           if (AlphabetHelper.isNumber(lookahead)) {
             state = 20
-          } else if (lookahead == '.') {
+          } else if (lookahead === '.') {
             throw LexicalException.formChar(lookahead)
           } else {
             return new Token(TokenType.FLOAT, s)

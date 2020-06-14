@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>输入框校验</title>
+  <link type="text/css" rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div>
+    <h3>Email Validate Check</h3>
+    <form action="#" id="form">
+      <div class="inputBox">
+        <input
+          type="text"
+          name=""
+          id="email"
+          placeholder="请输入邮箱地址"
+          onkeydown="validation()"
+        >
+      </div>
+      <span id="text"></span>
+    </form>
+  </div>
+  <script>
+    function validation() {
+      const form = document.getElementById('form')
+      const email = document.getElementById('email').value
+      const text = document.getElementById('text')
+      const pattern = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/
+      if (email.match(pattern)) {
+        form.classList.add('valid')
+        form.classList.remove('invalid')
+        text.innerHTML = '你输入的邮箱是合法的!'
+        text.style.color = '#00ff00'
+      } else {
+        form.classList.remove('valid')
+        form.classList.add('invalid')
+        text.innerHTML = '请输入正确的邮箱!'
+        text.style.color = '#ff0000'
+      }
+      if (email === '') {
+        form.classList.remove('valid')
+        form.classList.remove('invalid')
+        text.innerHTML = ''
+      }
+    }
+  </script>
+</body>
+
+</html>

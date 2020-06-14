@@ -19,7 +19,7 @@ class PeekIterator {
    */
   peek() {
     if (this.stackPutBacks.length > 0) {
-      return this.stackPutBacks.head
+      return this.stackPutBacks.tail
     }
     const val = this.next()
     this.putBack()
@@ -56,15 +56,15 @@ class PeekIterator {
       if (val === undefined) {
         const tmp = this.endToken
         this.endToken = null
-        return tmp
+        val = tmp
       }
     }
-
     // 处理缓存
     while (this.queueCache.length > CACHE_SIZE - 1) {
       // 超过上限，清除一个缓存
       this.queueCache.shift()
     }
+
     this.queueCache.push(val)
 
     return val
