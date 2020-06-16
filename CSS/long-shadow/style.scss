@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: '微软雅黑', sans-serif;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #00fff3;
+}
+
+#text {
+  position: relative;
+  color: #fff;
+  font: {
+    size: 9em;
+    weight: 700;
+  }
+  outline: none;
+  text: {
+    align: center;
+    shadow: 1px 1px 0 #01d1d3;
+  }
+}
