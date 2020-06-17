@@ -1,0 +1,106 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: '微软雅黑', sans-serif;
+}
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  min-height: 100vh;
+  background: #000;
+}
+
+h2 {
+  color: #000;
+  font-size: 6em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+h2 span {
+  -webkit-animation: animate 4s linear infinite;
+          animation: animate 4s linear infinite;
+}
+
+h2 span:nth-child(1) {
+  -webkit-animation-delay: 0s;
+          animation-delay: 0s;
+}
+
+h2 span:nth-child(2) {
+  -webkit-animation-delay: 0.1s;
+          animation-delay: 0.1s;
+}
+
+h2 span:nth-child(3) {
+  -webkit-animation-delay: 0.2s;
+          animation-delay: 0.2s;
+}
+
+h2 span:nth-child(4) {
+  -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+}
+
+h2 span:nth-child(5) {
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+}
+
+h2 span:nth-child(6) {
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
+}
+
+h2 span:nth-child(7) {
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s;
+}
+
+h2 span:nth-child(8) {
+  -webkit-animation-delay: 0.7s;
+          animation-delay: 0.7s;
+}
+
+@-webkit-keyframes animate {
+  0%, 100% {
+    color: #fff;
+    -webkit-filter: blur(2px);
+            filter: blur(2px);
+    text-shadow: 0 0 10px #00b3ff, 0 0 20px #00b3ff, 0 0 40px #00b3ff, 0 0 80px #00b3ff, 0 0 120px #00b3ff, 0 0 200px #00b3ff, 0 0 300px #00b3ff;
+  }
+  25%, 75% {
+    color: #000;
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    text-shadow: none;
+  }
+}
+
+@keyframes animate {
+  0%, 100% {
+    color: #fff;
+    -webkit-filter: blur(2px);
+            filter: blur(2px);
+    text-shadow: 0 0 10px #00b3ff, 0 0 20px #00b3ff, 0 0 40px #00b3ff, 0 0 80px #00b3ff, 0 0 120px #00b3ff, 0 0 200px #00b3ff, 0 0 300px #00b3ff;
+  }
+  25%, 75% {
+    color: #000;
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    text-shadow: none;
+  }
+}
+/*# sourceMappingURL=style.css.map */
