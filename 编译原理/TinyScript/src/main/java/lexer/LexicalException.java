@@ -2,17 +2,17 @@ package lexer;
 
 public class LexicalException extends Exception {
 
-    private String msg;
+    private String message;
 
     public LexicalException(char c) {
-        msg = String.format("Unexpected character %c", c);
+        message = String.format("Unexpected character %c", c);
     }
     public LexicalException(String _msg) {
-        msg = _msg;
+        message = _msg;
     }
 
     @Override
     public String getMessage() {
-        return msg;
+        return message;
     }
 }
