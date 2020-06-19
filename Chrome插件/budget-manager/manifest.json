@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Hello World",
+  "name": "预算管理",
   "version": "1.0",
-  "description": "Rskmin's Hello World",
+  "description": "追踪支出 管理",
   "icons": {
     "128" : "./static/img/128.png",
     "48" : "./static/img/48.png",
@@ -10,7 +10,6 @@
   },
   "browser_action": {
     "default_icon": "./static/img/16.png",
-    "default_popup": "Rskmin.html",
-    "default_title": "Hello Rskmin"
+    "default_popup": "popup.html"
   }
 }
