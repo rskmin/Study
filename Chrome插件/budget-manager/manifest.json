@@ -10,9 +10,11 @@
   },
   "browser_action": {
     "default_icon": "./static/img/16.png",
-    "default_popup": "popup.html"
+    "default_popup": "./src/pages/popup.html"
   },
+  "options_page": "./src/pages/options.html",
   "permissions": [ 
-    "storage"
+    "storage",
+    "notifications"
   ]
 }
