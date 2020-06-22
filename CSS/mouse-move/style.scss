@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: '微软雅黑', sans-serif
+}
+
+body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+span {
+  position: absolute;
+  background: url(./heart.png) {
+    size: cover;
+  };
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: animate 4s linear infinite;
+}
+
+@keyframes animate {
+  0% {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -1000%);
+    opacity: 0;
+  }
+}
