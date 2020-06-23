@@ -12,9 +12,14 @@
     "default_icon": "./static/img/16.png",
     "default_popup": "./src/pages/popup.html"
   },
+  "background": {
+    "scripts": ["./src/js/eventPage.js"],
+    "persistent": false
+  },
   "options_page": "./src/pages/options.html",
   "permissions": [ 
     "storage",
-    "notifications"
+    "notifications",
+    "contextMenus"
   ]
 }
