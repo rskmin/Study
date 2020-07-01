@@ -13,13 +13,13 @@ class Lexer {
     const tokens = []
     const it = new PeekIterator(source, '\0')
 
-    while(it.hasNext()) {
+    while (it.hasNext()) {
       let c = it.next()
       if (c === '\0') {
         break
       }
       let lookahead = it.peek()
-      
+
       if (c === ' ' || c == '\n') {
         continue
       }
@@ -27,10 +27,10 @@ class Lexer {
       // 提取注释
       if (c === '/') {
         if (lookahead === '/') {
-          while(it.hasNext() && (c = it.next()) !== '\n');
+          while (it.hasNext() && (c = it.next()) !== '\n');
         } else if (lookahead === '*') {
           let valid = false
-          while(it.hasNext()) {
+          while (it.hasNext()) {
             const p = it.next()
             if (p === '*' && it.peek() === '/') {
               valid = true
