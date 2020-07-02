@@ -1,0 +1,41 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add @type/node
+
+PATH: 
+  C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Users\85066\AppData\Local\Microsoft\WindowsApps;C:\Users\85066\BaseTool\Microsoft VS Code\bin;C:\Users\85066\BaseTool\nvm;C:\Program Files\nodejs;D:\BaseTool\Git\cmd;C:\Windows\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\85066\scoop\shims;C:\Users\85066\AppData\Local\Microsoft\WindowsApps;C:\Users\85066\BaseTool\nvm;C:\Program Files\nodejs;C:\Users\85066\BaseTool\Microsoft VS Code\bin;D:\BaseTool\IntelliJ IDEA Educational Edition 2019.3.1\bin;D:\Game\freepiano;C:\Users\85066\scoop\apps\docker\Docker Toolbox;C:\Program Files (x86)\Google\Chrome\Application;C:\Program Files\MongoDB\Server\4.2\bin;C:\Users\85066\BaseTool\cmder;C:\Users\85066\AppData\Local\GitHubDesktop\bin;D:\BaseTool\LxRunOffline;D:\BaseTool\JDK14\bin;
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.16.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.npm.taobao.org/@type%2fnode: Not found
+      at Request.params.callback [as _callback] (C:\Users\85066\BaseTool\nvm\v12.16.1\node_modules\yarn\lib\cli.js:66987:18)
+      at Request.self.callback (C:\Users\85066\BaseTool\nvm\v12.16.1\node_modules\yarn\lib\cli.js:140748:22)
+      at Request.emit (events.js:311:20)
+      at Request.<anonymous> (C:\Users\85066\BaseTool\nvm\v12.16.1\node_modules\yarn\lib\cli.js:141720:10)
+      at Request.emit (events.js:311:20)
+      at IncomingMessage.<anonymous> (C:\Users\85066\BaseTool\nvm\v12.16.1\node_modules\yarn\lib\cli.js:141642:12)
+      at Object.onceWrapper (events.js:417:28)
+      at IncomingMessage.emit (events.js:323:22)
+      at endReadableNT (_stream_readable.js:1204:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+
+npm manifest: 
+  {
+    "name": "Promise",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

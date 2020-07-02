@@ -5,6 +5,12 @@ const ENUM = {
   REJECTED: 'REJECTED'// 失败
 }
 
+const isPromise = value => {
+  if (typeof value === 'object' && value !== null || typeof value === 'function') {
+    return typeof value.then === 'function'
+  }
+}
+
 const resolvePromise = (x, promise2, resolve, reject) => {
   if (x === promise2) {
     reject(new TypeError('TypeError: Chaining cycle detected for promise #<Promise>'))
@@ -158,25 +164,39 @@ class Promise {
       reject(reason)
     })
   }
-  static all(values) {
+  static all(promises) {
     return new Promise((resolve, reject) => {
       let resultArr = []
       let orderIndex = 0
       const processResultByKey = (value, index) => {
         resultArr[index] = value
-        if (++orderIndex === values.length) {
+        if (++orderIndex === promises.length) {
           resolve(resultArr)
         }
       }
-      for (let i = 0, len = values.length; i < len; i++ ) {
-        let value = values[i]
-        if (value && typeof value.then === 'function') {
+      for (let i = 0, len = promises.length; i < len; i++ ) {
+        let current = promises[i]
+        if (isPromise(current)) {
           // 如果其中一个Promise则直接调用返回的promise的reject
-          value.then(val => {
+          current.then(val => {
             processResultByKey(val, i)
           }, reject)
         } else {
-          processResultByKey(value, i)
+          processResultByKey(current, i)
+        }
+      }
+    })
+  }
+  static race(promises) {
+    return new Promise((resolve, reject) => {
+      // 谁先返回 就用谁
+      // 一起执行就是 for
+      for (let i = 0; i < promises.length; i++) {
+        let current = promises[i]
+        if (isPromise(current)) {
+          current.then(resolve, reject)
+        } else {
+          resolve(current)
         }
       }
     })
