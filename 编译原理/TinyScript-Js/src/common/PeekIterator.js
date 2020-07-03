@@ -1,4 +1,5 @@
 const LinkedList = require('linkedlist')
+const Token = require('../lexer/Token')
 
 const CACHE_SIZE = 10
 class PeekIterator {
@@ -16,6 +17,7 @@ class PeekIterator {
 
   /**
    * 视察下一个迭代对象
+   * @return {Token}
    */
   peek() {
     if (this.stackPutBacks.length > 0) {
