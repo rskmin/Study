@@ -1,7 +1,15 @@
 {
   "cSpell.words": [
+    "CFLAGS",
     "epoll",
-    "sendfile"
+    "fastcgi",
+    "logrotate",
+    "sbin",
+    "scgi",
+    "sendfile",
+    "sysconfig",
+    "systemd",
+    "uwsgi"
   ],
   "python.pythonPath": "C:\\Users\\85066\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe"
 }
