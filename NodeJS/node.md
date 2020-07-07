@@ -73,3 +73,51 @@ global: [Circular],
   - process.argv 执行时所带的参数
 
 ## 模块
+
+- Module.prototype.require(id)
+
+  1. id是否为字符串
+
+  2. id是否为空(否：报错)
+
+  3. 引用层数增加(requireDepth++)
+
+  4. 加载模块， 捕获加载模块异常，加载失败引用层数减少(requireDepth--)
+
+- Module._load(require, parent, isMain) 加载模块
+
+  1. 查看是否有相对路径缓存(true: 返回缓存, false: next)
+
+  2. Module._resolveFilename(request, parent, isMain) 将模块路径转化为绝对路径
+
+  3. 查看是否有绝对路径缓存(true: 返回缓存, false: next)
+
+  4. 查看是否是原生模块(true: 加载原生模块并返回, false: next)
+
+  5. let module = new Module(filename, parent) 创建模块对象 id: 路径, exports: 导出结果
+
+  6. 缓存模块对象
+
+  7. 相对解析路径缓存
+
+  8. module.load() 加载模块内容
+
+- module.load()
+ 
+  1. let extension = findLongestRegisteredExtension(filename) 获取模块扩展名
+
+  2. Module._extensions[extension](this, filename) 调用对应模块解析规则
+
+- Module._extensions[extension](this, filename)
+
+  1. const content = fs.readFileSync(filename, 'utf8') 读取文件内容
+
+  2. module._compile(content, filename) 编译模块
+
+- module._compile(content, filename) 
+
+  1. 将文件内容包裹进函数形成函数字符串，用vm转化成函数
+
+  2. 执行函数并传入参数
+
+  3. 返回 module.exports 中的结果

@@ -16,5 +16,6 @@
 
 // console.log(program.port)
 // console.log(program.config)
+const a = require('./test')
+console.log(a)
 
-console.log(__dirname)
