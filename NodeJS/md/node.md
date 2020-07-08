@@ -10,7 +10,7 @@
 
 ## 事件环
 
-![event-loop](./img/event-loop.png)
+![event-loop](../img/event-loop.png)
 
 ``````js
     定时器:本阶段执行已经被 setTimeout() 和 setInterval() 的调度回调函数。
@@ -145,3 +145,10 @@ global: [Circular],
 - 第三方模块
 
 - 文件模块
+
+## Buffer
+
+- 属于global上的属性可以直接被访问， 读取文件， 写入(二进制)从硬盘中读取的内容到内存上(默认js不是二进制的), buffer 可以和字符串进行相互转化
+
+- 前端二进制 file blob (编码)
+

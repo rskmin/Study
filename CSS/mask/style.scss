@@ -1,0 +1,192 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: '微软雅黑', sans-serif;
+  // filter: contrast(15);
+}
+
+body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex: {
+    direction: column;
+    wrap: wrap;
+  }
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+
+@for $i from 1 through 8 {
+  .mask#{$i} {
+    width: 400px;
+    height: 200px;
+    background: #fff;
+  }
+}
+
+.mask1 {
+  background: url(./green.jpg) {
+    size: cover;
+  };
+  mask: linear-gradient(#fff, transparent);
+}
+
+.mask2 {
+  background: url(./green.jpg) {
+    size: cover;
+  };
+  mask: 
+    linear-gradient(135deg, transparent 15px, #fff 0) top left,
+    linear-gradient(-135deg, transparent 15px, #fff 0) top right,
+    linear-gradient(-45deg, transparent 15px, #fff 0) bottom right,
+    linear-gradient(45deg, transparent 15px, #fff 0) bottom left;
+  mask-size: 50% 50%;
+  mask-repeat: no-repeat;
+}
+
+.mask3 {
+  position: relative;
+  background: url(./green.jpg) {
+    size: cover;
+  };
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(./img-bigsize.jpg) {
+      size: cover;
+    };
+    mask: linear-gradient(45deg, #000 50%, transparent 50%);
+  }
+}
+
+.mask4 {
+  position: relative;
+  background: url(./green.jpg) {
+    size: cover;
+  };
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(./img-bigsize.jpg) {
+      size: cover;
+    };
+    mask: linear-gradient(45deg, #000 40%, transparent 60%);
+  }
+}
+
+.mask5 {
+  position: relative;
+  background: url(./green.jpg) {
+    size: cover;
+  };
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(./img-bigsize.jpg) {
+      size: cover;
+    };
+    animation: maskRotate 4s ease-in-out infinite;
+  }
+}
+
+@keyframes maskRotate {
+  @for $i from 0 through 100 {
+    #{$i + '%'} {
+      mask: linear-gradient(45deg, #000 #{$i + '%'}, transparent #{$i + 5 + '%'});
+    }
+  }
+}
+
+.mask6 {
+  position: relative;
+  background: url(./green.jpg) {
+    size: cover;
+  };
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(./img-bigsize.jpg) {
+      size: cover;
+    };
+    animation: maskRotate1 4s ease-in-out infinite;
+  }
+}
+
+@keyframes maskRotate1 {
+  @for $i from 0 through 100 {
+    #{$i + '%'} {
+      mask: conic-gradient(#000 #{$i + '%'}, transparent #{$i + 5 + '%'}, transparent);
+    }
+  }
+}
+
+.mask7 {
+  position: relative;
+  background: #fff;
+  filter: contrast(20);
+    
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(#000, transparent);
+    background-size: 20px 20px;
+    // mask: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, .5));
+    mask: repeating-radial-gradient(circle at 35% 65%, #000, rgba(0, 0, 0, .5), #000 25%);
+    animation: maskMove2 15s infinite linear;
+  }
+}
+
+@keyframes maskMove2 {
+    @for $i from 0 through 100 { 
+        #{$i + '%'} {
+            mask: repeating-radial-gradient(circle at 35% 65%, #000, rgba(0, 0, 0, .5), #000 #{$i + 10 +  '%'});
+        }
+    }
+}
+
+.mask8 {
+  position: relative;
+  background: linear-gradient(45deg, #f44336, #ff9800, #ffeb3b, #8bc34a, #00bcd4, #673ab7);
+
+  .inner {
+    height: 100%;
+    background: #000;
+    filter: contrast(20);
+    mix-blend-mode: multiply;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(#fff, transparent) {
+        size: 10px 10px;
+      };
+      mask: linear-gradient(#000, rgba(0, 0, 0, .5));
+    }
+  }
+}
