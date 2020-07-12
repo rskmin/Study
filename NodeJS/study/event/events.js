@@ -6,6 +6,13 @@ EventEmitter.prototype.on = function (eventName, callback) {
   if (!this._events) {
     this._events = {}
   }
+
+  if (eventName !== 'newListener') {
+    if (this._events['newListener']) {
+      this.emit('newListener', eventName)
+    }
+  }
+
   let callbacks = this._events[eventName] || []
   callbacks.push(callback)
   this._events[eventName] = callbacks
