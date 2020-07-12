@@ -11,9 +11,9 @@ let girl = new Girl()
 let eat = () => {
   console.log('吃')
 }
-let cry = () => {
-  console.log('哭')
-}
+// let cry = () => {
+//   console.log('哭')
+// }
 
 // newListener 在订阅完之前触发
 girl.on('newListener', type => {// newListener是一个固定的名字
