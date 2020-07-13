@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-parens */
 /* eslint-disable no-param-reassign */
 class Node {
   constructor(element, next) {
@@ -61,6 +62,31 @@ class LinkList {
       current = current.next
     }
     return current
+  }
+  reverse() {
+    function reverseRecursion(head) {
+      if (head == null || head.next == null) {
+        return head
+      }
+      let newHead = reverseRecursion(head.next)
+      head.next.next = head
+      head.next = null
+      return newHead
+    }
+    return (this.head = reverseRecursion(this.head))
+  }
+  reverseLoop() {
+    let head = this.head
+    let newHead = null
+
+    while (head !== null) {
+      let temp = head.next
+      head.next = newHead
+      newHead = head
+      head = temp
+    }
+    this.head = newHead
+    return newHead
   }
 }
 

@@ -8,8 +8,7 @@ ll.add(1)
 ll.add(2)
 ll.add(3)
 ll.add(4)
-console.dir(ll, {
+
+console.dir(ll.reverseLoop(), {
   depth: 1000
 })
-
-ll.reverse()
