@@ -82,6 +82,21 @@ class BST {// binary search tree
     }
     return traversal(this.root)
   }
+  levelOrderTraversal(visitor) {// 层序遍历
+    if (this.root == null) return
+    const stack = [this.root]
+    let index = 0
+    let currentNode
+    while (currentNode = stack[index++]) {
+      visitor.visit(currentNode.element)
+      if (currentNode.left) {
+        stack.push(currentNode.left)
+      }
+      if (currentNode.right) {
+        stack.push(currentNode.right)
+      }
+    }
+  }
 }
 
 let bst = new BST((a, b) => a - b)
@@ -102,5 +117,6 @@ let visitor = new Visitor()
 // bst.postorderTraversal(visitor)
 
 // console.log(bst.invertTree())
+bst.levelOrderTraversal(visitor)
 
 module.exports = BST
