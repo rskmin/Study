@@ -28,7 +28,7 @@ class BST {// binary search tree
     let currentNode = this.root
     let parent = null
     let compare
-    while(currentNode) {
+    while (currentNode) {
       compare = this.compare(element, currentNode.element)
       parent = currentNode
       if (compare > 0) {
@@ -47,11 +47,60 @@ class BST {// binary search tree
     }
     this.size++
   }
+  preorderTraversal(visitor) {// 前序遍历
+    const traversal = (node) => {
+      if (node == null) return
+      visitor.visit(node.element)// 访问者接口
+      traversal(node.left)
+      traversal(node.right)
+    }
+    traversal(this.root)
+  }
+  inorderTraversal(visitor) {// 中序遍历
+    const traversal = node => {
+      if (node == null) return
+      traversal(node.left)
+      visitor.visit(node.element)
+      traversal(node.right)
+    }
+    traversal(this.root)
+  }
+  postorderTraversal(visitor) {// 后序遍历
+    const traversal = node => {
+      if (node == null) return
+      traversal(node.left)
+      traversal(node.right)
+      visitor.visit(node.element)
+    }
+    traversal(this.root)
+  }
+  invertTree() {// REVIEW:反转二叉树
+    const traversal = node => {
+      if (node == null) return node
+      ;[node.left, node.right] = [traversal(node.right), traversal(node.left)]
+      return node
+    }
+    return traversal(this.root)
+  }
 }
 
-let bst = new BST((a, b) => b - a)
+let bst = new BST((a, b) => a - b)
 let arr = [10, 8, 19, 6, 15, 22, 20]
 arr.forEach(item => bst.add(item));
-console.dir(bst.root, {
-  depth: 1000
-})
+// console.dir(bst.root, {
+//   depth: 1000
+// })
+
+// 访问者
+class Visitor {
+  visit(element) {
+    console.log(element)
+  }
+}
+
+let visitor = new Visitor()
+// bst.postorderTraversal(visitor)
+
+// console.log(bst.invertTree())
+
+module.exports = BST

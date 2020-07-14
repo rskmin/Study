@@ -1,0 +1,13 @@
+{
+  "name": "ads",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^14.0.23",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1"
+  }
+}
