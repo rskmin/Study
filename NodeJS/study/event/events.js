@@ -2,6 +2,11 @@ function EventEmitter() {
   this._events = {}
 }
 
+/**
+ * 事件回调注册方法
+ * @param {string} eventName - 事件名称
+ * @param {Function} callback - 事件回调
+ */
 EventEmitter.prototype.on = function (eventName, callback) {
   if (!this._events) {
     this._events = {}

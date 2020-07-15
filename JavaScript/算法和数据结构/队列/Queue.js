@@ -15,12 +15,4 @@ class Queue {
   }
 }
 
-let queue = new Queue()
-queue.offer(1)
-queue.offer(2)
-console.log(queue.ll)
-console.log(queue.remove(0))
-console.log(queue.ll)
-console.log(queue.peek())
-
 module.exports = Queue

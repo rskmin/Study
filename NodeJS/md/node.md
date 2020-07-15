@@ -154,3 +154,4 @@ global: [Circular],
 
 - 默认 buffer 不支持扩容
 
+## 可读可写流

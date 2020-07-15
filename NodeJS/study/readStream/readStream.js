@@ -36,6 +36,17 @@ class ReadStream extends EventEmitter {
     this.flowing = true
     this.read()
   }
+  pipe(ws) {
+    this.on('data', function(data) {
+      let flag = ws.write(data)
+      if (!flag) {
+        this.pause
+      }
+    })
+    ws.on('drain', () => {
+      this.resume()
+    })
+  }
   open() {
     // I/O 操作 异步操作
     fs.open(this.path, this.flags, this.mode, (err, fd) => {
