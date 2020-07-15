@@ -5,13 +5,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>jsonp</title>
   <link type="text/css" rel="stylesheet" href="">
 </head>
 
 <body>
   
-  <script type="text/javascript" src=""></script>
+  <script type="text/javascript" >
+    function jsonp({url, params, cb}) {
+      return new Promise((resolve, reject) => {
+        // 创建script标签
+        let script = document.createElement('script')
+        window[cb] = function (data) {
+          resolve(data)
+          // 移除脚本
+          document.body.removeChild(script)
+        }
+        // 处理请求参数
+        params = {...params, cb}
+        let arr = []
+        for (let key in params) {
+          arr.push(`${key}=${params[key]}`)
+        }
+        // 拼接请求路径
+        script.src = `${url}?${arr.join('&')}`
+        // 添加脚本请求跨域资源
+        document.body.appendChild(script)
+      })
+    }
+    jsonp({
+      url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+      params: {wd: 'b'},
+      cb: 'show'
+    }).then(data => {
+      console.log(data)
+    })
+  </script>
 </body>
 
 </html>

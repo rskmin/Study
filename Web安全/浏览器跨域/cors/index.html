@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>cors</title>
+  <link type="text/css" rel="stylesheet" href="">
+</head>
+
+<body>
+  <script>
+    let xhr = new XMLHttpRequest()
+    xhr.open('GET', 'http://localhost:4000/getData', true)
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+          console.log(xhr.response)
+        }
+      }
+    }
+    xhr.send()
+  </script>
+</body>
+
+</html>
