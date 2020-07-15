@@ -112,6 +112,8 @@ app.listen(port, () => console.log(`Example app listening on port port!`))
 
 - 通过设置一级域名或二级域名来实现
 
+例如两个二级域名不相同`www.baidu.com`和`ccc.baidu.com`,两个页面通过设置相同的`document.domain='baidu.com'`来允许这两个页面的跨域
+
 ## window.name
 
 - 利用iframe的contentWindow会保留的特性
@@ -204,8 +206,44 @@ app.listen(port, () => console.log(`Example app listening on port port!`))
 </body>
 ````
 
-## http-proxy
+## Nginx(http-proxy)
 
-## nginx
+- HTTP代理
 
-## websocket
+- 跨域存在于浏览器与服务器之间，在中间加一层代理服务，将浏览器跨域请求转发到目标服务器获取资源后由代理服务返回
+
+## WebSocket
+
+- WebSocket无跨域限制
+
+``````html
+<!-- index.html -->
+<body>
+  <script type="text/javascript" >
+    // 与localhost:3000端口建立连接并发送数据
+    let ws = new WebSocket('ws://localhost:3000')
+    ws.onopen = function () {
+      ws.send('Rskmin')
+    }
+  </script>
+</body>
+``````
+
+``````js
+// server.js
+const express = require('express')
+const app = express()
+const port = 4000
+
+// WebSocket监听3000端口的访问
+let WebSocket = require('ws')
+let wss = new WebSocket.Server({port: 3000})
+wss.on('connection', function (ws) {
+  ws.on('message', function (data) {
+    console.log(data)
+  })
+})
+
+app.get('/', (req, res) => res.send('Hello World!'))
+app.listen(port, () => console.log('Example app listening on port port!'))
+``````

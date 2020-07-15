@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>WebSocket</title>
+</head>
+
+<body>
+  <script type="text/javascript" >
+    // 与localhost:3000端口建立连接并发送数据
+    let ws = new WebSocket('ws://localhost:3000')
+    ws.onopen = function () {
+      ws.send('Rskmin')
+    }
+  </script>
+</body>
+
+</html>
