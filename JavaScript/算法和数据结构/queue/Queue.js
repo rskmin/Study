@@ -1,4 +1,4 @@
-const LinkList = require('../链表/LinkList')
+const LinkList = require('../linkList/LinkList')
 
 class Queue {
   constructor() {

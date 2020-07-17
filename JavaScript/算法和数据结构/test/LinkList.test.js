@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const { assert } = require('chai')
-const LinkList = require('../链表/LinkList')
+const LinkList = require('../linkList/LinkList')
 
 const linkArr = [1, 2, 3, 4]
 
