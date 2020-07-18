@@ -1,3 +1,4 @@
+import AxiosInterceptorManger from './AxiosInterceptorManger'
 type Methods = 'get' | 'GET' | 'post' | 'POST' | 'put' | 'PUT' | 'delete' | 'DELETE' | 'options' | 'OPTIONS'
 
 export interface AxiosRequestConfig {
@@ -10,7 +11,11 @@ export interface AxiosRequestConfig {
 }
 
 export interface AxiosInstance {
-  <T = any>(config: AxiosRequestConfig): Promise<T>
+  <T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>>
+  interceptors: {
+    request: AxiosInterceptorManger<AxiosRequestConfig>
+    response: AxiosInterceptorManger<AxiosResponse>
+  }
 }
 
 export interface AxiosResponse<T = any> {
