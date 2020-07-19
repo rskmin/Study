@@ -14,7 +14,6 @@ let user: User = {
   password: '123456'
 }
 
-console.time('cost')
 // 请求拦截器先加的后执行
 axios.interceptors.request.use((config: AxiosRequestConfig): AxiosRequestConfig => {
   config.headers && (config.headers.name += '1')
@@ -42,11 +41,12 @@ axios.interceptors.response.use((response: AxiosResponse): AxiosResponse => {
   return response
 })
 
-axios<User>({
+axios({
   method: 'post',
   url: baseURL + '/post',
   headers: {
-    'content-type': 'application/json'
+    'content-type': 'application/json',
+    name: 'rskmin'
   },
   timeout: 1000,
   data: user
