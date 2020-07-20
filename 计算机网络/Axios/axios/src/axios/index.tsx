@@ -1,5 +1,6 @@
 import Axios from './Axios'
 import { AxiosInstance } from './types'
+import { CancelToken, isCancel } from './cancel'
 
 // 创建一个axios实例
 function createInstance(): AxiosInstance {
@@ -11,5 +12,7 @@ function createInstance(): AxiosInstance {
   return instance as AxiosInstance
 }
 let axios = createInstance()
+axios.cancelToken = new CancelToken()
+axios.isCancel = isCancel
 
 export default axios

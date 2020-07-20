@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "存放个人学习产物",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "nodemon": "^2.0.4"
+  },
   "devDependencies": {
     "cz-conventional-changelog": "^3.1.0"
   },

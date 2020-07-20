@@ -9,6 +9,13 @@ let defaults: AxiosRequestConfig = {
     common: {// 针对所有方法的请求生效
       accept: 'application/json'
     }
+  },
+  transformRequest: (data: any, headers: any) => {
+    headers['common']['content-type'] = 'application/json'
+    return JSON.stringify(data)
+  },
+  transformResponse: (response: any) => {
+    return response.data
   }
 }
 let getStyleMethods = ['get', 'head', 'delete', 'options']// get风格的请求
@@ -21,6 +28,7 @@ postStyleMethods.forEach((method: string) => {
     'content-type': 'application/json'
   }
 })
+
 let allMethods = [...getStyleMethods, ...postStyleMethods]
 
 export default class Axios<T> {
@@ -31,6 +39,9 @@ export default class Axios<T> {
   }
   request(config: AxiosRequestConfig): Promise<AxiosRequestConfig | AxiosResponse<T>> {
     config.headers = Object.assign(this.defaults.headers, config.headers)
+    if (config.transformRequest && config.data) {
+      config.data = config.transformRequest(config.data, config.headers)
+    }
     const chain: Array<Interceptor<AxiosRequestConfig> | Interceptor<AxiosResponse<T>>> = [
       {
         onFulfilled: this.dispatchRequest,
@@ -76,20 +87,18 @@ export default class Axios<T> {
               config,
               request
             }
+            if (config.transformResponse) {
+              response = config.transformResponse(response)
+            }
             resolve(response)
           } else {
             reject(`Error: Request failed with status code ${request.status}`)
           }
         }
       }
-      // if (headers) {
-      //   for (let key in headers) {
-      //     request.setRequestHeader(key, headers[key])
-      //   }
-      // }
       if (headers) {
         for (let key in headers) {
-          if (key === 'common' || key === config.method) {
+          if (key === 'common' || allMethods.includes(key)) {
             for (let key2 in headers[key]) {
               request.setRequestHeader(key2, headers[key][key2])
             }
@@ -110,6 +119,12 @@ export default class Axios<T> {
         request.ontimeout = function () {
           reject(`Error: timeout of ${timeout}ms exceeded`)
         }
+      }
+      if (config.cancelToken) {
+        config.cancelToken.then((message: string) => {
+          request.abort()
+          reject(message)
+        })
       }
       request.send(body)
     })
