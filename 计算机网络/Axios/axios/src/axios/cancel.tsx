@@ -10,14 +10,14 @@ export function isCancel(error: any) {
 }
 
 export class CancelToken {
-  public resolve: any
   source() {
+    let _resolve: any
     return {
       token: new Promise((resolve) => {
-        this.resolve = resolve
+        _resolve = resolve
       }),
       cancel: (message: string) => {
-        this.resolve(new Cancel(message))
+        _resolve(new Cancel(message))
       }
     }
   }
