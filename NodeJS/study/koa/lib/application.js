@@ -43,6 +43,9 @@ class Application extends EventEmitter {
       return Promise.resolve(middleware(ctx, () => dispatch(i+1))) // 延迟函数next, 调用next方法会找到下一个中间件执行
     }
     return dispatch(0)
+    // return this.middlewares.reduce((acc, cur) => {
+    //   return Promise.resolve(acc(ctx, () => cur))
+    // })
   }
   handleRequest() {
     return (req, res) => {
