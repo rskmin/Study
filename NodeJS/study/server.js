@@ -1,31 +1,30 @@
 /* eslint-disable callback-return */
 const Koa = require('koa')
-const bodyparser = require('./bodyParser')
+const static = require('./middlewares/koa-static')
+const Router = require('@koa/router')
 
 const app = new Koa()
+app.use(static(__dirname))
 
-// 登录的功能
-app.use(bodyparser())
-app.use(async (ctx, next) => {
-  if (ctx.method === 'GET' && ctx.path === '/login') {
-    ctx.body = `
-    <form action="/login" method="POST">
-      <input type="text" name="username">
-      <input type="text" name="password">
-      <button>提交</button>
-    </form>
-    `
-  } else {
-    await next()
-  }
+const router = new Router()
+router.get('/add', async ctx=> {
+  ctx.body = 'add'
+})
+router.get('/remove', async ctx => {
+  ctx.body = 'remove1'
+})
+router.get('/remove', async ctx => {
+  ctx.body = 'remove2'
 })
 
+app.use(router.routes())
+
 app.use(async (ctx, next) => {
-  if (ctx.method === 'POST' && ctx.path === '/login') {
-    ctx.body = ctx.request.body
-  } else {
-    next()
-  }
+  ctx.body = 'hello'
 })
 
-app.listen(3000)
+
+
+app.listen(3000, () => {
+  console.log('Server is running at 3000 port')
+})
