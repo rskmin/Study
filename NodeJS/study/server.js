@@ -1,30 +1,25 @@
 /* eslint-disable callback-return */
-const Koa = require('koa')
-const static = require('./middlewares/koa-static')
-const Router = require('@koa/router')
+const express = require('./express')
+const app = express()
+const port = 3000
 
-const app = new Koa()
-app.use(static(__dirname))
-
-const router = new Router()
-router.get('/add', async ctx=> {
-  ctx.body = 'add'
+app.get('/', function (req, res, next) {
+  console.log(1)
+  next()
+}, function (req, res, next) {
+  console.log(11)
+  next()
 })
-router.get('/remove', async ctx => {
-  ctx.body = 'remove1'
+app.get('/', function (req, res, next) {
+  console.log(2)
+  next()
 })
-router.get('/remove', async ctx => {
-  ctx.body = 'remove2'
+app.get('/', function (req, res, next) {
+  console.log(3)
+  next()
+})
+app.post('/', function (req, res, next) {
+  res.end('post')
 })
 
-app.use(router.routes())
-
-app.use(async (ctx, next) => {
-  ctx.body = 'hello'
-})
-
-
-
-app.listen(3000, () => {
-  console.log('Server is running at 3000 port')
-})
+app.listen(port, () => console.log('Example app listening on port port!'))

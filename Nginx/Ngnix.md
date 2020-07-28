@@ -1,4 +1,4 @@
-# Nginx 的中间件架构
+Nginx 的中间件架构
 
 ## 中间件
 
@@ -43,7 +43,7 @@
 | <div>/etc/nginx/fastcgi_params<br>/etc/nginx/uwsgi_params<br>/etc/nginx/scgi_params</div> | 配置文件 | cgi配置相关，fastcgi配置 |
 | <div>/etc/nginx/koi-utf<br>/etc/nginx/koi-win<br>/etc/nginx/win-utf</div> | 配置文件 | 编码转换映射转换文件 |
 | /etc/nginx/mime.types | 配置文件 | 设置http协议的Content-Type与扩展名对应关系 |
-| <div>/usr/lib/systemd/system/nginx-debug.service<br>/usr/lib/systemd/system/nginx.service<br>/etc/sysconfig/nginx<br>/etc/sysconfig/nginx-debug</div> | 配置文件 | 用于配置出系统守护进程管理器管理方式 |
+| <div> /usr/lib/systemd/system/nginx-debug.service<br>/usr/lib/systemd/system/nginx.service<br>/etc/sysconfig/nginx<br>/etc/sysconfig/nginx-debug</div> | 配置文件 | 用于配置出系统守护进程管理器管理方式 |
 | <div>/usr/lib64/nginx/modules<br>/etc/nginx/modules</div> | 目录 | Nginx模块目录 |
 | <div>/usr/sbin/nginx<br>/usr/sbin/nginx-debug</div> | 命令 | Nginx服务的启动管理的终端命令 |
 | <div>/usr/share/doc/nginx-@版本<br>/usr/share/doc/nginx-@版本/COPYRIGHT<br>/usr/share/man/man8/nginx.8.gz</div> | 文件、目录 | Nginx的手册和帮助文件 |
@@ -63,12 +63,19 @@
 
 ## 默认配置语法
 
-| 模块 | 作用 |
-| ---- | ---- |
-| user | 设置nginx服务的系统使用用户 |
-| worker_processes | 工作进程数 |
-| error_log | nginx的错误日志 |
-| pid | nginx服务启动时候pid |
+```nginx
+user nginx; # 设置nginx服务的系统使用用户
+worker_processes auto; # 工作进程数
+error_log /var/log/nginx/error.log; # nginx的错误日志
+pid /run/nginx.pid; # nginx服务启动时的pid
 
-<table>
-</table>
+events {
+    worker_connections 1024; # 每个进程允许最大连接数
+    # use 工作进程数
+}
+
+http {
+    
+}
+```
+
