@@ -3,23 +3,30 @@ const express = require('./express')
 const app = express()
 const port = 3000
 
-app.get('/', function (req, res, next) {
-  console.log(1)
-  next()
-}, function (req, res, next) {
-  console.log(11)
-  next()
-})
-app.get('/', function (req, res, next) {
-  console.log(2)
+const userRouter = express.Router()
+const articleRouter = express.Router()
+
+userRouter.get('/add', function (req, res, next) {
+  res.end('user add')
   next()
 })
-app.get('/', function (req, res, next) {
-  console.log(3)
+
+userRouter.get('/remove', function (req, res, next) {
+  res.end('user remove')
   next()
 })
-app.post('/', function (req, res, next) {
-  res.end('post')
+
+articleRouter.get('/add', function (req, res, next) {
+  res.end('article add')
+  next()
 })
+
+articleRouter.get('/remove', function (req, res, next) {
+  res.end('article remove')
+  next()
+})
+
+app.use('/user', userRouter)
+app.use('/article', articleRouter)
 
 app.listen(port, () => console.log('Example app listening on port port!'))
