@@ -6,8 +6,10 @@
   "dependencies": {
     "@koa/router": "^9.3.1",
     "@types/koa": "^2.11.3",
+    "@types/mongoose": "^5.7.32",
     "express": "^4.17.1",
     "koa": "^2.13.0",
-    "mime": "^2.4.6"
+    "mime": "^2.4.6",
+    "mongoose": "^5.9.25"
   }
 }
