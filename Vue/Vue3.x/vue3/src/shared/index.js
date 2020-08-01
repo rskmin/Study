@@ -21,3 +21,8 @@ export const hasOwn = (val, key) => hasOwnProperty.call(val, key)
  */
 export const hasChanged = (value, oldValue) =>
   value !== oldValue && (value === value || oldValue === oldValue)
+
+/**
+ * 判断是否是数组
+ */
+export const isArray = Array.isArray

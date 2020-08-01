@@ -1,11 +1,13 @@
 import { isObject, hasOwn, hasChanged } from '../shared'
 import { reactive } from './reactive'
+import { track, trigger } from './effect'
+import { TriggerOpTypes } from './operations'
 
 function createGetter() {
   return function get(target, key, receiver) {
     const res = Reflect.get(target, key, receiver)
 
-    console.log('Get', target, key)
+    track(target, 'get', key) // 依赖收集
     if (isObject(res)) {
       return reactive(res)
     }
@@ -24,9 +26,9 @@ function createSetter() {
     const result = Reflect.set(target, key, value, receiver)
 
     if (!hadKey) { // 属性的新增操作
-      console.log('新增操作', target, key)
+      trigger(target, TriggerOpTypes.ADD, key, value)
     } else if (hasChanged(value, oldValue)) { // 对属性值修改
-      console.log('修改操作', target, key)
+      trigger(target, TriggerOpTypes.SET, key, value) // 触发依赖更新
     }
 
     return result

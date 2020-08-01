@@ -1,4 +1,4 @@
-import { reactive, effect, computed, ref } from './reactivity'
+import { reactive, effect, computed, ref } from '@vue/reactivity'
 
 const state = reactive({
   name: 'rskmin',
@@ -6,6 +6,12 @@ const state = reactive({
   arr: [1, 2, 3, 4]
 })
 
-state.arr[0] = 2
+// effect(() => {
+//   console.log(state)
+//   console.log(JSON.stringify(state.arr))
+// })
 
+// state.arr[0] = 100
+
+console.log(state.arr)
 console.log(state)
