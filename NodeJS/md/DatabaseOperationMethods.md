@@ -2,6 +2,10 @@
 
 ## mongoose
 
+> MongoDB 是一个基于分布式文件存储的开源数据库系统
+>
+> MongoDB 将数据存储为一个文档，数据结构由键值(key => value)对组组成，MongoDB文档类似于 JSON 对象。字段值可以包含其他文档，数组及文档数组
+
 ### 建立连接
 
 ```js
@@ -72,33 +76,33 @@ module.exports = conn.model('Student', StudentSchema, 'student')
 - 集合传参新增
 
 ```js
-  let r = await Student.create({
-    username: 'Rskmin',
-    age: 6,
-    hobby: '爱好-编程'
-  })
+let r = await Student.create({
+  username: 'Rskmin',
+  age: 6,
+  hobby: '爱好-编程'
+})
 ```
 
 - new 一个文档
 
 ```js
-  let student = new Student({
-    username: 'Rskmin',
-    age: 6,
-    hobby: '爱好-编程'
-  })
-  let r = await student.save()
+let student = new Student({
+  username: 'Rskmin',
+  age: 6,
+  hobby: '爱好-编程'
+})
+let r = await student.save()
 ```
 
 - 批量增加
 
 ```js
-  // 放到数组中一次性添加只执行一次数据库操作
-  let arr = []
-  for (let i = 0; i < 30; i++) {
-    arr.push({username: 'rskmin' + i})
-  }
-  await Student.create(arr)
+// 放到数组中一次性添加只执行一次数据库操作
+let arr = []
+for (let i = 0; i < 30; i++) {
+  arr.push({username: 'rskmin' + i})
+}
+await Student.create(arr)
 ```
 
 #### 查询
@@ -132,5 +136,34 @@ module.exports = conn.model('Student', StudentSchema, 'student')
     }
   ])
   console.log(JSON.stringify(homework, null, 2))
+```
+
+## redis
+
+> Redis 是完全开源免费的，遵循BSD协议，是一个高性能的key-value数据库
+
+### ### 操作
+
+```js
+const redis = require('redis');
+
+// 连接数据库
+let client = redis.createClient(6379, '127.0.0.1')
+let client = redis.createClient(6379, '127.0.0.1')
+
+// 增加、获取数据
+// client.set(key, val, callback)
+;(async () => {
+  client.set('name', 'rskmin', redis.print)
+  await client.get('name', redis.print)
+})()
+
+// client1 订阅消息
+client1.subscribe('call')
+client1.on('message', function (channel, message) {
+    console.log(message)
+})
+// client2 发布消息
+client2.publish('call', 'hhhh')
 ```
 
