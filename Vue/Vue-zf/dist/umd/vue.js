@@ -42,6 +42,62 @@
     return Constructor;
   }
 
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  }
+
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
   // 获取数组原型上的方法
   var oldArrayProtoMethods = Array.prototype; // 继承方法
 
@@ -206,17 +262,437 @@
     if (opts.watch) ;
   }
 
+  /* eslint-disable no-useless-escape */
+  var ncname = '[a-zA-Z_][\\-\\.0-9_a-zA-Z]*';
+  var qnameCapture = "((?:".concat(ncname, "\\:)?").concat(ncname, ")");
+  var startTagOpen = new RegExp("^<".concat(qnameCapture)); // 标签开头的正则 捕获的内容是标签名
+
+  var endTag = new RegExp("^<\\/".concat(qnameCapture, "[^>]*>")); // 匹配标签结尾的 </div>
+
+  var attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/; // 匹配属性的
+
+  var startTagClose = /^\s*(\/?)>/; // 匹配标签结束的 >
+
+  /**
+   * 解析HTML为抽象语法树(AST)
+   * @param {string} html
+   */
+
+  function parseHTML(html) {
+    function createASTElement(tagName, attrs) {
+      return {
+        tag: tagName,
+        type: 1,
+        children: [],
+        attrs: attrs,
+        parent: null
+      };
+    }
+
+    var root;
+    var currentParent;
+    var stack = [];
+
+    function start(tagName, attrs) {
+      var element = createASTElement(tagName, attrs);
+
+      if (!root) {
+        root = element;
+      }
+
+      currentParent = element; // 保存当前解析的标签
+
+      stack.push(element); // 将生成的ast元素放到栈中
+    }
+
+    function end(tagName) {
+      var element = stack.pop(); // 取出栈中的最后一个
+
+      currentParent = stack[stack.length - 1];
+
+      if (currentParent) {
+        // 在闭合时可以知道该标签的父节点
+        // 解决ast父子关系
+        element.parent = currentParent;
+        currentParent.children.push(element);
+      }
+    }
+
+    function chars(text) {
+      // text = text.replace(/\s/g, '') // 删除空字符串
+      if (text) {
+        currentParent.children.push({
+          type: 3,
+          text: text
+        });
+      }
+    }
+
+    while (html) {
+      var textEnd = html.indexOf('<');
+
+      if (textEnd == 0) {
+        // 处理标签
+        var startTagMatch = parseStartTag(); // 开始标签匹配的结果
+
+        if (startTagMatch) {
+          start(startTagMatch.tagName, startTagMatch.attrs);
+          continue;
+        }
+
+        var endTagMatch = html.match(endTag);
+
+        if (endTagMatch) {
+          advance(endTagMatch[0].length);
+          end(endTagMatch[1]); // 将结束标签传入
+
+          continue;
+        }
+      }
+
+      var text = void 0;
+
+      if (textEnd > 0) {
+        // 处理文本
+        // 截取文本
+        text = html.substring(0, textEnd);
+      }
+
+      if (text) {
+        advance(text.length);
+        chars(text);
+      }
+    }
+
+    function advance(n) {
+      // 截取剩余字符串
+      html = html.substring(n);
+    }
+
+    function parseStartTag() {
+      // 解析标签头
+      var start = html.match(startTagOpen);
+
+      if (start) {
+        var match = {
+          tagName: start[1],
+          attrs: []
+        };
+        advance(start[0].length); // 删除开始标签
+
+        var _end;
+
+        var attr;
+
+        while (!(_end = html.match(startTagClose)) && (attr = html.match(attribute))) {
+          match.attrs.push({
+            name: attr[1],
+            value: attr[3] || attr[4] || attr[5]
+          });
+          advance(attr[0].length);
+        }
+
+        if (_end) {
+          advance(_end[0].length);
+          return match;
+        }
+      }
+    }
+
+    return root;
+  }
+
+  var defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // FROM: <div id="app" style="color:red"> hello {{name}} <span>hello</span></div>
+  // TO: render() {
+  //   return _c('div', {id: 'app', style: {color: 'red'}}, _v('hello' + _s(name)), _c('span', null, _v('hello')))
+  // }
+
+  /**
+   * 解析标签属性
+   * @param {object} attrs
+   */
+
+  function genProps(attrs) {
+    var str = '';
+
+    for (var i = 0; i < attrs.length; i++) {
+      var attr = attrs[i];
+
+      if (attr.name === 'style') {
+        (function () {
+          var obj = {};
+          attr.value.split(';').forEach(function (item) {
+            var _item$split = item.split(':'),
+                _item$split2 = _slicedToArray(_item$split, 2),
+                key = _item$split2[0],
+                value = _item$split2[1];
+
+            obj[key] = value;
+          });
+          attr.value = obj;
+        })();
+      }
+
+      str += "".concat(attr.name, ":").concat(JSON.stringify(attr.value), ",");
+    }
+
+    return "{".concat(str.slice(0, -1), "}");
+  }
+  /**
+   * 解析子节点
+   * @param {object} node - 子节点
+   */
+
+
+  function gen(node) {
+    if (node.type == 1) {
+      // 如果是元素节点
+      return generate(node);
+    }
+
+    var text = node.text; // 获取文本
+    // 如果是普通文本 不带{{}}
+
+    if (!defaultTagRE.test(text)) {
+      return "_v(".concat(JSON.stringify(text), ")");
+    }
+
+    var tokens = [];
+    var lastIndex = defaultTagRE.lastIndex = 0; // 重置正则匹配
+
+    var match, index;
+
+    while (match = defaultTagRE.exec(text)) {
+      index = match.index;
+
+      if (index > lastIndex) {
+        tokens.push(JSON.stringify(text.slice(lastIndex, index)));
+      }
+
+      tokens.push("_s(".concat(match[1].trim(), ")"));
+      lastIndex = index + match[0].length;
+    }
+
+    if (lastIndex < text.length) {
+      tokens.push(JSON.stringify(text.slice(lastIndex)));
+    }
+
+    return "_v(".concat(tokens.join('+'), ")");
+  }
+  /**
+   * 拼接子节点
+   * @param {object} el - ASTNode
+   */
+
+
+  function genChildren(el) {
+    var children = el.children;
+
+    if (children) {
+      // 将所有转化后的子节点用逗号拼接
+      return children.map(function (child) {
+        return gen(child);
+      }).join(',');
+    }
+  }
+  /**
+   * 解析AST为render返回值
+   * @param {object} el - ASTNode
+   */
+
+
+  function generate(el) {
+    var children = genChildren(el); // 子节点的生成
+
+    var code = "_c('".concat(el.tag, "', ").concat(el.attrs.length ? "".concat(genProps(el.attrs)) : 'undefined').concat(children ? ",".concat(children) : '', ")");
+    return code;
+  }
+
+  /**
+   * 将HTML模板解析成render函数
+   * @param {*} template - HTML模板
+   */
+
+  function compileToFunctions(template) {
+    // 将模板解析成ast树
+    var ast = parseHTML(template); // 1. 通过ast生成代码
+    // 2. 优化静态节点
+    // 3. 通过AST树 生成代码
+
+    var code = generate(ast); //4 . 将字符串变成函数
+
+    var render = new Function("with (this) { return ".concat(code, " }"));
+    return render;
+  }
+
+  function patch(oldVnode, vnode) {
+    // 将虚拟节点转化成真实节点
+    var el = createElm(vnode);
+    var parentElm = oldVnode.parentNode;
+    parentElm.insertBefore(el, oldVnode.nextSibling);
+    parentElm.removeChild(oldVnode);
+  }
+  /**
+   * 根据虚拟dom创建真实节点
+   * @param {object} vnode - 虚拟dom
+   */
+
+  function createElm(vnode) {
+    var tag = vnode.tag,
+        children = vnode.children,
+        key = vnode.key,
+        data = vnode.data,
+        text = vnode.text;
+
+    if (typeof tag == 'string') {
+      vnode.el = document.createElement(tag);
+      children.forEach(function (child) {
+        vnode.el.appendChild(createElm(child));
+      });
+    } else {
+      vnode.el = document.createTextNode(text);
+    }
+
+    return vnode.el;
+  }
+
+  /**
+   * Vue生命周期扩展
+   * @param {object} Vue - Vue 实例
+   */
+
+  function lifecycleMixin(Vue) {
+    Vue.prototype._update = function (vnode) {
+      var vm = this;
+      patch(vm.$el, vnode);
+    };
+  }
+  /**
+   * 挂载Vue组件
+   * @param {object} vm - Vue 实例
+   * @param {string} el - 挂载点
+   */
+
+  function mountComponent(vm, el) {
+    // 调用render方法去渲染 el 属性
+    // 先调用render 方法创建虚拟节点，再将虚拟节点渲染到页面上
+    vm._update(vm._render());
+  }
+
   /**
    * Vue初始化功能扩展插件
    * @param {object} Vue - Vue构造函数
    */
 
   function initMixin(Vue) {
+    /**
+     * 初始化方法
+     * @param {object} options
+     */
     Vue.prototype._init = function (options) {
       var vm = this;
       vm.$options = options; // 初始化状态(数据劫持，当数据改变时更新视图)
 
-      initState(vm);
+      initState(vm); // 如果当前有el属性说明要渲染模板
+
+      if (vm.$options.el) {
+        vm.$mount(vm.$options.el);
+      }
+    };
+    /**
+     * 挂载节点方法
+     * @param {string} params - 挂载点
+     */
+
+
+    Vue.prototype.$mount = function (el) {
+      var vm = this;
+      var options = vm.$options; // 查询挂载节点
+
+      el = document.querySelector(el);
+      vm.$el = el; // 判断有没有render方法
+
+      if (!options.render) {
+        // 无render
+        // 将template转换成render方法
+        var template = options.template;
+
+        if (!template && el) {
+          // 无template
+          // 使用挂载点作为模板
+          template = el.outerHTML;
+        } // 编译原理 将模板编译成render函数
+
+
+        var render = compileToFunctions(template);
+        options.render = render;
+      } // 有render(用户写的或者是使用模板编译出来的)
+      // 挂载组件
+
+
+      mountComponent(vm);
+    };
+  }
+
+  /**
+   * Vue渲染的扩展
+   * @param {object} Vue - Vue 实例
+   */
+  function renderMixin(Vue) {
+    Vue.prototype._c = function () {
+      // 创建虚拟dom元素
+      return createElement.apply(void 0, arguments);
+    };
+
+    Vue.prototype._s = function (val) {
+      // 获取插值内容并转化为字符串
+      return val == null ? '' : _typeof(val) == 'object' ? JSON.stringify(val) : val;
+    };
+
+    Vue.prototype._v = function (text) {
+      // 创建虚拟dom文本元素
+      return createTextVnode(text);
+    };
+
+    Vue.prototype._render = function () {
+      // _render = render
+      var vm = this;
+      var render = vm.$options.render;
+      var vnode = render.call(vm);
+      return vnode;
+    };
+  }
+
+  function createElement(tag) {
+    var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    for (var _len = arguments.length, children = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      children[_key - 2] = arguments[_key];
+    }
+
+    return vnode(tag, data, data.key, children);
+  }
+
+  function createTextVnode(text) {
+    return vnode(undefined, undefined, undefined, undefined, text);
+  }
+  /**
+   * 生成虚拟dom
+   * @param {string} [ tag ] - 标签
+   * @param {object} [ data ] - 标签属性对象
+   * @param {string} [ key ] - 节点 key 值
+   * @param {Array} [ children ] - 子节点
+   * @param {string} [ text ] - 文本内容
+   */
+
+
+  function vnode(tag, data, key, children, text) {
+    return {
+      tag: tag,
+      data: data,
+      key: key,
+      children: children,
+      text: text
     };
   }
 
@@ -225,7 +701,11 @@
   } // 扩展了初始化功能
 
 
-  initMixin(Vue);
+  initMixin(Vue); // 扩展了生命周期
+
+  lifecycleMixin(Vue); // 扩展了Vue的渲染方法
+
+  renderMixin(Vue);
 
   return Vue;
 

@@ -9,6 +9,11 @@
 </head>
 
 <body>
+  <div id="app" style="color:red;font-size: 24px;">
+    <p>hello world rskmin</p>
+    <li>{{school.name}}</li>
+    <li>{{school.age}}</li>
+  </div>
   <script src="/dist/umd/vue.js"></script>
   <script>
     // options Api 通过一个选项进行
@@ -16,11 +21,18 @@
       el: '#app',
       data() {
         return {
-          arr: [{a : 1}]
+          arr: [1, 2, 3],
+          school: {
+            name: 'rskmin',
+            age: 20
+          }
         }
       }
+      // template: `<div>hello</div>`
     })
-    console.log(vm.arr)
+
+    // 渲染操作 1) 默认先找render方法 2) 没有render方法会查找template 3) 找当前el指定元素的内容去渲染
+    // ast解析template => render 函数 
   </script>
 </body>
 
