@@ -19,6 +19,22 @@ export function lifecycleMixin(Vue) {
 export function mountComponent(vm, el) {
   // 调用render方法去渲染 el 属性
 
-  // 先调用render 方法创建虚拟节点，再将虚拟节点渲染到页面上
+  callHook(vm, 'beforeMount')
+  // 先调用 render 方法创建虚拟节点，再将虚拟节点渲染到页面上
   vm._update(vm._render())
+  callHook(vm, 'mounted')
+}
+
+/**
+ * 调用生命周期钩子
+ * @param {object} vm - Vue 实例
+ * @param {string} hook - 钩子名称
+ */
+export function callHook(vm, hook) {
+  const handlers = vm.$options[hook]
+  if (handlers) {
+    for (let i = 0, len = handlers.length; i < len; i++) {
+      handlers[i].call(vm)
+    }
+  }
 }

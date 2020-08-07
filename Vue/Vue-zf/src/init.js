@@ -1,6 +1,7 @@
 import { initState } from './state'
 import { compileToFunctions } from './compiler/index'
-import { mountComponent } from './lifecycle'
+import { mountComponent, callHook } from './lifecycle'
+import { mergeOptions } from './utils'
 
 /**
  * Vue初始化功能扩展插件
@@ -13,10 +14,12 @@ export function initMixin(Vue) {
    */
   Vue.prototype._init = function (options) {
     const vm = this
-    vm.$options = options
+    vm.$options = mergeOptions(vm.constructor.options, options)
 
+    callHook(vm, 'beforeCreate')
     // 初始化状态(数据劫持，当数据改变时更新视图)
     initState(vm)
+    callHook(vm, 'created')
 
     // 如果当前有el属性说明要渲染模板
     if (vm.$options.el) {
@@ -31,13 +34,14 @@ export function initMixin(Vue) {
   Vue.prototype.$mount = function (el) {
     const vm = this
     const options = vm.$options
-    // 查询挂载节点
+    // 获取挂载节点
     el = document.querySelector(el)
     vm.$el = el
 
     // 判断有没有render方法
     if (!options.render) { // 无render
       // 将template转换成render方法
+
       let template = options.template
       if (!template && el) { // 无template
         // 使用挂载点作为模板

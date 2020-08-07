@@ -31,6 +31,7 @@ function createTextVnode(text) {
 
 /**
  * 生成虚拟dom
+ * 对AST的扩展, 产生虚拟dom
  * @param {string} [ tag ] - 标签
  * @param {object} [ data ] - 标签属性对象
  * @param {string} [ key ] - 节点 key 值

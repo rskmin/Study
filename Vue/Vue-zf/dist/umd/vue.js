@@ -131,6 +131,7 @@
     };
   });
 
+  /* eslint-disable no-prototype-builtins */
   function proxy(vm, data, key) {
     Object.defineProperty(vm, key, {
       get: function get() {
@@ -148,6 +149,60 @@
       value: value
     });
   }
+  var LIFECYCLE_HOOKS = ['beforeCreate', 'created', 'beforeMount', 'mounted', 'beforeUpdate', 'updated', 'beforeDestory', 'destoryed'];
+  var strats = {};
+
+  strats.data = function (parentVal, childVal) {
+    return childVal;
+  };
+
+  strats.computed = function () {};
+
+  strats.watch = function () {};
+
+  function mergeHook(parentVal, childVal) {
+    if (childVal) {
+      if (parentVal) {
+        return parentVal.concat(childVal);
+      }
+
+      return [childVal];
+    } // 没有儿子, 不合并
+
+
+    return parentVal;
+  }
+
+  LIFECYCLE_HOOKS.forEach(function (hook) {
+    strats[hook] = mergeHook;
+  });
+  function mergeOptions(parent, child) {
+    var options = {};
+
+    for (var key in parent) {
+      // 父亲和儿子都有的
+      mergeField(key);
+    }
+
+    for (var _key in child) {
+      // 父亲没有儿子有
+      if (!parent.hasOwnProperty(_key)) {
+        mergeField(_key);
+      }
+    }
+
+    function mergeField(key) {
+      // 合并字段
+      if (strats[key]) {
+        options[key] = strats[key](parent[key], child[key]);
+      } else {
+        // 默认合并
+        options[key] = child[key];
+      }
+    }
+
+    return options;
+  }
 
   /**
    * 劫持对象
@@ -161,7 +216,6 @@
 
     Object.defineProperty(data, key, {
       get: function get() {
-        console.log('用户获取值了');
         return value;
       },
       set: function set(newValue) {
@@ -169,7 +223,6 @@
         observe(newValue); // 如果新值是个对象也要拦截
 
         value = newValue;
-        console.log('用户设置值了');
       }
     });
   }
@@ -545,7 +598,9 @@
         text = vnode.text;
 
     if (typeof tag == 'string') {
-      vnode.el = document.createElement(tag);
+      vnode.el = document.createElement(tag); // 更新属性
+
+      updateProperties(vnode);
       children.forEach(function (child) {
         vnode.el.appendChild(createElm(child));
       });
@@ -554,6 +609,23 @@
     }
 
     return vnode.el;
+  }
+
+  function updateProperties(vnode) {
+    var el = vnode.el;
+    var newProps = vnode.data || {};
+
+    for (var key in newProps) {
+      if (key === 'style') {
+        for (var styleName in newProps.style) {
+          el.style[styleName] = newProps.style[styleName];
+        }
+      } else if (key === 'class') {
+        el.className = el["class"];
+      } else {
+        el.setAttribute(key, newProps[key]);
+      }
+    }
   }
 
   /**
@@ -575,8 +647,26 @@
 
   function mountComponent(vm, el) {
     // 调用render方法去渲染 el 属性
-    // 先调用render 方法创建虚拟节点，再将虚拟节点渲染到页面上
+    callHook(vm, 'beforeMount'); // 先调用 render 方法创建虚拟节点，再将虚拟节点渲染到页面上
+
     vm._update(vm._render());
+
+    callHook(vm, 'mounted');
+  }
+  /**
+   * 调用生命周期钩子
+   * @param {object} vm - Vue 实例
+   * @param {string} hook - 钩子名称
+   */
+
+  function callHook(vm, hook) {
+    var handlers = vm.$options[hook];
+
+    if (handlers) {
+      for (var i = 0, len = handlers.length; i < len; i++) {
+        handlers[i].call(vm);
+      }
+    }
   }
 
   /**
@@ -591,9 +681,11 @@
      */
     Vue.prototype._init = function (options) {
       var vm = this;
-      vm.$options = options; // 初始化状态(数据劫持，当数据改变时更新视图)
+      vm.$options = mergeOptions(vm.constructor.options, options);
+      callHook(vm, 'beforeCreate'); // 初始化状态(数据劫持，当数据改变时更新视图)
 
-      initState(vm); // 如果当前有el属性说明要渲染模板
+      initState(vm);
+      callHook(vm, 'created'); // 如果当前有el属性说明要渲染模板
 
       if (vm.$options.el) {
         vm.$mount(vm.$options.el);
@@ -607,7 +699,7 @@
 
     Vue.prototype.$mount = function (el) {
       var vm = this;
-      var options = vm.$options; // 查询挂载节点
+      var options = vm.$options; // 获取挂载节点
 
       el = document.querySelector(el);
       vm.$el = el; // 判断有没有render方法
@@ -678,6 +770,7 @@
   }
   /**
    * 生成虚拟dom
+   * 对AST的扩展, 产生虚拟dom
    * @param {string} [ tag ] - 标签
    * @param {object} [ data ] - 标签属性对象
    * @param {string} [ key ] - 节点 key 值
@@ -696,16 +789,42 @@
     };
   }
 
+  function initGlobalApi(Vue) {
+    Vue.options = {};
+
+    Vue.mixin = function (mixin) {
+      this.options = mergeOptions(this.options, mixin);
+    };
+  }
+
+  /**
+   * Vue 构造函数
+   * @param {*} options
+   */
+
   function Vue(options) {
-    this._init(options);
-  } // 扩展了初始化功能
+    this._init(options); // 组件初始化入口
+
+  }
+  /**
+   * 通过插件的方式将Vue的初始化方法扩展到Vue原型上
+   */
+  // 扩展了初始化功能
 
 
-  initMixin(Vue); // 扩展了生命周期
+  initMixin(Vue); // _init
+  // 扩展了生命周期相关(更新 + 挂载)
 
-  lifecycleMixin(Vue); // 扩展了Vue的渲染方法
+  lifecycleMixin(Vue); // _update
+  // 扩展了Vue的渲染方法
 
-  renderMixin(Vue);
+  renderMixin(Vue); // _render
+
+  /**
+   * 静态方法 Vue.component Vue.directive Vue.extend Vue.mixin
+   */
+
+  initGlobalApi(Vue);
 
   return Vue;
 

@@ -11,14 +11,12 @@ function defineReactive(data, key, value) {
   observe(value) // 递归劫持
   Object.defineProperty(data, key, {
     get() {
-      console.log('用户获取值了')
       return value
     },
     set(newValue) {
       if (newValue == value) return
       observe(newValue) // 如果新值是个对象也要拦截
       value = newValue
-      console.log('用户设置值了')
     }
   })
 }
