@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="counter-app"></div>
+  <script src="index.js"></script>
+  <script>
+    let counterApp = document.getElementById('counter-app')
+    new Counter({name: 'rskmin'}).mount(counterApp)
+  </script>
+</body>
+
+</html>
