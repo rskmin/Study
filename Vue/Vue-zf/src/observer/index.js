@@ -1,5 +1,6 @@
-import { arrayMethods } from './array'
-import { defineProperty } from '../utils'
+import { arrayMethods } from './array';
+import { defineProperty } from '../utils';
+import Dep from './dep';
 
 /**
  * 劫持对象
@@ -8,17 +9,24 @@ import { defineProperty } from '../utils'
  * @param {*} value
  */
 function defineReactive(data, key, value) {
-  observe(value) // 递归劫持
+  observe(value); // 递归劫持
+
+  const dep = new Dep(); // 每个属性都有一个dep
+
   Object.defineProperty(data, key, {
     get() {
-      return value
+      if (Dep.target) {
+        dep.depend();
+      }
+      return value;
     },
     set(newValue) {
-      if (newValue == value) return
-      observe(newValue) // 如果新值是个对象也要拦截
-      value = newValue
+      if (newValue == value) return;
+      observe(newValue); // 如果新值是个对象也要拦截
+      value = newValue;
+      dep.notify();
     }
-  })
+  });
 }
 
 /**
@@ -27,34 +35,34 @@ function defineReactive(data, key, value) {
 class Observer {
   constructor(value) {
     // 判断一个对象是否被观测过可以查看有没有没 __ob__
-    defineProperty(value, '__ob__', this)
+    defineProperty(value, '__ob__', this);
 
     // 使用 defineProperty 重新定义属性
     if (Array.isArray(value)) { // 数组函数劫持(切片编程)
-      Object.setPrototypeOf(value, arrayMethods)
-      this.observeArray(value) // 观测数组中的对象类型
+      Object.setPrototypeOf(value, arrayMethods);
+      this.observeArray(value); // 观测数组中的对象类型
     } else { // 对象属性劫持
-      this.walk(value)
+      this.walk(value);
     }
   }
   observeArray(value) {
-    value.forEach(item => observe(item))
+    value.forEach(item => observe(item));
   }
   walk(data) {
-    let keys = Object.keys(data)
+    let keys = Object.keys(data);
     keys.forEach(key => {
       // 定义成响应数据
-      defineReactive(data, key, data[key])
-    })
+      defineReactive(data, key, data[key]);
+    });
   }
 }
 
 export function observe(data) {
   if (typeof data !== 'object' && data !== null) { // 确保必须是对象
-    return data
+    return data;
   }
   if (data.__ob__) {
-    return data
+    return data;
   }
-  return new Observer(data)
+  return new Observer(data);
 }

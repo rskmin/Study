@@ -204,6 +204,38 @@
     return options;
   }
 
+  var Dep = /*#__PURE__*/function () {
+    function Dep() {
+      _classCallCheck(this, Dep);
+
+      this.subs = [];
+    }
+
+    _createClass(Dep, [{
+      key: "depend",
+      value: function depend() {
+        this.subs.push(Dep.target);
+      }
+    }, {
+      key: "notify",
+      value: function notify() {
+        this.subs.forEach(function (watcher) {
+          return watcher.update();
+        });
+      }
+    }]);
+
+    return Dep;
+  }();
+
+  Dep.target = null;
+  function pushTarget(watcher) {
+    Dep.target = watcher;
+  }
+  function popTarget() {
+    Dep.target = null;
+  }
+
   /**
    * 劫持对象
    * @param {object} data
@@ -214,8 +246,14 @@
   function defineReactive(data, key, value) {
     observe(value); // 递归劫持
 
+    var dep = new Dep(); // 每个属性都有一个dep
+
     Object.defineProperty(data, key, {
       get: function get() {
+        if (Dep.target) {
+          dep.depend();
+        }
+
         return value;
       },
       set: function set(newValue) {
@@ -223,6 +261,7 @@
         observe(newValue); // 如果新值是个对象也要拦截
 
         value = newValue;
+        dep.notify();
       }
     });
   }
@@ -584,6 +623,7 @@
     var parentElm = oldVnode.parentNode;
     parentElm.insertBefore(el, oldVnode.nextSibling);
     parentElm.removeChild(oldVnode);
+    return el;
   }
   /**
    * 根据虚拟dom创建真实节点
@@ -628,6 +668,45 @@
     }
   }
 
+  var id = 0;
+
+  var Watcher = /*#__PURE__*/function () {
+    // exprOrFn vm._update(vm._render())
+    function Watcher(vm, exprOrFn, cb, options) {
+      _classCallCheck(this, Watcher);
+
+      this.vm = vm;
+      this.exprOrFn = exprOrFn;
+      this.cb = cb;
+      this.options = options;
+      this.id = id++; // watcher 的唯一标识
+
+      if (typeof exprOrFn === 'function') {
+        this.getter = exprOrFn;
+      }
+
+      this.get();
+    }
+
+    _createClass(Watcher, [{
+      key: "get",
+      value: function get() {
+        pushTarget(this); // 当前watcher实例
+
+        this.getter(); // 调用exprOrFn 渲染页面
+
+        popTarget();
+      }
+    }, {
+      key: "update",
+      value: function update() {
+        this.get();
+      }
+    }]);
+
+    return Watcher;
+  }();
+
   /**
    * Vue生命周期扩展
    * @param {object} Vue - Vue 实例
@@ -636,7 +715,7 @@
   function lifecycleMixin(Vue) {
     Vue.prototype._update = function (vnode) {
       var vm = this;
-      patch(vm.$el, vnode);
+      vm.$el = patch(vm.$el, vnode);
     };
   }
   /**
@@ -649,8 +728,14 @@
     // 调用render方法去渲染 el 属性
     callHook(vm, 'beforeMount'); // 先调用 render 方法创建虚拟节点，再将虚拟节点渲染到页面上
 
-    vm._update(vm._render());
+    var updateComponent = function updateComponent() {
+      vm._update(vm._render());
+    }; // watcher 用于渲染
 
+
+    var watcher = new Watcher(vm, updateComponent, function () {
+      callHook(vm, 'beforeUpdate');
+    }, true);
     callHook(vm, 'mounted');
   }
   /**

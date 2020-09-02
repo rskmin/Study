@@ -1,4 +1,5 @@
-import { patch } from './vdom/patch'
+import { patch } from './vdom/patch';
+import Watcher from './observer/watcher';
 
 /**
  * Vue生命周期扩展
@@ -6,9 +7,9 @@ import { patch } from './vdom/patch'
  */
 export function lifecycleMixin(Vue) {
   Vue.prototype._update = function (vnode) {
-    const vm = this
-    patch(vm.$el, vnode)
-  }
+    const vm = this;
+    vm.$el = patch(vm.$el, vnode);
+  };
 }
 
 /**
@@ -19,10 +20,16 @@ export function lifecycleMixin(Vue) {
 export function mountComponent(vm, el) {
   // 调用render方法去渲染 el 属性
 
-  callHook(vm, 'beforeMount')
+  callHook(vm, 'beforeMount');
   // 先调用 render 方法创建虚拟节点，再将虚拟节点渲染到页面上
-  vm._update(vm._render())
-  callHook(vm, 'mounted')
+  let updateComponent = () => {
+    vm._update(vm._render());
+  };
+  // watcher 用于渲染
+  const watcher = new Watcher(vm, updateComponent, () => {
+    callHook(vm, 'beforeUpdate');
+  }, true);
+  callHook(vm, 'mounted');
 }
 
 /**
@@ -31,10 +38,10 @@ export function mountComponent(vm, el) {
  * @param {string} hook - 钩子名称
  */
 export function callHook(vm, hook) {
-  const handlers = vm.$options[hook]
+  const handlers = vm.$options[hook];
   if (handlers) {
     for (let i = 0, len = handlers.length; i < len; i++) {
-      handlers[i].call(vm)
+      handlers[i].call(vm);
     }
   }
 }
