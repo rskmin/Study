@@ -214,7 +214,8 @@
     _createClass(Dep, [{
       key: "depend",
       value: function depend() {
-        this.subs.push(Dep.target);
+        // 我们希望 watcher 可以存放 dep
+        Dep.target.addDep(this); // this.subs.push(Dep.target);
       }
     }, {
       key: "notify",
@@ -681,6 +682,8 @@
       this.options = options;
       this.id = id++; // watcher 的唯一标识
 
+      this.deps = [];
+
       if (typeof exprOrFn === 'function') {
         this.getter = exprOrFn;
       }
@@ -689,6 +692,11 @@
     }
 
     _createClass(Watcher, [{
+      key: "addDep",
+      value: function addDep(dep) {
+        this.deps.push(dep);
+      }
+    }, {
       key: "get",
       value: function get() {
         pushTarget(this); // 当前watcher实例

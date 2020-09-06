@@ -10,11 +10,15 @@ class Watcher {
     this.cb = cb;
     this.options = options;
     this.id = id++; // watcher 的唯一标识
+    this.deps = [];
 
     if (typeof exprOrFn === 'function') {
       this.getter = exprOrFn;
     }
     this.get();
+  }
+  addDep(dep) {
+    this.deps.push(dep);
   }
   get() {
     pushTarget(this); // 当前watcher实例
