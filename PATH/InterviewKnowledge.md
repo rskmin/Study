@@ -4,6 +4,12 @@
 
 ### 盒子模型
 
+#### 基本概念
+
+- margin、border、padding、content。在网页中，一个元素占有空间的大小由几个部分构成，其中包括元素的内容(content)、元素的内边距(padding)，元素的边框(border)、元素的外边距(margin)四个部分。这四个部分占有的空间中，有的部分可以显示其相应的内容，有的部分只用来分割相邻的区域,这4个部分一起构成了css中元素的盒模型
+
+#### 盒模型分类
+
 - W3C盒子模型(标准盒模型)：`box-sizing: content-box;` 默认设置，元素内容占据的空间(content)是由 `width` 属性设置的，而 `padding` 和 `border` 是另外设置的
 - IE盒子模型(怪异盒模型): `box-sizing: border-box` width = content + padding + border
 
@@ -73,22 +79,32 @@ cookie是服务器发送到浏览器的一小段数据，会在浏览器下次�
 
 #### XSS攻击(跨站脚本攻击)
 
+> `XSS`全称是`Cross Site Scripting[跨站脚本]`，为了和css区分，故叫它`xss`。XSS攻击是指浏览器中执行恶意脚本(无论是跨域还是同域)，从而拿到用户的信息进行操作
+
+- 危害：
+  - 窃取Cookie
+  - 监听用户行为，比如输入账号密码后直接发送到黑客服务器
+  - 修改DOM伪造登录表单
+  - 在页面中生成浮窗广告
+
 - 原理：用户输入的数据出现在代码中成为脚本
 - 类型
-  - 反射型： url别人，发送该url给别人(可生成短链接伪装)
+  - 反射型： url注入，恶意脚本作为网络请求的一部分，发送该url给别人(可生成短链接伪装)
   - 存储型：脚本注入到数据库中，再次被渲染到页面中
-- 防范：阻止用户输入的内容形成脚本
+  - 文档型：文档型的XSS攻击并不会经过服务端，而是作为中间人的角色，在数据传输过程劫持到网络数据包，然后修改里面的html文档 这样的劫持方式包括`wifi路由劫持`或者`本地恶意软件`等
+- 防范：阻止用户输入的内容形成脚本，阻止恶意脚本执行
   - 浏览器提供：设置HTTP头 `X-XSS-Protection`, 用户输入内容再次出现在HTML中时会进行拦截(在html词法分析后进行)
   - 转义
   - 黑白名单：针对富文本
   - CSP(内容安全策略): 通过HTTP头限制某些内容的执行
+  - HttpOnly：很多XSS攻击脚本都是用来窃取Cookie，而设置Cookie的HttpOnly属性后，JavaScript便无法读取Cookie的值
 
 #### CSRF(跨站请求伪造)
 
 - 原理：浏览器请求会携带cookie信息，利用cookie信息上的登录态伪装用户操作
 - 防范
   - 由于是利用cookie的信息，只要不发送cookie就好了，设置 `same-site` 限制cookie发送条件
-  - CSRF攻击直接访问后端接口，不经过前端，只要在前端站点设置判断信息传送给后端校验(自定义信息或者referer)
+  - CSRF攻击直接访问后端接口，不经过前端，只要在前端站点设置判断信息传送给后端校验(自定义校验信息Token、Origin或者referer)。其中，Origin只包含域名信息，而Referer包含了具体的 URL 路径。 当然，这两者都是可以伪造的，通过 Ajax 中自定义请求头即可，安全性略差。
 
 ### 缓存
 
@@ -294,26 +310,26 @@ cookie是服务器发送到浏览器的一小段数据，会在浏览器下次�
 
 #### Proxy
 
-#### 模块化(ES Module)
+#### 模块化
 
 - CommonJS 和 ES Module 的区别
   - 语法不同
   - CommonJS 是运行时加载模块，ES6 在静态编译期间确定模块依赖
-  - CommonJS 导出的是一个值得拷贝，ES6 是值的引用
+  - CommonJS 导出的是一个值的拷贝，ES6 是值的引用
   - ES6 会将`import`提升到顶部，CommonJS不会提升 `require`
   - CommonJS 中的this指向的是模块本身，ES6 模块中的this指向的是 `undefined`
   - 循环导入实现不同，CommonJS 循环导入时返回的时已加载部分，ES6 由于返回的是引用需要用户手动判断
-
 - AMD
   - 异步加载模块，浏览器优先，推崇依赖前置
 - CMD
   - 延迟执行，推崇依赖就近
-
 - CommonJS
   - 同步加载，服务端规范
   - 规范：一个单独的文件就是一个模块。加载模块用 `require` 方法，导出内容用 `module.exports`
 - UMD
   - AMD和CommonJS 结合，判断环境决定使用什么规范
+- ESM(ES Module)
+- SystemJS
 
 ## Node
 
