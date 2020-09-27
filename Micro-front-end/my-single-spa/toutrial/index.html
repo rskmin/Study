@@ -9,15 +9,41 @@
 </head>
 
 <body>
+  <a href="#/home">加载appA</a>
+  <a href="#/index">加载appB</a>
+  <div id="app"></div>
   <script src="../lib/umd/my-single-spa.js"></script>
   <script>
     (global => {
+      function loadScript(appName) {
+        let script = document.createElement('script');
+        script.src = '/toutrial/' + appName + '.js';
+        document.body.appendChild(script);
+
+        return new Promise((resolve, reject) => {
+          script.onload = function () {
+            resolve(window[appName]);
+            script.parentNode.removeChild(script);
+          };
+          script.onerror = reject;
+        });
+      }
       let mySingleSpa = global.mySingleSpa;
-      mySingleSpa.registerApplication('appA',
-      () => Promise.resolve({}),
-      function (location) {
-        return true;
-      })
+      mySingleSpa.registerApplication(
+        'appA',
+        () => loadScript('appA'),
+        function (location) {
+          return location.hash === '#/home';
+        },
+      );
+      mySingleSpa.registerApplication(
+        'appB',
+        () => loadScript('appB'),
+        function (location) {
+          return location.hash === '#/index';
+        },
+      );
+      mySingleSpa.start();
     })(globalThis || window);
   </script>
 </body>

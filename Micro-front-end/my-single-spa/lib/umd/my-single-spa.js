@@ -7,14 +7,32 @@
   const NOT_LOADED = {
     status: 'NOT_LOADED'
   };
+  const LOAD_SOURCE_CODE = {
+    status: 'LOAD_SOURCE_CODE'
+  };
+  const NOT_BOOTSTRAPPED = {
+    status: 'NOT_BOOTSTRAPPED'
+  };
+  const BOOTSTRAPPING = {
+    status: 'BOOTSTRAPPING'
+  };
+  const NOT_MOUNTED = {
+    status: 'NOT_MOUNTED'
+  };
+  const MOUNTING = {
+    status: 'MOUNTING'
+  };
+  const MOUNTED = {
+    status: 'MOUNTED'
+  };
+  const UNMOUNTING = {
+    status: 'UNMOUNTING'
+  };
   const SKIP_BECAUSE_BROKEN = {
     status: 'SKIP_BECAUSE_BROKEN'
   };
   const LOAD_ERROR = {
     status: 'LOAD_ERROR'
-  };
-  const LOAD_SOURCE_CODE = {
-    status: 'LOAD_SOURCE_CODE'
   };
   function noSkip(app) {
     return app.status !== SKIP_BECAUSE_BROKEN;
@@ -22,8 +40,11 @@
   function noLoadError(app) {
     return app.status !== LOAD_ERROR;
   }
+  function isLoaded(app) {
+    return app.status !== NOT_LOADED && app.status !== SKIP_BECAUSE_BROKEN && app.status !== LOAD_ERROR;
+  }
   function isntLoaded(app) {
-    return app.status === NOT_LOADED;
+    return !isLoaded(app);
   }
   function shouldBeActive(app) {
     try {
@@ -33,8 +54,77 @@
       console.log(e);
     }
   }
+  function shouldntBeActive(app) {
+    try {
+      return !app.activityWhen(window.location);
+    } catch (e) {
+      app.status = SKIP_BECAUSE_BROKEN;
+      console.log(e);
+    }
+  }
+  function isActive(app) {
+    return app.status === MOUNTED;
+  }
+  function isntActive(app) {
+    return !isActive(app);
+  }
 
-  function start() {}
+  let started = false;
+  function start() {
+    if (started) {
+      return;
+    }
+
+    started = true;
+    console.log('my-single-spa start');
+    return invoke();
+  }
+  function isStarted() {
+    return started;
+  }
+
+  const TIMEOUTS = {
+    bootstrap: {
+      milliseconds: 3000,
+      rejectWhenTimeout: false
+    },
+    mount: {
+      milliseconds: 3000,
+      rejectWhenTimeout: false
+    },
+    unmount: {
+      milliseconds: 3000,
+      rejectWhenTimeout: false
+    }
+  };
+  function reasonableTime(lifecyclePromise, description, timeout) {
+    return new Promise((resolve, reject) => {
+      let finished = false;
+      lifecyclePromise.then(data => {
+        finished = true;
+        resolve(data);
+      }).catch(e => {
+        finished = true;
+        reject(e);
+      });
+      setTimeout(() => {
+        if (finished) {
+          return;
+        }
+
+        if (timeout.rejectWhenTimeout) {
+          reject(`${description}`);
+        } else {
+          console.log('timeout but waiting');
+        }
+      }, timeout.milliseconds);
+    });
+  }
+  function ensureTimeout(timeouts = {}) {
+    return { ...TIMEOUTS,
+      ...timeouts
+    };
+  }
 
   function smellLikePromise(promise) {
     if (promise instanceof Promise) {
@@ -52,9 +142,9 @@
       lifecycle = [() => Promise.resolve()];
     }
 
-    return new Promise((resolve, reject) => {
+    return props => new Promise((resolve, reject) => {
       function waitForPromises(index) {
-        let fn = lifecycle[index]();
+        let fn = lifecycle[index](props);
 
         if (!smellLikePromise(fn)) {
           reject(new Error(`${description} has error`));
@@ -72,6 +162,12 @@
       waitForPromises(0);
     });
   }
+  function getProps(app) {
+    return {
+      name: app.name,
+      ...app.customProps
+    };
+  }
 
   function toLoadPromise(app) {
     if (app.status !== NOT_LOADED) {
@@ -79,15 +175,16 @@
     }
 
     app.status = LOAD_SOURCE_CODE;
-    let loadPromise = app.loadFunction();
+    let loadPromise = app.loadFunction(getProps(app));
 
     if (!smellLikePromise(loadPromise)) {
+      app.status = SKIP_BECAUSE_BROKEN;
       return Promise.reject(new Error(''));
     }
 
-    loadPromise.then(appConfig => {
+    return loadPromise.then(appConfig => {
       if (typeof appConfig !== 'object') {
-        throw new Error('');
+        throw new Error('loadPromise must return a promise or thennable object');
       }
 
       let errors = [];
@@ -100,31 +197,227 @@
       if (errors.length) {
         app.status = SKIP_BECAUSE_BROKEN;
         console.log(errors);
-        return;
+        return app;
       }
 
+      app.status = NOT_BOOTSTRAPPED;
       app.bootstrap = flattenLifecyclesArray(appConfig.bootstrap, `app: ${app.name} bootstrapping`);
       app.mount = flattenLifecyclesArray(appConfig.mount, `app: ${app.name} mounting`);
       app.unmount = flattenLifecyclesArray(appConfig.unmount, `app: ${app.name} unmounting`);
+      app.timeouts = ensureTimeout(appConfig.timeouts);
+      return app;
+    }).catch(e => {
+      app.status = LOAD_ERROR;
+      console.log(e);
+    });
+  }
+
+  function toBootstrapPromise(app) {
+    if (app.status !== NOT_BOOTSTRAPPED) {
+      return Promise.resolve(app);
+    }
+
+    app.status = BOOTSTRAPPING;
+    return reasonableTime(app.bootstrap(getProps(app)), `app: ${app.name} bootstrapping`, app.timeouts.bootstrap).then(() => {
+      app.status = NOT_MOUNTED;
+      return app;
+    }).catch(e => {
+      app.status = SKIP_BECAUSE_BROKEN;
+      console.log("toBootstrapPromise -> e", e);
+      return app;
+    });
+  }
+
+  function toUnmountPromise(app) {
+    if (app.status !== MOUNTED) {
+      return Promise.resolve(app);
+    }
+
+    app.status = UNMOUNTING;
+    return reasonableTime(app.unmount(getProps(app)), `app: ${app.name} unmounting`, app.timeouts.unmount).then(() => {
+      app.status = NOT_MOUNTED;
+      return app;
+    }).catch(e => {
+      console.log("toUnmountPromise -> e", e);
+      app.status = SKIP_BECAUSE_BROKEN;
+      return app;
+    });
+  }
+
+  function toMountPromise(app) {
+    if (app.status !== NOT_MOUNTED) {
+      return Promise.resolve(app);
+    }
+
+    app.status = MOUNTING;
+    return reasonableTime(app.mount(getProps(app)), `app: ${app.name} mounting`, app.timeouts.mount).then(() => {
+      app.status = MOUNTED;
+      return app;
+    }).catch(e => {
+      console.log("toMountPromise -> e", e); // 如果app 挂载失败，那么立即执行 unmount 操作
+
+      app.status = MOUNTED; // toUnmountPromise
+
+      return toUnmountPromise(app);
+    });
+  }
+
+  const HIJACK_EVENTS_NAME = /^(hashchange|popstate)$/i;
+  const EVENTS_POOL = {
+    hashchange: [],
+    popstate: []
+  };
+
+  function reroute() {
+    invoke([], arguments);
+  }
+
+  window.addEventListener('hashchange', reroute);
+  window.addEventListener('popstate', reroute);
+  const originalAddEventListener = window.addEventListener;
+  const originalRemoveEventListener = window.removeEventListener;
+
+  window.addEventListener = function (eventName, handler) {
+    if (eventName && HIJACK_EVENTS_NAME.test(eventName)) {
+      EVENTS_POOL[eventName].indexOf(handler) === -1 && EVENTS_POOL[eventName].push(handler);
+    } else {
+      originalAddEventListener.apply(this, arguments);
+    }
+  };
+
+  window.removeEventListener = function (eventName, handler) {
+    if (eventName && HIJACK_EVENTS_NAME.test(eventName)) {
+      let events = EVENTS_POOL[eventName];
+      events.indexOf(handler) > -1 && (EVENTS_POOL[eventName] = events.filter(fn => fn !== handler));
+    } else {
+      originalRemoveEventListener.apply(this, arguments);
+    }
+  };
+
+  function mockPopStateEvent(state) {
+    return new PopStateEvent('popstate', {
+      state
+    });
+  }
+
+  const originalPushState = window.history.pushState;
+  const originalReplaceState = window.history.replaceState;
+
+  window.history.pushState = function (state, title, url) {
+    let result = originalPushState.apply(this, arguments);
+    reroute(mockPopStateEvent(state));
+    return result;
+  };
+
+  window.history.replaceState = function (state, title, url) {
+    let result = originalReplaceState.apply(this, arguments);
+    reroute(mockPopStateEvent(state));
+    return result;
+  };
+
+  function callCapturedEvents(eventsArgs) {
+    if (!eventsArgs) {
+      return;
+    }
+
+    if (!Array.isArray(eventsArgs)) {
+      eventsArgs = [eventsArgs];
+    }
+
+    let name = eventsArgs[0].type;
+
+    if (!EVENTS_POOL[name] || EVENTS_POOL[name].length === 0) {
+      return;
+    }
+
+    EVENTS_POOL[name].forEach(handler => {
+      handler.apply(null, eventsArgs);
     });
   }
 
   let appChangesUnderway = false;
-  function invoke() {
+  let changesQueue = [];
+  function invoke(pendings = [], eventArgs) {
     if (appChangesUnderway) {
       return new Promise((resolve, reject) => {
+        changesQueue.push({
+          success: resolve,
+          failure: reject,
+          eventArgs
+        });
       });
     }
 
     appChangesUnderway = true;
 
-    {
-      loadApps();
-    }
+    if (isStarted()) {
+      // 系统已启动，切换页面，需要先卸载之前的app
+      return performAppChanges();
+    } // 系统未启动，只加载APP（按需预加载）
+
+
+    return loadApps();
 
     function loadApps() {
-      // 获取需要被load的app
-      getAppsToLoad().map(toLoadPromise);
+      let loadPromises = getAppsToLoad().map(toLoadPromise); // 获取需要被load的app
+
+      return Promise.all(loadPromises).then(() => {
+        callAllCapturedEvents();
+        return finish();
+      }).catch(e => {
+        callAllCapturedEvents();
+        console.log("loadApps -> e", e);
+      });
+    }
+
+    function performAppChanges() {
+      // getAppsToUnmount
+      let unmountApps = getAppsToUnmount();
+      let unmountPromises = Promise.all(unmountApps.map(toUnmountPromise)); // getAppsToLoad
+
+      let loadApps = getAppsToLoad();
+      let loadPromises = loadApps.map(app => {
+        return toLoadPromise(app).then(toBootstrapPromise).then(() => unmountPromises).then(() => toMountPromise(app));
+      }); // will mount app
+
+      let mountApps = getAppsToMount().filter(app => loadApps.indexOf(app) === -1);
+      let mountPromises = mountApps.map(app => {
+        return toBootstrapPromise(app).then(() => unmountPromises).then(() => toMountPromise(app));
+      });
+      return unmountPromises.then(() => {
+        callAllCapturedEvents();
+        let loadAndMountPromises = loadPromises.concat(mountPromises);
+        return Promise.all(loadAndMountPromises).then(finish).catch(ex => {
+          pendings.forEach(item => item.failure(ex));
+        });
+      }).catch(e => {
+        callAllCapturedEvents();
+        console.log("performAppChanges -> e", e);
+        throw e;
+      });
+    }
+
+    function finish() {
+      let returnValue = getMountedApps();
+
+      if (pendings.length) {
+        pendings.forEach(item => item.success(returnValue));
+      }
+
+      appChangesUnderway = false;
+
+      if (changesQueue.length) {
+        let backup = changesQueue;
+        changesQueue = [];
+        return invoke(backup);
+      }
+
+      return returnValue;
+    }
+
+    function callAllCapturedEvents() {
+      pendings && pendings.length && pendings.filter(item => item.eventArgs).forEach(item => callCapturedEvents(item.eventArgs));
+      eventArgs && callCapturedEvents(eventArgs);
     }
   }
 
@@ -138,7 +431,7 @@
    * @returns {Promise}
    */
 
-  function registerApplication(appName, loadFunction, activityWhen, customProps) {
+  function registerApplication(appName, loadFunction, activityWhen, customProps = {}) {
     if (!appName || typeof appName !== 'string') {
       throw new Error('appName must be a non-empty string');
     }
@@ -166,12 +459,18 @@
     invoke();
   }
   function getAppsToLoad() {
-    try {
-      console.time('filter');
-      return APPS.filter(noSkip).filter(noLoadError).filter(isntLoaded).filter(shouldBeActive); // return filterWith(APPS, noSkip, noLoadError, isntLoaded, shouldBeActive);
-    } finally {
-      console.timeEnd('filter');
-    }
+    return APPS.filter(noSkip).filter(noLoadError).filter(isntLoaded).filter(shouldBeActive);
+  }
+  function getAppsToUnmount() {
+    return APPS.filter(noSkip).filter(isActive).filter(shouldntBeActive);
+  }
+  function getAppsToMount() {
+    // 没有中断，已经加载过的，没有被mount的，应该被mount
+    return APPS.filter(noSkip).filter(isLoaded).filter(isntActive).filter(shouldBeActive);
+  } // 获取当前已经被挂载的app
+
+  function getMountedApps() {
+    return APPS.filter(isActive);
   }
 
   exports.registerApplication = registerApplication;

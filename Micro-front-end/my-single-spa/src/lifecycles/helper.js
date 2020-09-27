@@ -15,9 +15,9 @@ export function flattenLifecyclesArray(lifecycle, description) {
     lifecycle = [() => Promise.resolve()];
   }
 
-  return new Promise((resolve, reject) => {
+  return props => new Promise((resolve, reject) => {
     function waitForPromises(index) {
-      let fn = lifecycle[index]();
+      let fn = lifecycle[index](props);
       if (!smellLikePromise(fn)) {
         reject(new Error(`${description} has error`));
       } else {
@@ -32,4 +32,11 @@ export function flattenLifecyclesArray(lifecycle, description) {
     }
     waitForPromises(0);
   })
+}
+
+export function getProps(app) {
+  return {
+    name: app.name,
+    ...app.customProps,
+  };
 }

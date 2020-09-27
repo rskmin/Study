@@ -4,9 +4,12 @@ import {
   noLoadError,
   isntLoaded,
   shouldBeActive,
+  isActive,
+  shouldntBeActive,
+  isLoaded,
+  isntActive,
 } from './apps.helper';
 import { invoke } from '../navigation/invoke.js';
-// import {filterWith} from '../utils/optimize-function.js';
 
 const APPS = [];
 
@@ -18,7 +21,7 @@ const APPS = [];
  * @param {Object} customProps - 自定义配置
  * @returns {Promise}
  */
-export function registerApplication(appName, loadFunction, activityWhen, customProps) {
+export function registerApplication(appName, loadFunction, activityWhen, customProps = {}) {
   if (!appName || typeof appName !== 'string') {
     throw new Error('appName must be a non-empty string');
   }
@@ -44,11 +47,19 @@ export function registerApplication(appName, loadFunction, activityWhen, customP
 }
 
 export function getAppsToLoad() {
-  try {
-    console.time('filter');
-    return APPS.filter(noSkip).filter(noLoadError).filter(isntLoaded).filter(shouldBeActive);
-    // return filterWith(APPS, noSkip, noLoadError, isntLoaded, shouldBeActive);
-  } finally {
-    console.timeEnd('filter');
-  }
+  return APPS.filter(noSkip).filter(noLoadError).filter(isntLoaded).filter(shouldBeActive);
+}
+
+export function getAppsToUnmount() {
+  return APPS.filter(noSkip).filter(isActive).filter(shouldntBeActive);
+}
+
+export function getAppsToMount() {
+  // 没有中断，已经加载过的，没有被mount的，应该被mount
+  return APPS.filter(noSkip).filter(isLoaded).filter(isntActive).filter(shouldBeActive);
+}
+
+// 获取当前已经被挂载的app
+export function getMountedApps() {
+  return APPS.filter(isActive);
 }
