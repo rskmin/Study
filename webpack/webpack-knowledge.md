@@ -36,7 +36,7 @@
   - 所有loader的pitch执行完成加载文件
   - 逆序执行loaders
 
-  ![image-20200925102114442](/Users/rskmin/studyspace/Study/webpack/img/image-20200925102114442.png)
+  ![image-20200925102114442](./img/image-20200925102114442.png)
 
 ## sourcemap
 
