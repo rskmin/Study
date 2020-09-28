@@ -1,0 +1,20 @@
+let {SyncWaterfallHook} = require('tapable');
+
+/**
+ * 上一个函数的结果如果不为undefined，则可以作为下一个函数的第一个参数，如果是undefined则会用上一个不为undefined的值
+ */
+// 创建钩子
+let hook = new SyncWaterfallHook(['name', 'age']);
+// 注册事件
+hook.tap('1', (name, age) => {
+  console.log(1, name, age);
+  return 'oldRskmin';
+});
+hook.tap('2', (name, age) => {
+  console.log(2, name, age);
+}); 
+hook.tap('3', (name, age) => {
+  console.log(3, name, age);
+});
+// 触发事件
+hook.call('rskmin', 10);

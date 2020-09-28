@@ -1,6 +1,4 @@
-# Study
->  存放个人学习产物
-
+# Study - 存放个人学习产物
 ## <a href="./CSS/note.md">CSS</a> 
 
 ## <a href="./JavaScript/note.md">JavaScript</a> 
