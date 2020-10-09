@@ -15,6 +15,16 @@ class Hook {
   _insert(item) {
     this.taps.push(item);
   }
+  call(...args) {
+    let callMethod = this._createCall(); // 动态编译出来一个函数
+    return callMethod.apply(this, args); // 执行这个函数并传入参数
+  }
+  _createCall() {
+    return this.compile({
+      taps: this.taps, // 函数数组
+      args: this._args // 参数数组
+    })
+  }
 }
 
 module.exports = Hook;

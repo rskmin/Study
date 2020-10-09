@@ -1,4 +1,4 @@
-let {SyncHook} = require('tapable');
+let {SyncHook} = require('./tapable');
 /**
  * 同步钩子
  */
