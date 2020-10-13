@@ -5,14 +5,18 @@ const path = require('path');
 const ZipPlugin = require('./plugins/ZipPlugin.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AutoExternalPlugin = require('./plugins/AutoExternalPlugin.js');
+const HashPlugin = require('./plugins/HashPlugin.js');
 
 module.exports = {
   mode: 'development',
   devtool: false,
-  entry: './src/index.js',
+  entry: {
+    page1: './src/page1.js',
+    page2: './src/page2.js',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
+    filename: '[name].[chunkhash]js',
   },
   // 外部引入
   // externals: {
@@ -27,17 +31,19 @@ module.exports = {
     //   filename: 'assets.zip',
     // }),
     new HtmlWebpackPlugin({
-      template: './index.html',
+      template: './public/index.html',
     }),
-    new AutoExternalPlugin({
-      jquery: {
-        expose: '$',
-        url: 'https://lib.baomitu.com/jquery/3.1.0/jquery.js'
-      },
-      lodash: {
-        expose: '_',
-        url: 'https://lib.baomitu.com/lodash.js/4.17.19/lodash.js',
-      },
-    }),
+    // new AutoExternalPlugin({
+    //   jquery: {
+    //     variable: '$',
+    //     url: 'https://lib.baomitu.com/jquery/3.1.0/jquery.js'
+    //   },
+    //   lodash: {
+    //     variable: '_',
+    //     u
+    //     rl: 'https://lib.baomitu.com/lodash.js/4.17.19/lodash.js',
+    //   },
+    // }),
+    new HashPlugin(),
   ],
 }

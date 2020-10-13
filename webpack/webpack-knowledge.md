@@ -94,6 +94,31 @@
 - Compiler 对象代表了完整的 webpack 环境配置。这个对象在启动 webpack 时被一次性创建，并配置好所有可操作的设置，包括 options， loader 和 plugin。当在 webpack 环境中应用一个插件时，插件将收到此 compiler 对象的引用。可以使用它来访问 webpack 的主环境。
 - Compilation 对象代表了一次资源版本构建。当运行 webpack 开发环境中间件时，每当检测到一个文件变化，就会创建一个新的 Compilation，从而生产一组新的编译资源。一个 Compilation 对象表现了当前的模块资源、编译生成资源、变化的文件、以及被跟踪依赖的状态信息。Compilation 对象也提供了很多关键时机的回调，以供插件做自定义处理时选择使用。
 
+### 插件的实现
+
+- webpack本质是一个事件流机制，核心模块：tapable(Sync + Async)Hooks 构造出 === Compiler(编译) + Compilation(创建bundles)
+
+- 创建一个插件函数，在其prototype上定义apply方法，指定一个webpack自身的事件钩子
+
+  ```js
+  class HashPlugin {
+    // 定义apply方法
+    apply(compiler) {
+      // 为 compiler 的 compilation 事件注册回调函数
+      compiler.hooks.compilation.tap('HashPlugin', (compilation) => {
+        // 为 compilation 的 afterHash 事件注册回调函数
+        compilation.hooks.afterHash.tap('HashPlugin', () => {
+          compilation.hash = 'hash';
+        });
+      });
+    }
+  }
+  ```
+
+- 函数内部处理webpack内部实例的特定数据
+
+- 处理完成后，调用webpack提供的回调函数
+
 ## loader
 
 > loader 是一个导出为函数的 `JavaScript` 模块。它接收上一个loader产生的结果或者资源文件作为入参。也可以用多个loader 函数组成 loader chain 

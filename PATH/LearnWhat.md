@@ -1,6 +1,8 @@
 - docker
 - nginx
 - k8s
+- css深度
+- V8
 - webpack
 - vue
 - ts
@@ -8,3 +10,6 @@
 - 微服务
 - 前端监控
 - 性能优化
+- WebAssembly
+  - https://juejin.im/post/6844903709806182413
+
