@@ -1,4 +1,3 @@
-const { resolve } = require('path');
 const readline = require('readline');
 const gaussianElimination = require('../base/gaussianElimination');
 
@@ -31,7 +30,7 @@ const gaussianElimination = require('../base/gaussianElimination');
  */
 const createRl = () => readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 const inputA = () => new Promise((resolve, reject) => {

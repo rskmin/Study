@@ -15,8 +15,9 @@ module.exports = {
     page2: './src/page2.js',
   },
   output: {
+    hashSalt: 'rskmin',
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[chunkhash]js',
+    filename: '[name].[contenthash]js',
   },
   // 外部引入
   // externals: {
@@ -44,6 +45,6 @@ module.exports = {
     //     rl: 'https://lib.baomitu.com/lodash.js/4.17.19/lodash.js',
     //   },
     // }),
-    new HashPlugin(),
+    // new HashPlugin(),
   ],
 }

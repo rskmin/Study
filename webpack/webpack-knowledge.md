@@ -86,7 +86,7 @@
 | html-webpack-plugin            | 根据模板生产html的插件                                       |
 | webpack.SourceMapDevToolPlugin | webpack内置的精确控制sourcemap的插件                         |
 | filemanager-webpack-plugin     | 文件管理插件，在打包前后操作文件（copy、move、delete、mkdir、archive[打包压缩]） |
-| Tree-shaking                   | 移除没有用到的导入内容，支持es module 静态依赖分析，动态的require不支持 |
+| Tree-shaking                   | 移除没有用到的导入内容，利用 es module 静态依赖分析，动态的require不支持。用babel-loader转换时要保留export和import用于静态分析。 |
 |                                |                                                              |
 
 ### Compiler 和 Compilation
@@ -133,3 +133,25 @@
 2. 用法不同
    - Loader在module.rules中配置，也就是说作为模块的解析规则而存在。 类型为数组，每一项都是一个Object，里面描述了对于什么类型的文件（test），使用什么加载(loader)和使用的参数（options）
    - Plugin在plugins中单独配置。 类型为数组，每一项是一个plugin的实例，参数都通过构造函数传入
+
+## Hash
+
+### hash - 本次编译的hash值
+
+- 受 hashSalt 的影响
+
+### chunkhash - 每个chunk的hash值
+
+- 受 hashSalt 的影响
+- 受代码块 id 的影响
+- 受代码块名称的影响
+- 受代码块包含模块的影响
+- 受生成最终代码的 template 的影响
+
+### contenthash - 每个模块的hash值
+
+- 受普通模块依赖的影响
+- 受异步模块依赖的影响
+- 受模块 id 的影响
+- 受 usedExports 导出对象的影响
+- 受本次编译 hash 的影响

@@ -1,6 +1,7 @@
 code/
 SourceCode/
 node_modules/
+dist/
 book/
 Docker/doodle
 NodeJS/\346\234\215\345\212\241\345\231\250\351\203\250\347\275\262/vue-app
