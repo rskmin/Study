@@ -87,7 +87,8 @@
 | webpack.SourceMapDevToolPlugin | webpack内置的精确控制sourcemap的插件                         |
 | filemanager-webpack-plugin     | 文件管理插件，在打包前后操作文件（copy、move、delete、mkdir、archive[打包压缩]） |
 | Tree-shaking                   | 移除没有用到的导入内容，利用 es module 静态依赖分析，动态的require不支持。用babel-loader转换时要保留export和import用于静态分析。 |
-|                                |                                                              |
+| happypack                      | 多线程打包                                                   |
+| webpack.DefinePlugin           | 创建全局常量                                                 |
 
 ### Compiler 和 Compilation
 
