@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { injectAppNavigator } from "../navigator/app-navigator";
+import { AppNavigator } from '../navigator/app-navigator';
 import { AppMenu, MENUS } from "./menus";
 
 export default {
@@ -33,7 +33,7 @@ export default {
     currentPath: { type: String },
   },
   setup() {
-    const navigator = injectAppNavigator();
+    const navigator = AppNavigator.use.inject();
     return {
       menus: MENUS,
       handleClickMenu(menu: AppMenu) {

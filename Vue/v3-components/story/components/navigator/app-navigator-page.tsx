@@ -1,15 +1,18 @@
-import { defineComponent, reactive, DefineComponent, markRaw, watch } from 'vue';
-import { injectAppNavigator } from './app-navigator';
+import { designComponent } from 'src/use/designComponent';
+import { reactive, DefineComponent, markRaw, watch } from 'vue';
+import { AppNavigator } from './app-navigator';
 
 /**
  * 页面导航 - 通过监听全局路由状态的改变从而改变内容
  */
-export const AppNavigatorPage = defineComponent({
+export const AppNavigatorPage = designComponent({
   setup() {
+
+    const navigator = AppNavigator.use.inject();
+
     const state = reactive({
       PageComponent: null as null | DefineComponent,
     });
-    const navigator = injectAppNavigator();
 
     const utils = {
       reset: async () => {
@@ -25,13 +28,11 @@ export const AppNavigatorPage = defineComponent({
 
     watch(() => navigator.state.route.path, utils.reset, { immediate: true });
 
-    return () => {
-      const { PageComponent } = state;
-      return (
-        <div class="app-navigator-page">
-          {!!PageComponent ? <PageComponent/> : null}
-        </div>
-      )
+    return {
+      render: () => {
+        const { PageComponent } = state;
+        return !!PageComponent ? <PageComponent /> : null;
+      }
     }
   },
 })
