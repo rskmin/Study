@@ -1,0 +1,17 @@
+@include theme {
+  .pl-button {
+    display: inline-block;
+    outline: none;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    @include statusMixin(button) {
+      background-color: $value;
+      color: white;
+      &:active {
+        background-color: mix($value, black, 70%);
+      }
+    }
+  }
+}

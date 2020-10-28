@@ -1,5 +1,10 @@
 <template>
-  <div class="demo-button">demo-button</div>
+  <div class="demo-button">
+    <pl-button label="label" />
+    <pl-button>BUTTON</pl-button>
+    <h4>状态</h4>
+    <pl-button v-for="item in ['primary', 'success', 'warn', 'error', 'info']" :label="item" :key="item" :status="item" />
+  </div>
 </template>
 
 <script>
@@ -9,4 +14,9 @@ export default {
 </script>
 
 <style lang="scss">
+.demo-button {
+  .pl-button {
+    margin-right: 8px;
+  }
+}
 </style>
