@@ -1,4 +1,4 @@
-import ReactDOM from './react-dom';
+import { compareTwoVdom } from './react-dom';
 import { isFunction } from './utils';
 
 /**
@@ -46,19 +46,20 @@ class Updater {
   /**
    * 发射更新
    */
-  emitUpdate() {
-    updateQueue.isBatchingUpdate ? updateQueue.add(this) : this.updateComponent();
+  emitUpdate(nextProps) {
+    this.nextProps = nextProps;
+    this.nextProps || !updateQueue.isBatchingUpdate ? this.updateComponent() : updateQueue.add(this);
   }
   /**
    * 开始更新组件状态
    */
   updateComponent() {
-    const { classInstance, pendingStates } = this;
-    if (pendingStates.length > 0) {
+    const { classInstance, pendingStates, nextProps } = this;
+    if (nextProps || pendingStates.length > 0) {
       // classInstance.state = this.getState();
       // classInstance.forceUpdate();
       // 无论是否真正更新页面，组件的state都在this.getState进行了更新
-      shouldUpdate(classInstance, this.getState());
+      shouldUpdate(classInstance, nextProps, this.getState());
     }
   }
   /**
@@ -82,11 +83,13 @@ class Updater {
 
 /**
  * 判断组件是否应该更新
- * @param {Component} classInstance - 类组件实例
- * @param {Obj} nextState - 类组件的下一个状态
+ * @param {Component} classInstance 类组件实例
+ * @param {Obj} nextProps 类组件的下一个属性
+ * @param {Obj} nextState 类组件的下一个状态
  */
-function shouldUpdate(classInstance, nextState) {
-  classInstance.state = nextState;
+function shouldUpdate(classInstance, nextProps, nextState) {
+  nextProps && (classInstance.props = nextProps);
+  nextState && (classInstance.state = nextState);
   if (classInstance.shouldComponentUpdate
     && !classInstance.shouldComponentUpdate(classInstance.props, nextState)) return;
   classInstance.forceUpdate();
@@ -101,6 +104,7 @@ class Component {
     this.props = props;
     this.state = {};
     this.updater = new Updater(this);
+    this.nextProps = null;
   }
   /**
    * 更新state
@@ -114,22 +118,11 @@ class Component {
    */
   forceUpdate() {
     this.componentWillUpdate && this.componentWillUpdate();
-    let renderVdom = this.render();
-    updateClassComponent(this, renderVdom);
+    let newVdom = this.render();
+    let currentVdom = compareTwoVdom(this.oldVdom.dom.parentNode, this.oldVdom, newVdom);
+    this.oldVdom = currentVdom;
+    this.componentDidUpdate && this.componentDidUpdate(this.props, this.state);
   }
-}
-
-/**
- * 更新类组件实例
- * @param {Component} classInstance - 类组件实例
- * @param {import('./react-dom').vdom} renderVdom - 虚拟DOM
- */
-function updateClassComponent(classInstance, renderVdom) {
-  let oldDOM = classInstance.dom;
-  let newDOM = ReactDOM.createDOM(renderVdom);
-  oldDOM.parentNode.replaceChild(newDOM, oldDOM);
-  classInstance.componentDidUpdate && classInstance.componentDidUpdate();
-  classInstance.dom = newDOM;
 }
 
 export default Component;

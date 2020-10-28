@@ -1,5 +1,5 @@
 <template>
-  <app-navigator defaultPath="nromal/button" ref="navigator">
+  <app-navigator defaultPath="normal/button" ref="navigator">
     <div class="app-home">
       <section class="app-header">
         <span @click="goHome">v3-component</span>

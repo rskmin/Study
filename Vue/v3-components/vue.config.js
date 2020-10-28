@@ -18,6 +18,14 @@ module.exports = {
       .delete('prefetch-index')
       .delete('preload-index');
     config.resolve.alias
-      .set('story', resolve('story'));
+      .set('story', resolve('story'))
+      .set('src', resolve('src'));
   },
+  css: {
+    loaderOptions: {
+      sass: {
+        prependData: `@import "src/style/global-import.scss";`,
+      },
+    },
+  }
 };

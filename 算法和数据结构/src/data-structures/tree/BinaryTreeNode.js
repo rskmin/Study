@@ -1,4 +1,4 @@
-const Visitor = require('../utils/Visitor');
+const Visitor = require('../../utils/Visitor');
 
 /**
  * 二叉树的节点

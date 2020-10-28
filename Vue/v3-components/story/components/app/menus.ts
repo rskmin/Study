@@ -39,5 +39,16 @@ export const MENUS: MenuGroup[] = [
         complete: false,
       }
     ],
-  }
+  },
+  {
+    name: '表单组件',
+    children: [
+      {
+        name: 'Input',
+        title: '输入框',
+        page: '/normal/input',
+        complete: false,
+      },
+    ],
+  },
 ]
