@@ -1,27 +1,29 @@
 # Study - 存放个人学习产物
-## <a href="./CSS/note.md">CSS</a> 
+## <a href="./CSS">CSS</a> 
 
-## <a href="./JavaScript/note.md">JavaScript</a> 
+## <a href="./JavaScript">JavaScript</a> 
 
-## <a href="./Web/note.md">浏览器</a> 
+## <a href="./Web">浏览器</a> 
 
-## <a href="./NodeJS/note.md">Node</a> 
+## <a href="./NodeJS">Node</a> 
 
 ## 打包构建工具
 
-### <a href='./webpack/webpack-knowledge.md'>webpack</a>  
+### <a href='./webpack'>webpack</a>  
 
 ### Rollup
 
 JavaScript模块打包器，多用于JS库的打包
 
-## Vue部分
+## <a href="./Vue">Vue部分</a> 
 
 ### <a href="./Vue/经典面试题.md">经典面试题目</a> 
 
-## <a href="./React/note.md">React</a> 
+## <a href="./React">React</a> 
 
-## <a href="./计算机网络/computer-networks.md">计算机网络</a> 
+## <a href="./计算机网络">计算机网络</a> 
+
+## <a href="./算法和数据结构+数学">算法和数据结构+数学</a> 
 
 ## Feature
 

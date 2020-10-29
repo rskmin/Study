@@ -17,6 +17,7 @@ class Comparator {
    * @returns {number} a - b
    */
   static defaultCompareFunction(a, b) {
+    if (a === b) return 0; // 判断对象
     return a - b;
   }
   /**

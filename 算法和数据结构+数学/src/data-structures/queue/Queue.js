@@ -28,7 +28,7 @@ class Queue {
    * @param {*} value
    * @returns {Queue}
    */
-  enqueue(value) {
+  enQueue(value) {
     this.linkedList.append(value);
     return this;
   }
@@ -36,7 +36,7 @@ class Queue {
    * 出队操作
    * @returns {LinkedListNode} 出队节点
    */
-  dequeue() {
+  deQueue() {
     const removedHead = this.linkedList.deleteHead();
     return removedHead ? removedHead.value : null;
   }
