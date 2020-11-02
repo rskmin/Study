@@ -1,4 +1,4 @@
 import Input from './input';
-import { installPlugins } from 'src/utils/installPlugins';
+import { installPlugins } from '../../utils/installPlugins';
 
 export default installPlugins(Input);

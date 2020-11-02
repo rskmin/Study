@@ -1,7 +1,16 @@
 {
-  "name": "v3-components",
-  "version": "0.1.0",
-  "private": true,
+  "name": "v3-comp-rm",
+  "version": "0.1.2",
+  "private": false,
+  "main": "dist/index.js",
+  "typings": "src/index.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "author": {
+    "name": "rskmin"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

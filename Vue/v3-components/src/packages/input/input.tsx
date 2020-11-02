@@ -1,4 +1,4 @@
-import { designComponent } from 'src/use/designComponent';
+import { designComponent } from '../../use/designComponent';
 import { ref, computed } from 'vue';
 import './input.scss';
 
