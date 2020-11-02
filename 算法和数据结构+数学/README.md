@@ -16,3 +16,8 @@
 - <a  href="./src/data-structures/hash-table">哈希表(散列表)</a> 
 - <a  href="./src/data-structures/heap">堆</a> 
 - <a  href="./src/data-structures/priority-queue">优先队列</a> 
+- <a href="./src/data-structures/trie">字典树</a> 
+- 树
+  - <a href="./src/data-structures/tree/binary-search-tree">二叉查找树</a> 
+  - <a href="./src/data-structures/tree/avl-tree">AVL 树</a> 
+

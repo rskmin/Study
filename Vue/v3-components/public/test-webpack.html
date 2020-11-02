@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webpack</title>
+  <link rel="stylesheet" href="../dest/index.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script crossorigin="anonymous"
+    integrity="sha512-REb0S2epbS0XtS28ifNa1haxmTZigXjB+Tx5IHCvXZndWB2RL431Vt1qONzFoe0dPwA8WGow+xxkQwhVr44nRg=="
+    src="https://lib.baomitu.com/vue/3.0.2/vue.global.js"></script>
+  <script src="../dest/index.js"></script>
+
+  <script>
+    const app = window.Vue.createApp({
+      template: `
+      <div>
+        <pl-button label="label" />
+        <pl-button>插槽内容</pl-button>
+
+        <pl-input status="error" ref="myInput" />
+        <button @click="outerClear">outer clear</button>
+        <button @click="outerFocus">outer focus</button>
+      </div>
+      `,
+      setup() {
+        const inputRef = window.V3CompRm.Input.use.ref('myInput');
+        return {
+          outerFocus() {
+            inputRef.value.methods.focus();
+          },
+          outerClear() {
+            inputRef.value.methods.clear();
+          }
+        }
+      }
+    });
+    app.use(window.V3CompRm);
+    app.mount('#app');
+  </script>
+</body>
+</html>

@@ -66,7 +66,7 @@ class HashTable {
   /**
    * 获取指定键所对应的值
    * @param {string} key 键
-   * @returns {LinkedListNode|null}
+   * @returns {any}
    */
   get(key) {
     const bucketLinkedList = this.buckets[this.keys[key] || this.hash(key)];
