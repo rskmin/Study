@@ -1,4 +1,5 @@
-import { ComponentPropsOptions, defineComponent, ExtractPropTypes, getCurrentInstance, inject, provide, SetupContext, withCtx } from 'vue';
+import { ComponentPropsOptions, defineComponent, ExtractPropTypes, getCurrentInstance, inject, provide, SetupContext } from 'vue';
+import { ComponentEvent, getComponentEmit, useEvent } from './useEvent';
 
 /**
  * 扩展了defineComponent
@@ -8,6 +9,7 @@ import { ComponentPropsOptions, defineComponent, ExtractPropTypes, getCurrentIns
 export function designComponent<
   PropsOptions extends Readonly<ComponentPropsOptions>,
   Props extends Readonly<ExtractPropTypes<PropsOptions>>,
+  Emits extends { [k: string]: (...args: any[]) => boolean },
   Refer,
   >(
     options: {
@@ -15,26 +17,29 @@ export function designComponent<
       props?: PropsOptions,
 
       provideRefer?: boolean,
-      setup: (props: Props, setupContext: SetupContext) => {
+      emits?: Emits,
+      setup: (parameter: { props: Props, event: ComponentEvent<Emits>, setupContext: SetupContext<Emits> }) => {
         refer?: Refer,
         render: () => any,
       }
     }) {
 
-  const { setup, provideRefer, ...leftOptions } = options;
+  const { setup, provideRefer, emits, ...leftOptions } = options;
 
   return {
     ...defineComponent({
       ...leftOptions,
-      setup(props: Props, setupContext: SetupContext) {
+      emits: getComponentEmit(emits),
+      setup(props: Props, setupContext: any) {
 
         const ctx = getCurrentInstance() as any;
+        const event = useEvent<Emits>(emits!);
 
         if (!setup) {
           console.error('designComponent: setup is required!');
           return () => null;
         }
-        const { refer, render } = setup(props, setupContext);
+        const { refer, render } = setup({props, event, setupContext});
 
         provideRefer && (
           !leftOptions.name ?

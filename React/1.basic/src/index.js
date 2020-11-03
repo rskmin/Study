@@ -1,5 +1,5 @@
-import React from './react';
-import ReactDOM from './react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 let root = document.getElementById('root');
 
@@ -12,6 +12,9 @@ class Counter extends React.Component {
     this.state = {number: 0};
     console.log('父 1.set up props and state');
   }
+  static getDerivedStateFromProps(nextProps, preState) {
+
+  }
   componentWillMount() {
     console.log('父 2.componentWillMount');
   }
@@ -23,8 +26,7 @@ class Counter extends React.Component {
     return (
       <div id={`counter-${this.state.number}`}>
         <p>{this.state.number}</p>
-        <CounterChild count={this.state.number} />
-        {/* {this.state.number % 4 === 0 ? null : <CounterChild count={this.state.number} />} */}
+        {this.state.number % 4 === 0 ? null : <CounterChild count={this.state.number} />}
         <button onClick={this.handleClick}>+</button>
       </div>
     );

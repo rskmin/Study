@@ -11,7 +11,7 @@ import { addEvent } from './event';
  */
 function render(vdom, container) {
   const dom = createDOM(vdom);
-  container.appendChild(dom);
+  dom && container.appendChild(dom);
 }
 
 /**
@@ -23,6 +23,7 @@ function createDOM(vdom) {
   if (typeof vdom === 'string' || typeof vdom === 'number') {
     return document.createTextNode(vdom);
   }
+  if (!vdom) return null;
   // 否则就是一个React元素
   let { type, props, ref } = vdom;
   if (typeof type === 'function') { // React组件
@@ -117,7 +118,7 @@ function updateProps(dom, oldProps, newProps) {
  * @param {vdom} oldVdom 老的虚拟DOM
  * @param {vdom} newVdom 新的虚拟DOM
  */
-export function compareTwoVdom(parentDOM, oldVdom, newVdom) {
+export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
   if (!oldVdom && !newVdom) {
     return null;
   } else if (oldVdom && !newVdom) {
@@ -129,7 +130,11 @@ export function compareTwoVdom(parentDOM, oldVdom, newVdom) {
   } else if (!oldVdom && newVdom) {
     let newDOM = createDOM(newVdom);
     newVdom.dom = newDOM;
-    parentDOM.appendChild(newDOM);
+    if (nextDOM) { // 插入到下一个元素的前面
+      parentDOM.insertBefore(newDOM, nextDOM);
+    } else {
+      parentDOM.appendChild(newDOM);
+    }
     return newVdom;
   } else {
     updateElement(oldVdom, newVdom);
@@ -170,7 +175,8 @@ function updateChildren(parentDOM, oldVChildren, newVChildren) {
   const maxLength = Math.max(oldVChildren.length, newVChildren.length);
   // TODO: DOM-DIFF优化
   for (let i = 0; i< maxLength; i++) {
-    compareTwoVdom(parentDOM, oldVChildren[i], newVChildren[i]);
+    let nextDOM = oldVChildren.find((item, index) => index > i && item && item.dom);
+    compareTwoVdom(parentDOM, oldVChildren[i], newVChildren[i], nextDOM && nextDOM.dom);
   }
 }
 function updateClassInstance(oldVdom, newVdom) {

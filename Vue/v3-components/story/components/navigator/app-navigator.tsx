@@ -31,7 +31,7 @@ export const AppNavigator = designComponent({
     defaultPath: String,
   },
   provideRefer: true,
-  setup(props, setupContext) {
+  setup({props, setupContext}) {
     let initRoute = getRoute();
     !initRoute && (initRoute = { path: props.defaultPath });
 
