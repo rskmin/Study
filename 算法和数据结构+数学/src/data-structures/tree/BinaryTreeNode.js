@@ -1,4 +1,6 @@
+const Comparator = require('../../utils/Comparator');
 const Visitor = require('../../utils/Visitor');
+const HashTable = require('../hash-table/HashTable');
 
 /**
  * 二叉树的节点
@@ -6,15 +8,17 @@ const Visitor = require('../../utils/Visitor');
 class BinaryTreeNode {
   /**
    * @param {*} [value] - 节点的值
-   * @param {BinaryTreeNode|null} [parent] - 父节点
-   * @param {BinaryTreeNode|null} [left] - 左节点
-   * @param {BinaryTreeNode|null} [right] - 右节点
    */
-  constructor(value = null, parent = null, left = null, right = null) {
-    this.left = left;
-    this.right = right;
-    this.parent = parent;
+  constructor(value = null) {
+    this.left = null;
+    this.right = null;
+    this.parent = null;
     this.value = value;
+
+    /** @var 存储信息元 @type {HashTable} */
+    this.meta = new HashTable();
+    /** @var 节点比较器 @type {Comparator} */
+    this.nodeComparator = new Comparator();
   }
   /**
    * 设置左节点

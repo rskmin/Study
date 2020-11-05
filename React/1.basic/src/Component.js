@@ -118,10 +118,16 @@ class Component {
    */
   forceUpdate() {
     this.componentWillUpdate && this.componentWillUpdate();
+    if (this.ownVdom.type.getDerivedStateFromProps) { // 更新组件，调用生命周期函数
+      let newState = this.ownVdom.type.getDerivedStateFromProps(this.props, this.state);
+      newState && (this.state = newState);
+    }
     let newVdom = this.render();
+    // 在修改DOM之前拿到旧DOM的信息
+    let extraArgs = this.getSnapshotBeforeUpdate && this.getSnapshotBeforeUpdate();
     let currentVdom = compareTwoVdom(this.oldVdom.dom.parentNode, this.oldVdom, newVdom);
     this.oldVdom = currentVdom;
-    this.componentDidUpdate && this.componentDidUpdate(this.props, this.state);
+    this.componentDidUpdate && this.componentDidUpdate(this.props, this.state, extraArgs);
   }
 }
 

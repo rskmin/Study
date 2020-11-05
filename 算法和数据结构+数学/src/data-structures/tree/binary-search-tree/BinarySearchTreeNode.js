@@ -1,3 +1,4 @@
+const Comparator = require('../../../utils/Comparator');
 const BinaryTreeNode = require('../BinaryTreeNode');
 
 /**
@@ -6,13 +7,15 @@ const BinaryTreeNode = require('../BinaryTreeNode');
  */
 class BinarySearchTreeNode extends BinaryTreeNode {
   /**
-   * @param {number|null} [value] - 节点的值
-   * @param {BinarySearchTreeNode|null} [parent] - 父节点
-   * @param {BinarySearchTreeNode|null} [left] - 左节点
-   * @param {BinarySearchTreeNode|null} [right] - 右节点
+   * @param {number|null} [value] 节点的值 
+   * @param {function} compareFunction 节点比较方法
    */
-  constructor(value = null, parent = null, left = null, right = null) {
-    super(value, parent, left, right);
+  constructor(value = null, compareFunction = undefined) {
+    super(value);
+    /** @var 节点值比较方法 @type {Comparator} */
+    this.compareFunction = compareFunction;
+    /** @var 节点值比较器 @type {Comparator} */
+    this.nodeValueComparator = new Comparator(compareFunction);
   }
   /**
    * 插入节点
@@ -21,19 +24,19 @@ class BinarySearchTreeNode extends BinaryTreeNode {
    */
   insert(value) {
     value = +value;
-    if (this.value === null) {
+    if (this.nodeValueComparator.equal(this.value, null)) {
       this.value = value;
       return this;
     }
-    if (value <= this.value) { // 插入左节点
+    if (this.nodeValueComparator.lessThan(value, this.value)) { // 插入左节点
       if (this.left) return this.left.insert(value);
-      const newNode = new BinarySearchTreeNode(value);
+      const newNode = new BinarySearchTreeNode(value, this.compareFunction);
       this.setLeft(newNode);
       return newNode;
     }
-    if (value > this.value) { // 插入右节点
+    if (this.nodeValueComparator.greaterThan(value, this.value)) { // 插入右节点
       if (this.right) return this.right.insert(value);
-      const newNode = new BinarySearchTreeNode(value);
+      const newNode = new BinarySearchTreeNode(value, this.compareFunction);
       this.setRight(newNode);
       return newNode;
     }
@@ -44,10 +47,26 @@ class BinarySearchTreeNode extends BinaryTreeNode {
    * @param {number} value - 要查找的值
    */
   find(value) {
-    if (this.value === value) return this;
-    if (value <= this.value && this.left) return this.left.find(value);
-    if (value > this.value && this.right) return this.right.find(value);
+    if (this.nodeValueComparator.equal(this.value, value)) return this;
+    if (this.nodeValueComparator.lessThan(value, this.value) && this.left) return this.left.find(value);
+    if (this.nodeValueComparator.greaterThan(value, this.value) && this.right) return this.right.find(value);
     return null;
+  }
+  /**
+   * 是否存在指定值
+   * @param {*} value 指定值
+   * @returns {boolean}
+   */
+  contains(value) {
+    return !!this.find(value);
+  }
+  /**
+   * 寻找最小值
+   * @returns {BinarySearchTreeNode}
+   */
+  findMin() {
+    if (!this.left) return this;
+    return this.left.findMin();
   }
 }
 

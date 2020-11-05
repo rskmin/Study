@@ -68,6 +68,7 @@ function updateClassComponent(vdom) {
   const { type, props } = vdom;
   let classInstance = new type(props);
   vdom.classInstance = classInstance; // 在虚拟dom上绑定类组件的实例
+  classInstance.ownVdom = vdom;
   // componentWillMount
   classInstance.componentWillMount && classInstance.componentWillMount();
   let renderVdom = classInstance.render();
@@ -136,7 +137,12 @@ export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
       parentDOM.appendChild(newDOM);
     }
     return newVdom;
-  } else {
+  } else if (oldVdom && newVdom && (oldVdom.type !== newVdom.type)) { // 类型不同无法复用，直接创建新节点覆盖老节点
+    let oldDOM = oldVdom.dom;
+    let newDOM = createDOM(newVdom);
+    oldDOM.parentNode.replaceChild(newDOM, oldDOM);
+    oldVdom.classInstance?.componentWillUnmount && oldVdom.classInstance.componentWillUnmount();
+  } else { // 复用老节点的更新
     updateElement(oldVdom, newVdom);
     return newVdom;
   }

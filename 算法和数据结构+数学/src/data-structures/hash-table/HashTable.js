@@ -56,12 +56,12 @@ class HashTable {
    * @returns {LinkedListNode|null}
    */
   delete(key) {
-   const keyHash = this.keys[key] || this.hash(key);
-   delete this.keys[key];
-   const bucketLinkedList = this.buckets[keyHash];
-   const node = bucketLinkedList.find({ callback: (nodeVue) => nodeVue.key === key });
-   if (node) return bucketLinkedList.delete(node.value);
-   return null;
+    const keyHash = this.keys[key] || this.hash(key);
+    delete this.keys[key];
+    const bucketLinkedList = this.buckets[keyHash];
+    const node = bucketLinkedList.find({ callback: (nodeVue) => nodeVue.key === key });
+    if (node) return bucketLinkedList.delete(node.value);
+    return null;
   }
   /**
    * 获取指定键所对应的值

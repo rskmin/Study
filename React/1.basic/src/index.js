@@ -1,77 +1,78 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from './react';
+import ReactDOM from './react-dom';
 
 let root = document.getElementById('root');
 
+// class ScrollList extends React.Component {
+//   constructor(props) {
+//     super(props);
+
+//     this.state = {
+//       message: [],
+//     };
+//     this.wrapper = React.createRef();
+//   }
+//   addMessage() {
+//     this.setState({
+//       message: [`${this.state.message.length}`, ...this.state.message]
+//     });
+//   }
+//   getSnapshotBeforeUpdate() {
+//     return {
+//       prevScrollTop: this.wrapper.current.scrollTop, // 上次卷曲的高度
+//       prevScrollHeight: this.wrapper.current.scrollHeight, // 上次内容的高度
+//     }
+//   }
+//   componentDidUpdate(prevProps, prevState, { prevScrollTop, prevScrollHeight }) {
+//     this.wrapper.current.scrollTop = prevScrollTop + (
+//       this.wrapper.current.scrollHeight - prevScrollHeight
+//     )
+//   }
+//   componentDidMount() {
+//     this.timer = setInterval(() => {
+//       this.addMessage();
+//     }, 1000);
+//   }
+//   render() {
+//     let style = {
+//       height: '100px',
+//       width: '200px',
+//       border: '1px solid red',
+//       overflow: 'auto',
+//     }
+//     return (
+//       <div style={style} ref={this.wrapper}>
+//         {
+//           this.state.message.map((message, index) => (
+//             <div key={index}>{message}</div>
+//           ))
+//         }
+//       </div>
+//     )
+//   }
+
+// }
+
 class Counter extends React.Component {
-  static defaultProps = {
-    name: 'rskmin',
-  }
   constructor(props) {
     super(props);
-    this.state = {number: 0};
-    console.log('父 1.set up props and state');
-  }
-  static getDerivedStateFromProps(nextProps, preState) {
 
+    this.state = {
+      number: 0
+    };
   }
-  componentWillMount() {
-    console.log('父 2.componentWillMount');
-  }
-  handleClick = () => {
+  handleClick = (event) => {
     this.setState({number: this.state.number + 1});
   }
   render() {
-    console.log('父 3.render');
     return (
-      <div id={`counter-${this.state.number}`}>
-        <p>{this.state.number}</p>
-        {this.state.number % 4 === 0 ? null : <CounterChild count={this.state.number} />}
+      <div>
+        {this.state.number % 2 === 0 ? <p>{this.state.number}</p> : <button>{this.state.number}</button>}
         <button onClick={this.handleClick}>+</button>
       </div>
-    );
+    )
   }
-  componentDidMount() {
-    console.log('父 4.componentDidMount');
-  }
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('父 5.shouldComponentUpdate');
-    return nextState.number % 2 === 0;
-  }
-  componentWillUpdate() {
-    console.log('父 6.componentWillUpdate');
-  }
-  componentDidUpdate(prevProps, prevState) {
-    console.log('父 7.componentDidUpdate');
-  }
+
 }
 
-class CounterChild extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log('子 1.set up props and state');
-  }
-  componentWillMount() {
-    console.log('子 2.componentWillMount');
-  }
-  render() {
-    console.log('子 3.render');
-    return (
-      <div id={`counter-child-${this.props.count}`}>{this.props.count}</div>
-    );
-  }
-  componentDidMount() {
-    console.log('子 4.componentDidMount');
-  }
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('子 5.shouldComponentUpdate');
-    return true;
-  }
-  componentWillUpdate() {
-    console.log('子 6.componentWillUpdate');
-  }
-  componentDidUpdate(prevProps, prevState) {
-    console.log('子 7.componentDidUpdate');
-  }
-}
 ReactDOM.render(<Counter />, root);

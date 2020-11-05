@@ -23,6 +23,16 @@
 
 无状态组件指的是组件内部不维护state，只根据外部组件传入的props进行渲染的组件，当props改变时，组件重新渲染 有状态组件内部使用state，维护自身状态的变化，有状态组件根据外部组件传入的props和自身的state，进行渲染。
 
+## 生命周期
+
+- 旧
+
+  ![lifecycle_old](./images/lifecycle_old.jpg)
+
+- 新
+
+  ![lifecycle_new](./images/lifecycle_new.jpg)
+
 ## 面试题
 
 ### React单向数据流的好处
