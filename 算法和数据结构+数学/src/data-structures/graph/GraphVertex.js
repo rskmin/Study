@@ -82,8 +82,8 @@ class GraphVertex {
     return !!vertexNode;
   }
   /**
-   * 查找指定顶点的边
-   * @param {GraphVertex} vertex vertex
+   * 查找该顶点与指定顶点的边
+   * @param {GraphVertex} vertex 指定顶点
    * @returns {GraphEdge|null}
    */
   findEdge(vertex) {
