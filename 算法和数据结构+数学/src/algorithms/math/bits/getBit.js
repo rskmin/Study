@@ -1,6 +1,6 @@
 /**
  * 获取一个十进制数指定二进制位上的值
- * @param {number} number 十进制数
+ * @param {number} number 十进制整数
  * @param {number} bitPosition 二进制位
  * @returns {1|0}
  * @example getBit(10, 1) ->  1010 >> 1 & 1 = 1
