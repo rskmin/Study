@@ -1,78 +1,103 @@
 import React from './react';
 import ReactDOM from './react-dom';
-
 let root = document.getElementById('root');
+let ThemeContext = React.createContext();
+// ThemeContext = {Provider, Consumer}
 
-// class ScrollList extends React.Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       message: [],
-//     };
-//     this.wrapper = React.createRef();
-//   }
-//   addMessage() {
-//     this.setState({
-//       message: [`${this.state.message.length}`, ...this.state.message]
-//     });
-//   }
-//   getSnapshotBeforeUpdate() {
-//     return {
-//       prevScrollTop: this.wrapper.current.scrollTop, // 上次卷曲的高度
-//       prevScrollHeight: this.wrapper.current.scrollHeight, // 上次内容的高度
-//     }
-//   }
-//   componentDidUpdate(prevProps, prevState, { prevScrollTop, prevScrollHeight }) {
-//     this.wrapper.current.scrollTop = prevScrollTop + (
-//       this.wrapper.current.scrollHeight - prevScrollHeight
-//     )
-//   }
-//   componentDidMount() {
-//     this.timer = setInterval(() => {
-//       this.addMessage();
-//     }, 1000);
-//   }
-//   render() {
-//     let style = {
-//       height: '100px',
-//       width: '200px',
-//       border: '1px solid red',
-//       overflow: 'auto',
-//     }
-//     return (
-//       <div style={style} ref={this.wrapper}>
-//         {
-//           this.state.message.map((message, index) => (
-//             <div key={index}>{message}</div>
-//           ))
-//         }
-//       </div>
-//     )
-//   }
-
-// }
-
-class Counter extends React.Component {
+class Header extends React.Component {
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {
+          (value) => (
+            <div style={{ border: `5px solid ${value.color}`, padding: '5px' }}>
+              header
+              <Title />
+            </div>
+          )
+        }
+      </ThemeContext.Consumer>
+    )
+  }
+}
+class Title extends React.Component {
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {
+          (value) => (
+            <div style={{ border: `5px solid ${value.color}`, padding: '5px' }}>
+              title
+            </div>
+          )
+        }
+      </ThemeContext.Consumer>
+    )
+  }
+}
+class Main extends React.Component {
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {
+          (value) => (
+            <div style={{ border: `5px solid ${value.color}`, padding: '5px' }}>
+              main
+              <Content />
+            </div>
+          )
+        }
+      </ThemeContext.Consumer>
+    )
+  }
+}
+class Content extends React.Component {
+  render() {
+    return (
+      <ThemeContext.Consumer>
+        {
+          (value) => (
+            <div style={{ border: `5px solid ${value.color}`, padding: '5px' }}>
+              content
+              <button onClick={() => value.changeColor('red')}>red</button>
+              <button onClick={() => value.changeColor('green')}>green</button>
+            </div>
+          )
+        }
+      </ThemeContext.Consumer>
+    )
+  }
+}
+class Page extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      number: 0
+      color: 'red',
     };
   }
-  handleClick = (event) => {
-    this.setState({number: this.state.number + 1});
+  changeColor = (color) => {
+    this.setState({color});
   }
   render() {
+    let value = {
+      color: this.state.color,
+      changeColor: this.changeColor,
+    };
+    let style = {
+      margin: '10px',
+      border: `5px solid ${this.state.color}`,
+      padding: '5px', height: '200px',
+    };
     return (
-      <div>
-        {this.state.number % 2 === 0 ? <p>{this.state.number}</p> : <button>{this.state.number}</button>}
-        <button onClick={this.handleClick}>+</button>
-      </div>
+      <ThemeContext.Provider value={value}>
+        <div style={style}>
+          <Header />
+          <Main />
+        </div>
+      </ThemeContext.Provider>
     )
   }
-
 }
 
-ReactDOM.render(<Counter />, root);
+ReactDOM.render(<Page />, root);

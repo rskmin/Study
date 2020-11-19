@@ -14,7 +14,7 @@ function createElement(type, config, children) {
     ref = config.ref;
     delete config.ref;
   }
-  let props = {...config};
+  let props = { ...config };
   if (arguments.length > 3) {
     children = Array.prototype.slice.call(arguments, 2);
   }
@@ -30,10 +30,31 @@ function createRef() {
   };
 }
 
+function createContext() {
+  /**
+   * 缓存要提供的上下文内容
+   * @param {Obj} props 
+   * @param {any} props.value
+   * @param {ReactDOM}
+   */
+  function Provider({ value, children }) {
+    Provider.value = value;
+    return children;
+  }
+  function Consumer({ children }) {
+    return children(Provider.value)
+  }
+  return {
+    Provider,
+    Consumer,
+  }
+}
+
 let React = {
   createElement,
   Component,
   createRef,
+  createContext,
 };
 
 export default React;

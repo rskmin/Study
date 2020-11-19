@@ -22,7 +22,7 @@
         animation: appear 0.3s linear;
         overflow: hidden;
 
-        &::before {
+        .qr-code {
           content: "";
           position: absolute;
           top: 0;
@@ -67,7 +67,7 @@
       }
       &:hover {
         .pc-login {
-          &::before {
+          .qr-code {
             clip-path: circle(15px at 100% 0);
             background-size: 10%;
             background-position: 96% 4%;

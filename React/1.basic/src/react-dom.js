@@ -28,9 +28,9 @@ function createDOM(vdom) {
   let { type, props, ref } = vdom;
   if (typeof type === 'function') { // React组件
     // 类组件
-    if (type.isReactComponent) return updateClassComponent(vdom);
+    if (type.isReactComponent) return mountClassComponent(vdom);
     // 函数组件
-    return updateFunctionComponent(vdom);
+    return mountFunctionComponent(vdom);
   }
   // 原生元素
   let dom = document.createElement(type);
@@ -54,9 +54,10 @@ function createDOM(vdom) {
  * 将函数组件的虚拟DOM转化为真实DOM
  * @param {vdom} vdom 函数组件的虚拟DOM React元素
  */
-function updateFunctionComponent(vdom) {
+function mountFunctionComponent(vdom) {
   const { type, props } = vdom;
   let renderVdom = type(props);
+  vdom.renderVdom = renderVdom;
   return createDOM(renderVdom);
 }
 
@@ -64,7 +65,7 @@ function updateFunctionComponent(vdom) {
  * 将类组件的虚拟DOM转化为真实DOM
  * @param {vdom} vdom 类组件的虚拟DOM React元素
  */
-function updateClassComponent(vdom) {
+function mountClassComponent(vdom) {
   const { type, props } = vdom;
   let classInstance = new type(props);
   vdom.classInstance = classInstance; // 在虚拟dom上绑定类组件的实例
@@ -154,14 +155,32 @@ export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
  * @param {vdom} newVdom 新的虚拟DOM
  */
 function updateElement(oldVdom, newVdom) {
-  const currentDOM = newVdom.dom = oldVdom.dom; // 虚拟DOM要使用新的，但真实DOM要基于旧DOM作更新
-  newVdom.classInstance = oldVdom.classInstance;
   if (typeof oldVdom.type === 'string') { // 原生DOM类型
+    const currentDOM = newVdom.dom = oldVdom.dom; // 虚拟DOM要使用新的，但真实DOM要基于旧DOM作更新
     updateProps(currentDOM, oldVdom.props, newVdom.props);
     updateChildren(currentDOM, oldVdom.props.children, newVdom.props.children);
   } else if (typeof oldVdom.type === 'function') { // 类组件或函数组件
-    updateClassInstance(oldVdom, newVdom);
+    if (oldVdom.type.isReactComponent) { // 类组件
+      newVdom.dom = oldVdom.dom; // 虚拟DOM要使用新的，但真实DOM要基于旧DOM作更新
+      newVdom.classInstance = oldVdom.classInstance;
+      updateClassInstance(oldVdom, newVdom);
+    } else { // 函数组件
+      updateFunctionComponent(oldVdom, newVdom);
+    }
   }
+}
+
+/**
+ * 
+ * @param {vdom} oldVdom 
+ * @param {vdom} newVdom 
+ */
+function updateFunctionComponent(oldVdom, newVdom) {
+  let parentDOM = oldVdom.renderVdom.dom.parentNode;
+  let {type, props} = newVdom; // 获取新的虚拟函数组件
+  let newRenderVdom = type(props); // 传入属性对象并执行
+  newVdom.renderVdom = newRenderVdom;
+  compareTwoVdom(parentDOM, oldVdom, newRenderVdom)
 }
 
 /**

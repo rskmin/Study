@@ -82,7 +82,7 @@ Object.defineProperty(statusSwitch, 'status', {
 
 /**
  * @typedef {Object} MainButton
- * @property {HTMLElement} $button button(#main-button)实例
+ * @property {HTMLButtonElement} $button button(#main-button)实例
  * @property {Function} changeContent 切换按钮内容
  * @property {Function} getContent 获取按钮内容
  * @property {Function} click 按钮点击事件

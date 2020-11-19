@@ -110,10 +110,58 @@ Object.defineProperties(mobileEvents, {
   },
 });
 
+/**
+ * @typedef Verifier
+ * @property {Function} account 账号校验
+ * @property {Function} password 密码校验
+ * @property {Function} securityCode 验证码校验
+ * @property {Function} notEmpty 非空判断
+ */
+
+/**
+ * @type {Verifier}
+ */
+const verifier = {
+  account(val = '') {
+    let flag = regs.username.reg.test(val);
+    if (flag) return '';
+    return regs.username.info;
+  },
+  password(val = '') {
+    let flag = regs.password.reg.test(val);
+    if (flag) return '';
+    return regs.password.info;
+  },
+  securityCode(val = '') {
+
+  },
+  notEmpty(val = '') {
+    if (
+      val == null ||
+      ((typeof val === 'string') && val.trim() === '')
+      ) {
+        return '不能为空';
+    }
+    return '';
+  }
+}
+
+const regs = {
+  username: {
+    reg: /^[a-zA-Z0-9_-]{4,16}$/,
+    info: '4到16位（字母，数字，下划线，减号）',
+  },
+  password: {
+    reg: /^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+    info: '最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符',
+  },
+}
+
 export {
   isPC,
   isDeviceMobile,
   ua,
   mobileEvents,
   createEvent,
+  verifier,
 }
