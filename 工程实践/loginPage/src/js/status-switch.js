@@ -6,14 +6,13 @@ import { isPC, isDeviceMobile, createEvent } from 'src/js/utils';
 const STATUS_MAP = {
   'phone-login': 'rm-login--phone-login',
   'account-register': 'rm-login--account-register',
-  'phone-register': 'rm-login--phone-register',
   'pc-login': 'rm-login--pc-login',
 };
 
-const MAIN_BUTTON_MAP = {
-  login: STATUS_MAP['pc-login'],
-  register: STATUS_MAP['account-register'],
-};
+// const MAIN_BUTTON_MAP = {
+//   login: STATUS_MAP['pc-login'],
+//   register: STATUS_MAP['account-register'],
+// };
 
 /**
  * @typedef {Object} StatusSwitch
@@ -66,7 +65,7 @@ Object.defineProperty(statusSwitch, 'status', {
         modeSwitch.changeMode('change-mode--pc');
         break;
       case STATUS_MAP['phone-login']:
-        content = 'Register';
+        content = 'Login&nbsp;/&nbsp;Register';
         modeSwitch.changeMode('change-mode--phone');
         break;
       case STATUS_MAP['phone-register']:
@@ -113,11 +112,9 @@ const mainButton = {
     switch (loginStatus) {
       case STATUS_MAP['account-register']: status = STATUS_MAP['pc-login']; break;
       case STATUS_MAP['pc-login']: status = STATUS_MAP['account-register']; break;
-      case STATUS_MAP['phone-login']: status = STATUS_MAP['phone-register']; break;
-      case STATUS_MAP['phone-register']: status = STATUS_MAP['phone-login']; break;
       default: break;
     }
-    statusSwitch.changeStatus(status);
+    status && statusSwitch.changeStatus(status);
   },
   _init() {
     const $button = this.$button;
@@ -148,13 +145,10 @@ const modeSwitch = {
         statusSwitch.changeStatus(STATUS_MAP["phone-login"]);
         break;
       case STATUS_MAP['account-register']:
-        statusSwitch.changeStatus(STATUS_MAP['phone-register']);
+        statusSwitch.changeStatus(STATUS_MAP['phone-login']);
         break;
       case STATUS_MAP['phone-login']:
         statusSwitch.changeStatus(STATUS_MAP['pc-login']);
-        break;
-      case STATUS_MAP['phone-register']:
-        statusSwitch.changeStatus(STATUS_MAP['account-register']);
         break;
       default: break;
     }
