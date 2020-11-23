@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>websocket</title>
+</head>
+
+<body>
+  <script>
+    let socket = new WebSocket('ws://localhost:8889');
+    socket.onopen = () => {
+      console.log('socket 连接成功');
+      socket.send('Hello');
+    };
+    socket.onmessage = (event) => {
+      console.log(event.data);
+    };
+  </script>
+</body>
+
+</html>
