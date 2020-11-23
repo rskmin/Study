@@ -32,7 +32,7 @@ const statusSwitch = {
   $login: $$('#rm-login'),
   changeStatus(status) {
     const $login = this.$login;
-    if (!login) {
+    if (!$login) {
       throw new Error('Function changeStatus must be bind with statusSwitch');
     }
     // const removeList = Array(...$login.classList).filter(cla => cla.includes('--'));

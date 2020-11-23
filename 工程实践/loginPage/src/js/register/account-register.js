@@ -2,30 +2,34 @@ import { formInput, securityCode } from '../prototypes';
 import { verifier } from '../utils';
 
 const accountInput = Object.create(formInput);
-accountInput.bind($$('#pc-login__account'));
+accountInput.bind($$('#account-register__account'));
 
 const passwordInput = Object.create(formInput);
-passwordInput.bind($$('#pc-login__password'));
+passwordInput.bind($$('#account-register__password'));
+
+const affirmPasswordInput = Object.create(formInput);
+affirmPasswordInput.bind($$('#account-register__password-affirm'));
 
 const codeInput = Object.create(formInput);
-let verificationCode = $$('#pc-login__verification-code');
+let verificationCode = $$('#account-register__verification-code');
 codeInput.bind(verificationCode);
 codeInput.bindInfo(verificationCode?.parentElement?.parentElement?.parentElement.lastElementChild)
 
 const checkCode = Object.create(securityCode);
-checkCode.bind($$('#verification-code__img--pc-login'));
+checkCode.bind($$('#verification-code__img--account-register'));
 
 /** @type {HTMLAnchorElement} */
-const loginButton = $$('#pc-login');
-loginButton.addEventListener('click', () => {
+const affirmButton = $$('#account-register');
+affirmButton.addEventListener('click', () => {
   let accountFlag = accountInput.verify(verifier.notEmpty, '账号不能为空');
   let passwordFlag = passwordInput.verify(verifier.notEmpty, '密码不能为空');
+  let affirmFlag = affirmPasswordInput.setInfo(verifier.samePassword(passwordInput.$input.value, affirmPasswordInput.$input.value));
   let codeFlag = codeInput.verify(verifier.notEmpty, '验证码不能为空');
-  if (!!accountFlag && !!passwordFlag && !!codeFlag) {
-    // 登陆校验
+  if (!!accountFlag && !!affirmFlag && !!passwordFlag && !!codeFlag) {
+    // 注册校验
     fetch('http://localhost:3000/posts', {
       method: 'POST',
-    }).then(response => response.json()) // 必须返回 JSON 数据
+    }).then(response => response.json())
     .catch(error => console.log(error))
     .then(response => console.log(response));
     // 成功

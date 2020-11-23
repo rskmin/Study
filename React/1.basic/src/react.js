@@ -1,4 +1,5 @@
-import Component from './Component';
+import Component, {PureComponent} from './Component';
+export const reactFragment = 'react.fragment';
 
 /**
  * 
@@ -24,6 +25,17 @@ function createElement(type, config, children) {
   }
 }
 
+function cloneElement(element, newProps, children) {
+  if (arguments.length > 3) {
+    children = Array.prototype.slice(arguments, 2);
+  }
+  newProps.children = children;
+  return {
+    ...element,
+    newProps,
+  }
+}
+
 function createRef() {
   return {
     current: null,
@@ -31,6 +43,7 @@ function createRef() {
 }
 
 function createContext() {
+  let context = {_currentValue: null};
   /**
    * 缓存要提供的上下文内容
    * @param {Obj} props 
@@ -38,16 +51,15 @@ function createContext() {
    * @param {ReactDOM}
    */
   function Provider({ value, children }) {
-    Provider.value = value;
+    context._currentValue = value;
     return children;
   }
   function Consumer({ children }) {
-    return children(Provider.value)
+    return children(context._currentValue)
   }
-  return {
-    Provider,
-    Consumer,
-  }
+  context.Provider = Provider;
+  context.Consumer = Consumer;
+  return context;
 }
 
 let React = {
@@ -55,6 +67,8 @@ let React = {
   Component,
   createRef,
   createContext,
+  cloneElement,
+  PureComponent,
 };
 
 export default React;

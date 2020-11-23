@@ -21,17 +21,17 @@ const formInput = {
     }
     const value = this.$input.value;
     let _info = verifier(value);
-    
+
     if (_info == null) {
       _info = '';
     } else {
       _info += '';
     }
 
-    if (!_info){
+    if (!_info) {
       this.setInfo('');
       return true;
-    } 
+    }
     this.setInfo(info ? info : _info);
     return false;
   },
@@ -41,6 +41,7 @@ const formInput = {
     }
 
     this.$info.innerText = errInfo + '';
+    return (errInfo + '').length > 0 ? false : true;
   },
   bind(ele) {
     this.$input = ele;
@@ -65,13 +66,35 @@ const formInput = {
 const securityCode = {
   $securityCode: null,
   getCode() {
-
+    return new Promise((resolve, reject) => {
+      // TODO: 请求base64
+      resolve();
+    }).then(base64 => {
+      let src = `data:image/jpeg;base64,${base64}`;
+      if (!this.$securityCode) {
+        throw new Error('You must bind securityCode');
+      }
+      this.$securityCode.src = src;
+    })
   },
-  setStatus(status = true) {
-
+  setStatus(status = false) {
+    const className = 'rm-loading';
+    if (status) {
+      this.$securityCode.parentNode.classList.remove(className);
+    } else {
+      this.$securityCode.parentNode.classList.add(className);
+    }
   },
   bind(ele) {
     this.$securityCode = ele;
+    if (!ele) {
+      throw new Error('You must bind a securityCode with click event');
+    }
+    this.$securityCode.addEventListener('click', async () => {
+      this.setStatus(false);
+      await this.getCode();
+      this.setStatus(true);
+    })
   }
 };
 

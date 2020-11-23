@@ -89,9 +89,12 @@ class Updater {
  */
 function shouldUpdate(classInstance, nextProps, nextState) {
   nextProps && (classInstance.props = nextProps);
-  nextState && (classInstance.state = nextState);
   if (classInstance.shouldComponentUpdate
-    && !classInstance.shouldComponentUpdate(classInstance.props, nextState)) return;
+    && !classInstance.shouldComponentUpdate(classInstance.props, nextState)) {
+    classInstance.state = nextState;
+    return;
+  };
+  classInstance.state = nextState
   classInstance.forceUpdate();
 }
 
@@ -128,6 +131,20 @@ class Component {
     let currentVdom = compareTwoVdom(this.oldVdom.dom.parentNode, this.oldVdom, newVdom);
     this.oldVdom = currentVdom;
     this.componentDidUpdate && this.componentDidUpdate(this.props, this.state, extraArgs);
+  }
+}
+
+export class PureComponent extends Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    let oldKeyLength = Object.keys(this.state).length;
+    let newKeyLength = Object.keys(nextState).length;
+    if (oldKeyLength !== newKeyLength) return true;
+    for (let key in this.state) {
+      if (this.state[key] !== nextState[key]) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

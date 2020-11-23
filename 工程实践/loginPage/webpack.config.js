@@ -53,7 +53,7 @@ module.exports = {
             options: {
               sourceMap: false,
               resources: [
-                $utils.resolve('src/style/theme.scss'),
+                $utils.resolve('src/style/_theme.scss'),
                 $utils.resolve('src/style/animation.scss')
               ],
             },

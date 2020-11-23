@@ -25,6 +25,34 @@
 
 ### 高阶组件
 
+#### 属性代理
+
+给旧组件增加额外的属性
+
+```jsx
+const loading = loadingProps => OldComponent => {
+  return (props) => {
+      const extraProps = {}
+      return (
+        <OldComponent {...props} {...extraProps} />
+      )
+  }
+}
+```
+
+#### 反向继承
+
+修改React元素的生命周期和子元素, 扩展React元素功能
+
+- 通过继承React元素调用super进行修改
+
+### Render props
+
+- `render prop` 是指一种在 React 组件之间使用一个值为函数的 prop 共享代码的简单技术
+- 具有 render prop 的组件接受一个函数，该函数返回一个 React 元素并调用它而不是实现自己的渲染逻辑
+- render prop 是一个用于告知组件需要渲染什么内容的函数 prop
+- 这是一种逻辑复用方式
+
 ## 生命周期
 
 - 旧
@@ -34,6 +62,10 @@
 - 新
 
   ![lifecycle_new](./images/lifecycle_new.jpg)
+
+## React Hooks
+
+- Hook 是 React 16.8 的新增特性，它可以让你在不编写 class 的情况下使用 state 以及其它的 React 特性
 
 ## 面试题
 

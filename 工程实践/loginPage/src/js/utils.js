@@ -116,6 +116,7 @@ Object.defineProperties(mobileEvents, {
  * @property {Function} password 密码校验
  * @property {Function} securityCode 验证码校验
  * @property {Function} notEmpty 非空判断
+ * @property {Function} samePassword 两次密码检查
  */
 
 /**
@@ -142,6 +143,10 @@ const verifier = {
       ) {
         return '不能为空';
     }
+    return '';
+  },
+  samePassword(password, affirm) {
+    if (password !== affirm) return '两次密码不相同';
     return '';
   }
 }

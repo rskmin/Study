@@ -9,8 +9,8 @@ import { addEvent } from './event';
  * @param {vdom} vdom 虚拟DOM
  * @param {HTMLElement} container 容器
  */
-function render(vdom, container) {
-  const dom = createDOM(vdom);
+function render(vdom, container, mountIndex) {
+  const dom = createDOM(vdom, mountIndex);
   dom && container.appendChild(dom);
 }
 
@@ -18,22 +18,29 @@ function render(vdom, container) {
  * 把虚拟DOM转换为真实DOM
  * @param {vdom} vdom 虚拟DOM
  */
-function createDOM(vdom) {
+function createDOM(vdom, mountIndex) {
   // 如果vdom是一个字符串或者数字，创建一个文本节点
   if (typeof vdom === 'string' || typeof vdom === 'number') {
-    return document.createTextNode(vdom);
+    let dom = document.createTextNode(vdom);
+    dom._mountIndex = mountIndex;
+    return dom;
   }
   if (!vdom) return null;
   // 否则就是一个React元素
   let { type, props, ref } = vdom;
+  let dom;
   if (typeof type === 'function') { // React组件
     // 类组件
     if (type.isReactComponent) return mountClassComponent(vdom);
     // 函数组件
     return mountFunctionComponent(vdom);
+  } else { // 原生元素
+    if (type === 'react.fragment') { // 空节点
+      dom = document.createDocumentFragment();
+    } else {
+      dom = document.createElement(type);
+    }
   }
-  // 原生元素
-  let dom = document.createElement(type);
   updateProps(dom, {}, props);
   // 处理子节点
   if (typeof vdom.props.children === 'string' || typeof vdom.props.children === 'number') {
@@ -46,6 +53,7 @@ function createDOM(vdom) {
     dom.textContent = props.children ? props.children.toString() : '';
   }
   !!ref && (ref.current = dom);
+  dom._mountIndex = mountIndex;
   vdom.dom = dom;
   return dom;
 }
@@ -89,7 +97,10 @@ function mountClassComponent(vdom) {
  * @param {HTMLElement} parentDOM 父节点的真实DOM
  */
 function reconcileChildren(childrenVdom, parentDOM) {
-  childrenVdom.forEach(childVdom => render(childVdom, parentDOM));
+  childrenVdom.forEach((childVdom, index) => {
+    // _mountIndex：此DOM在父DOM身上挂载索引
+    render(childVdom, parentDOM, index)
+  });
 }
 
 /**
@@ -114,6 +125,20 @@ function updateProps(dom, oldProps, newProps) {
     }
   }
 }
+function findDOM(vdom) {
+  let { type } = vdom;
+  let dom;
+  if (typeof type === 'function') {
+    if (type.isReactComponent) {
+      dom = findDOM(vdom.classInstance.oldRenderVdom);
+    } else {
+      dom = findDOM(vdom.oldRenderVdom);
+    }
+  } else {
+    dom = vdom.dom;
+  }
+  return dom;
+}
 
 /**
  * @param {vdom} parentDOM 父DOM节点
@@ -124,14 +149,13 @@ export function compareTwoVdom(parentDOM, oldVdom, newVdom, nextDOM) {
   if (!oldVdom && !newVdom) {
     return null;
   } else if (oldVdom && !newVdom) {
-    const currentDOM = oldVdom.dom;
+    const currentDOM = findDOM(oldVdom);
     currentDOM.parentNode.removeChild(currentDOM);
     // componentWillUnmount
     oldVdom.classInstance?.componentWillUnmount && oldVdom.classInstance.componentWillUnmount();
     return null;
   } else if (!oldVdom && newVdom) {
     let newDOM = createDOM(newVdom);
-    newVdom.dom = newDOM;
     if (nextDOM) { // 插入到下一个元素的前面
       parentDOM.insertBefore(newDOM, nextDOM);
     } else {
@@ -177,7 +201,7 @@ function updateElement(oldVdom, newVdom) {
  */
 function updateFunctionComponent(oldVdom, newVdom) {
   let parentDOM = oldVdom.renderVdom.dom.parentNode;
-  let {type, props} = newVdom; // 获取新的虚拟函数组件
+  let { type, props } = newVdom; // 获取新的虚拟函数组件
   let newRenderVdom = type(props); // 传入属性对象并执行
   newVdom.renderVdom = newRenderVdom;
   compareTwoVdom(parentDOM, oldVdom, newRenderVdom)
@@ -192,15 +216,32 @@ function updateFunctionComponent(oldVdom, newVdom) {
 function updateChildren(parentDOM, oldVChildren, newVChildren) {
   if ((typeof oldVChildren === 'string' || typeof oldVChildren === 'number')
     && (typeof newVChildren === 'string' || typeof newVChildren === 'number')) {
-    if (oldVChildren !== newVChildren) (parentDOM.innerText = newVChildren);
+    if (oldVChildren !== newVChildren) (parentDOM.textContent = newVChildren);
     return;
   }
   oldVChildren = Array.isArray(oldVChildren) ? oldVChildren : [oldVChildren];
   newVChildren = Array.isArray(newVChildren) ? newVChildren : [newVChildren];
   const maxLength = Math.max(oldVChildren.length, newVChildren.length);
+  function findDOMByIndex(index) {
+    for (let i = 0; i < parentDOM.childNodes.length; i++) {
+      if (parentDOM.childNodes[i]._mountIndex === index) {
+        return parentDOM.childNodes[i];
+      }
+    }
+  }
   // TODO: DOM-DIFF优化
-  for (let i = 0; i< maxLength; i++) {
+  for (let i = 0; i < maxLength; i++) {
     let nextDOM = oldVChildren.find((item, index) => index > i && item && item.dom);
+    if ((typeof oldVChildren[i] === 'string' || typeof oldVChildren[i] === 'number')
+      && (typeof newVChildren[i] === 'string' || typeof newVChildren[i] === 'number')) {
+      if (oldVChildren[i] !== newVChildren[i]) {
+        let dom = findDOMByIndex(i);
+        if (dom) {
+          dom.textContent = newVChildren[i];
+        }
+      }
+      continue;
+    }
     compareTwoVdom(parentDOM, oldVChildren[i], newVChildren[i], nextDOM && nextDOM.dom);
   }
 }
