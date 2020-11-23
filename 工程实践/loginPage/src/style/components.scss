@@ -1,5 +1,6 @@
 .inputBox {
   position: relative;
+  display: flex;
   width: 100%;
   height: 30px;
   border-radius: $radius;
@@ -9,9 +10,18 @@
     inset -4px -4px 5px rgba(255, 255, 255, 0.8),
     4px 4px 5px rgba(0, 0, 0, 0.05);
 
+  i {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    margin-left: $p8;
+  }
+
+  i ~ input {
+    padding: $p4;
+  }
+
   input {
-    position: absolute;
-    top: 0;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -21,6 +31,7 @@
     font-size: 18px;
     outline: none;
     color: $colorPrimaryDeep;
+    letter-spacing: 2px;
 
     &::placeholder {
       color: #ccc;
