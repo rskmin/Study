@@ -1,7 +1,6 @@
 @import "./pc-login.scss";
 @import "./phone-login.scss";
 @import "./account-register.scss";
-@import "./phone-register.scss";
 @import "./components.scss";
 
 div {
@@ -107,6 +106,21 @@ select:-webkit-autofill {
   }
 }
 
+.others-login {
+  position: absolute;
+  visibility: hidden;
+  z-index: 10;
+  opacity: 0.8;
+  text-align: center;
+  width: 100%;
+  letter-spacing: 10px;
+  bottom: calc(#{$bottom-bar} + #{$p4});
+  i {
+    display: inline-block;
+    cursor: pointer;
+  }
+}
+
 #main-button {
   position: absolute;
   bottom: 60px;
@@ -114,7 +128,7 @@ select:-webkit-autofill {
   width: 120%;
   transform: translateX(calc(-10 / 120 * 100%));
   box-shadow: 0 2px 10px 0 $colorPrimaryDeep;
-  z-index: 1;
+  z-index: 99;
   background-color: $colorPrimaryDeep;
   border-radius: $radius-lg;
   text-align: center;
@@ -181,7 +195,6 @@ select:-webkit-autofill {
 @include pc-login();
 @include account-register();
 @include phone-login();
-@include phone-register();
 
 // @media screen and (max-width: 360px) {
 //   .rm-login {
