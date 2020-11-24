@@ -2,6 +2,21 @@
 
 > 专注于视图，进行组件化开发
 
+- JSX和虚拟DOM
+- DOM-DIFF
+- 类组件
+  - 状态
+  - 生命周期
+  - 异步更新
+  - 事件合成
+  - PureComponent
+- 函数组件
+  - hooks（实现状态、副作用）
+- Context（共享上下文）
+  - React.createContext() [Class]
+  - React.useContext() [hooks]
+- 高阶组件
+
 ## 组件
 
 - 可以将UI切分成一些独立的、可复用的部件，这样你就只需专注于构建每一个单独的部件

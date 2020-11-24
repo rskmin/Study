@@ -182,6 +182,14 @@ cookie是服务器发送到浏览器的一小段数据，会在浏览器下次�
   - 避免多次读取回引发回流的属性(例如 `offsetLeft` `scrollTop` `width` 等) 
   - 将复杂节点脱离文档流，形成新的渲染层，降低回流成本
 
+## 事件环
+
+![浏览器事件环](./event-loop.jpg)
+
+
+
+- queueMicrotask: 添加一个微任务
+
 ## V8
 
 ### <a href="./V8/垃圾收集/note.md">垃圾回收</a> 
