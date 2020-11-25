@@ -1,43 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 
-
-let hookStates = [];
-let hookIndex = 0;
-
-function useRef() {
-  console.log(hookIndex)
-  hookStates[hookIndex] = hookStates[hookIndex] || {current: null};
-  return hookStates[hookIndex++];
+function useAnimation(baseClassName) {
+  let [className, setClassName] = useState(baseClassName);
+  function start() {
+    if (className === baseClassName) {
+      setClassName(`${baseClassName}-bigger`);
+    } else {
+      setClassName(baseClassName);
+    }
+  }
+  return [className, start];
 }
 
-function Counter() {
-  let [number, setNumber] = React.useState(0);
-  const lastNumberRef = useRef();
-  let alertNumber = () => {
-    setTimeout(() => {
-      alert(lastNumberRef.current)
-    }, 3000);
-  };
-  React.useEffect(() => {
-    lastNumberRef.current = number;
-  });
+function App() {
+  const [className, start] = useAnimation('circle');
   return (
     <div>
-      <p>{number}</p>
-      <button onClick={() => {
-        setNumber(number => number + 1)
-      }
-      }>+</button>
-      <button onClick={alertNumber}>alert</button>
+      <button onClick={start}>begin bigger</button>
+      <div className={className}></div>
     </div>
-  )
+  );
 }
 
 function render() {
-  hookIndex = 0;
   ReactDOM.render(
-    <Counter />,
+    <App />,
     document.getElementById('root')
   );
 }

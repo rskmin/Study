@@ -1,0 +1,15 @@
+.circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: red;
+  transition: all 0.5s linear;
+}
+
+.circle-bigger {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: red;
+  transition: all 0.5s linear;
+}
