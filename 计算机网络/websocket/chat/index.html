@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>聊天室</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+  <link href="https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div class="container" style="margin-top: 30px">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+
+          <div class="panel-heading">
+            <h2 class="text-center">WelCome To ChatRoom</h2>
+          </div>
+
+          <div class="panel-body">
+            <ul onclick="clickUser(event)" class="list-group" id="messageList" style="max-height: 60vh; overflow: auto;"></ul>
+          </div>
+
+          <div class="panel-footer">
+            <div class="row">
+              <div class="col-md-10">
+                <input onkeyup="handleKeyUp(event)" id="textMsg" type="text" class="form-control">
+              </div>
+              <div class="col-md-2">
+                <button onclick="sendMsg()" id="sendBtn" class="btn btn-primary">发言</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/moment.js/2.29.1/moment.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/moment.js/2.29.1/locale/zh-cn.js"></script>
+  <script>
+    const $ = document.querySelector.bind(document);
+    const textMsg = $('#textMsg');
+    const sendBtn = $('#sendBtn');
+    const messageList = $('#messageList');
+    const socket = io.connect('/');
+    const username = getUserName();
+    socket.on('connect', () => {
+      console.log('连接成功: ' + username);
+      sendMsg(username);
+    });
+    socket.on('message', msgObj => {
+      let li = document.createElement('li');
+      li.innerHTML = `<span class="user">${msgObj.username}</span>: ${msgObj.content}<span class="pull-right">${moment(msgObj.createAt).format('MMMM Do YYYY, h:mm:ss a')}</span>`;
+      li.className = 'list-group-item animate__animated animate__fadeInUp';
+      let bottomFlag = (messageList.scrollTop + messageList.clientHeight) == messageList.scrollHeight;
+      messageList.appendChild(li);
+      if (bottomFlag) {
+        messageList.scrollTop = messageList.scrollHeight;
+      }
+    });
+
+    function handleKeyUp(event) {
+      if (event.keyCode == 13) {
+        sendMsg();
+      }
+    }
+    function sendMsg(msg) {
+      let content = msg || textMsg.value;
+      if (!content) {
+        alert('消息不能为空');
+      } else {
+        socket.send(content);
+        textMsg.value = '';
+      }
+    }
+    function getUserName() {
+      let username = prompt('请输入用户名') || '';
+      if (!username.trim()) {
+        getUserName();
+      } else {
+        textMsg.focus();
+        return username;
+      }
+    }
+    function clickUser(event) {
+      if (event.target?.className?.includes('user')) {
+        textMsg.value = `@${event.target?.innerText} `;
+        textMsg.focus();
+      }
+    }
+  </script>
+</body>
+
+</html> 
