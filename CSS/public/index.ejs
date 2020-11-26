@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="<%= PUBLIC_URL %>/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS</title>
+  <link rel="stylesheet" href="<%= PUBLIC_URL %>/style.css">
+</head>
+
+<body>
+  <header class="app-header">
+    <span>CSS 效果展示</span>
+  </header>
+  <div class="app-menu">
+    <div id="app-menu-list" class="app-menu-list">
+      <ul class="app-menu-group-list">
+        <% for (let i = 0; i < dirList.length; i++)  { %>
+        <li class="app-menu-group">
+          <div class="app-menu-group-name">
+            <span><%- dirList[i].name %></span>
+          </div>
+          <ul class="app-menu-item-list">
+            <% for (let j = 0; j < dirList[i].contentList.length; j++) { %>
+            <li class="app-menu-item" data-dir="<%- dirList[i].name %>" data-dirname="<%- dirList[i].contentList[j] %>">
+              <%- dirList[i].contentList[j] %></li>
+            <% } %>
+          </ul>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+  <div class="app-content">
+    <div class="content-wrapper">
+      <textarea class="size-control" disabled></textarea>
+      <% for (let i = 0; i < dirList.length; i++) { %> 
+        <% if (dirList[i].contentList.length > 0) { %> 
+          <iframe id="content" src="/<%- dirList[i].name %>/<%- dirList[i].contentList[0] %>" frameborder="0"></iframe>
+          <% break; %> 
+        <% } %> 
+      <% } %> 
+    </div>
+  </div>
+  <script src="<%= PUBLIC_URL %>/index.js"></script>
+</body>
+
+</html>
