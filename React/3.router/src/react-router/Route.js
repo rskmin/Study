@@ -1,24 +1,19 @@
 import React, { Component } from 'react'
 import RouterContext from './RouterContext';
+import matchPath from './matchPath';
 
 class Route extends Component {
-  // static contextType = RouterContext;
+  static contextType = RouterContext;
   render() {
-    return (
-      <RouterContext.Consumer>
-        {
-          contextValue => {
-            const { history, location } = contextValue;
-            const { path, component } = this.props;
-            const match = location.pathname === this.props.path;
-            let routeProps = { history, location, match };
-            if (match) {
-              return React.createElement(component, routeProps);
-            }
-          }
-        }
-      </RouterContext.Consumer>
-    )
+      const { history, location } = this.context;
+      const { component: Component } = this.props;
+      const match = matchPath(location.pathname, this.props);
+      console.log('match');
+      let routeProps = { history, location, match };
+      if (match) {
+        return <Component {...routeProps} />
+      }
+      return null;
   }
 }
 

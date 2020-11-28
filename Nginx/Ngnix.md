@@ -79,3 +79,55 @@ http {
 }
 ```
 
+## 虚拟主机配置
+
+> 在同一个 Nginx 上运行多套单独服务，这些服务是相互独立的
+
+![虚拟主机](./imgs/virtual-machine.png)
+
+### 基于主机多IP的方式
+
+![多IP](./imgs/many-ip.png)
+
+- 在一台主机上绑定多个IP
+
+  - 多网卡多IP
+
+    ![](./imgs/many-network-card.png)
+
+  - 单网卡多IP
+
+    ![](./imgs/one-network-card.png)
+
+    ```bash
+    # mac
+    sudo ifconfig en7 inet 10.1.102.97 netmask 255.0.0.0 alias # 设置别名 192.168.0.108
+    sudo ifconfig en0 -alias 10.1.102.97 # 删除别名
+    # centOS
+    ip a # 查看
+    ip a add 192.169.146/24 dev eth0 # 添加
+    ```
+
+    - vserver1.conf
+
+      ```nginx
+      server {
+        listen       ip1:port;
+      }
+      ```
+
+    - vserver2.conf
+
+      ```nginx
+      server {
+        listen       ip2:port;
+      }
+      ```
+
+### 基于端口的配置方式
+
+![端口](./imgs/many-port.png)
+
+### 基于多个 host 名称方式（多域名方式）
+
+![host](./imgs/many-host.png)

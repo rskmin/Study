@@ -13,7 +13,7 @@ function createBrowserHistory() {
   }
   function listen(listener) {
     listeners.push(listener);
-    return function() {
+    return function () {
       listeners = listeners.filter(l => l !== listener);
     }
   }
@@ -29,9 +29,15 @@ function createBrowserHistory() {
    */
   function push(pathname, state) {
     const action = 'PUSH'; // 表示发生了什么动作引起了路径变化
+    if (typeof pathname === 'object') {
+      state = pathname.state;
+      pathname = pathname.pathname;
+
+    }
     globalHistory.pushState(state, null, pathname);
     const location = { state, pathname };
     setState({ action, location });
+
   }
   const history = {
     action: 'POP',
