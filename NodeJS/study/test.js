@@ -1,7 +1,19 @@
-let http = require('http')
-http.createServer(function (request, response) {
-  response.writeHead(200, {'Content-Type': 'text/plain'})
-  response.end('Hello World')
-}).listen(8081, () => {
-  console.log('Server running at http://127.0.0.1:8081/')
-})
+const { nextTick } = require("process");
+
+// console.log(process.argv);
+nextTick(() => {
+  console.log('nextTick');
+});
+console.log('1');
+setImmediate(() => {
+  console.log('setImmediate')
+});
+setTimeout(() => {
+  console.log('setTimeout');
+  nextTick(() => {
+    console.log('setTimeout nextTick');
+  });
+});
+queueMicrotask(() => {
+  console.log('queueMicrotask');
+});

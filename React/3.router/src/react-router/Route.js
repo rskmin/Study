@@ -5,15 +5,24 @@ import matchPath from './matchPath';
 class Route extends Component {
   static contextType = RouterContext;
   render() {
-      const { history, location } = this.context;
-      const { component: Component } = this.props;
-      const match = matchPath(location.pathname, this.props);
-      console.log('match');
-      let routeProps = { history, location, match };
-      if (match) {
-        return <Component {...routeProps} />
+    const { history, location } = this.context;
+    const { component: RouteComponent, render, children } = this.props;
+    const match = matchPath(location.pathname, this.props);
+    let routeProps = { history, location, match };
+    if (match) {
+      routeProps.match = match;
+      if (children) {
+        return children(routeProps);
+      } else if (RouteComponent) {
+        return <RouteComponent {...routeProps} />
+      } else if (render) {
+        return render(routeProps);
+      } else {
+        return null;
       }
-      return null;
+    }
+    if (children) return children(routeProps);
+    return null;
   }
 }
 
