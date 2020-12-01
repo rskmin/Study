@@ -15,7 +15,11 @@ body {
   position: relative;
   width: 200px;
   height: 200px;
-  filter: url(#gooey);
+  &:hover {
+    span {
+      outline: 1px solid white;
+    }
+  }
 
   span {
     position: absolute;
@@ -48,9 +52,4 @@ body {
   100% {
     transform: rotate(360deg);
   }
-}
-
-svg {
-  width: 0;
-  height: 0;
 }

@@ -4,7 +4,7 @@
   "description": "## 盒子模型",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon -w public/index.ejs -w app.js app.js"
+    "dev": "nodemon -w public/index.ejs -w public/index.js -w app.js app.js"
   },
   "keywords": [],
   "author": "",

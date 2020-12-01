@@ -6,7 +6,7 @@
   <link rel="icon" href="<%= PUBLIC_URL %>/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSS</title>
-  <link rel="stylesheet" href="<%= PUBLIC_URL %>/style.css">
+  <%- basicCss %>
 </head>
 
 <body>
@@ -19,11 +19,12 @@
         <% for (let i = 0; i < dirList.length; i++)  { %>
         <li class="app-menu-group">
           <div class="app-menu-group-name">
-            <span><%- dirList[i].name %></span>
+            <span><%- dirList[i].dirname %></span>
           </div>
           <ul class="app-menu-item-list">
             <% for (let j = 0; j < dirList[i].contentList.length; j++) { %>
-            <li class="app-menu-item" data-dir="<%- dirList[i].name %>" data-dirname="<%- dirList[i].contentList[j] %>">
+            <li class="app-menu-item" data-dir="<%- dirList[i].dirname %>"
+              data-dirname="<%- dirList[i].contentList[j] %>">
               <%- dirList[i].contentList[j] %></li>
             <% } %>
           </ul>
@@ -34,14 +35,17 @@
   </div>
   <div class="app-content">
     <div class="content-wrapper">
-      <% for (let i = 0; i < dirList.length; i++) { %> 
-        <% if (dirList[i].contentList.length > 0) { %> 
-          <iframe id="content" src="/<%- dirList[i].name %>/<%- dirList[i].contentList[0] %>" frameborder="0"></iframe>
-          <% break; %> 
-        <% } %> 
-      <% } %> 
+      <% for (let i = 0; i < dirList.length; i++) { %>
+      <% if (dirList[i].contentList.length > 0) { %>
+      <iframe id="content" frameborder="0"></iframe>
+      <% break; %>
+      <% } %>
+      <% } %>
     </div>
   </div>
+  <script>
+    window.__dirList__ = JSON.parse('<%- JSON.stringify(dirList) %>');
+  </script>
   <script src="<%= PUBLIC_URL %>/index.js"></script>
 </body>
 

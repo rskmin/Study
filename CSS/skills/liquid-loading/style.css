@@ -21,8 +21,10 @@ body {
   position: relative;
   width: 200px;
   height: 200px;
-  -webkit-filter: url(#gooey);
-          filter: url(#gooey);
+}
+
+.loader:hover span {
+  outline: 1px solid white;
 }
 
 .loader span {
@@ -74,10 +76,5 @@ body {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg);
   }
-}
-
-svg {
-  width: 0;
-  height: 0;
 }
 /*# sourceMappingURL=style.css.map */
