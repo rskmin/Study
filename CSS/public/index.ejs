@@ -34,7 +34,6 @@
   </div>
   <div class="app-content">
     <div class="content-wrapper">
-      <textarea class="size-control" disabled></textarea>
       <% for (let i = 0; i < dirList.length; i++) { %> 
         <% if (dirList[i].contentList.length > 0) { %> 
           <iframe id="content" src="/<%- dirList[i].name %>/<%- dirList[i].contentList[0] %>" frameborder="0"></iframe>

@@ -1,0 +1,31 @@
+body {
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0;
+  line-height: 22px;
+}
+
+.parent {
+  height: calc(100vh - 30px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  .box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(101, 183, 135);
+    margin: 5px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    vertical-align: middle;
+    flex: 0 1 150px;
+    transition: flex 0.3s linear;
+  }
+}
+
+#full-check:checked + .parent > .box {
+  flex: 1 1 150px;
+}
