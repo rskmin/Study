@@ -38,7 +38,7 @@
 
 无状态组件指的是组件内部不维护state，只根据外部组件传入的props进行渲染的组件，当props改变时，组件重新渲染 有状态组件内部使用state，维护自身状态的变化，有状态组件根据外部组件传入的props和自身的state，进行渲染。
 
-### 高阶组件
+### 高阶组件（HOC - high order component）
 
 #### 属性代理
 
@@ -144,6 +144,24 @@ const loading = loadingProps => OldComponent => {
 - 路径参数
 - 查询参数
 - state状态
+
+## Redux
+
+- 解决的问题： 数据的单向流动导致两个非父子关系的组件之间通信麻烦
+- 解决方案：建立一个基于发布订阅的store仓库存储数据，当数据发生变化时通知订阅方
+
+### Redux 三大原则
+
+- 整个应用的 state 被存储在一棵 object tree 中，并且这个 object tree 只存在唯一一个store中
+- State 是只读的，唯一改变 state 的方法就是出触发 action，action 是一个用于藐视已发生事件的普通对象 使用纯函数来执行修改，为了描述action 如何改变state tree，你需要编写reducers
+- 单一的数据源设计让 React 的组件之间的通信更加方便，同时也便于状态的统一管理
+
+### Redux 中间件
+
+***redux 是同步的执行方式*** 
+
+- 中间件的机制可以改变数据流，实现异步操作
+- 核心是改造dispatch方法
 
 ## 面试题
 

@@ -371,6 +371,22 @@ server {
 
 ### 代理服务
 
+#### 常见的反向代理的模块
+
+![](./imgs/reverse-proxy.png)
+
+![](./imgs/reverse-proxy2.png)
+
+![](./imgs/proxy-module.png)
+
+#### 基本配置
+
+- Syntax: proxy_pass URL; # 代理到的目标
+- Default: --
+- Context: location, if in location, limit_except
+
+
+
 ### 负载均衡调度器SLB
 
 ### 动态缓存
