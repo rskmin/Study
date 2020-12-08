@@ -1,0 +1,91 @@
+body {
+  margin: 0;
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #eee;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.stripe {
+  width: 240px;
+  height: 150px;
+  outline: 1px dotted #42b983;
+}
+
+.stripe:nth-child(1) {
+  background: -webkit-gradient(linear, left top, right top, color-stop(50%, #fb3), color-stop(0, #58a));
+  background: linear-gradient(90deg, #fb3 50%, #58a 0);
+  background-size: 30px 100%;
+}
+
+.stripe:nth-child(2) {
+  background: repeating-linear-gradient(60deg, #fb3, #fb3 15px, #58a 0, #58a 30px);
+}
+
+.stripe:nth-child(3) {
+  background: repeating-linear-gradient(45deg, #fb3 0, #fb3 25%, #58a 0, #58a 50%);
+  background-size: 42.426406871px 42.426406871px;
+}
+
+.stripe:nth-child(4) {
+  background: #58a;
+  background-image: repeating-linear-gradient(30deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1) 15px, transparent 0, transparent 30px);
+}
+
+.stripe:nth-child(5) {
+  background: repeating-linear-gradient(#fb3 0 15px, #58a 0 30px);
+}
+
+.stripe:nth-child(6) {
+  background: white;
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(50%, rgba(200, 0, 0, 0.5)), color-stop(0, transparent)), -webkit-gradient(linear, left top, left bottom, color-stop(50%, rgba(200, 0, 0, 0.5)), color-stop(0, transparent));
+  background-image: linear-gradient(90deg, rgba(200, 0, 0, 0.5) 50%, transparent 0), linear-gradient(rgba(200, 0, 0, 0.5) 50%, transparent 0);
+  background-size: 30px 30px;
+}
+
+.stripe:nth-child(7) {
+  background: #58a;
+  background-image: linear-gradient(white 1px, transparent 0), linear-gradient(90deg, white 1px, transparent 0);
+  background-size: 30px 30px;
+}
+
+.stripe:nth-child(8) {
+  background: #58a;
+  background-image: linear-gradient(white 2px, transparent 0), linear-gradient(90deg, white 2px, transparent 0), linear-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 0), linear-gradient(90deg, rgba(255, 255, 255, 0.3) 1px, transparent 0);
+  background-size: 75px 75px, 75px 75px, 15px 15px, 15px 15px;
+}
+
+.stripe:nth-child(9) {
+  background: #655;
+  background-image: radial-gradient(tan 30%, transparent 0), radial-gradient(tan 30%, transparent 0);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+.stripe:nth-child(10) {
+  background: #58a;
+  background-image: linear-gradient(45deg, tan 25%, transparent 0, transparent 75%, tan 0), linear-gradient(45deg, tan 25%, transparent 0, transparent 75%, tan 0);
+  background-position: 0 0, 15px 15px;
+  background-size: 30px 30px;
+}
+
+.stripe:nth-child(11) {
+  background: #eee url('data:image/svg+xml,    <svg xmlns="http://www.w3.org/2000/svg"       width="100" height="100"       fill-opacity=".25">    <rect x="50" width="50" height="50" />     <rect y="50" width="50" height="50" />     </svg>');
+  background-size: 30px 30px;
+}
+
+.stripe:nth-child(12) {
+  background: repeating-conic-gradient(#42b983 0, #42b983 25%, #eee 0, #eee 50%);
+  background-size: 30px 30px;
+}
+/*# sourceMappingURL=style.css.map */
