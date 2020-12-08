@@ -41,6 +41,9 @@
 
 #### 偏移地址寄存器
 
+- SI
+- DI
+
 ### 标志位寄存器
 
 ## DEBUG
@@ -103,8 +106,11 @@ inc ax ; 将 ax 寄存器中的值 + 1，等同于 add ax, 1，但指令只占�
 ### 循环指令(loop)
 
 1. 将cx的值 -1
-
 2. 判断cx中的值，不为0则跳转（jmp）到 标号（内存地址）位置继续执行，等于0就执行下面的内容
+
+### and（&） 和 or（｜） 指令
+
+二进制与或运算指令
 
 ## 栈（字型数据操作）
 
@@ -193,6 +199,45 @@ code SEGMENT
 
 	         mov  ax, 4c00H
 	         int  21
+code ENDS
+
+end start
+```
+
+## 技巧
+
+### 字符大小写转换
+
+```assembly
+assume cs:code, ds:data
+
+data SEGMENT USE16
+	     db 'BaSie'
+	     db 'iNFOrMaTiOn'
+data ENDS
+
+code SEGMENT USE16
+	start:      mov  bx, data
+	            mov  ds, bx
+
+	            mov  bx, 0
+	            mov  cx, 5
+
+	toUpperCase:mov  al, ds:[bx]
+	            and  al, 11011111B
+	            mov  ds:[bx], al
+	            inc  bx
+	            loop toUpperCase
+
+	            mov  cx, 11
+	toLowerCase:mov  al, ds:[bx]
+	            or   al, 00100000B
+	            mov  ds:[bx], al
+	            inc  bx
+	            loop toLowerCase
+
+	            mov  ah, 4cH
+	            int  21H
 code ENDS
 
 end start
