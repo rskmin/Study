@@ -1,16 +1,25 @@
-.386
-DATA SEGMENT USE16
-MESG DB 'Hello word','$'
-DATA ENDS
-CODE SEGMENT USE16
-  ASSUME CS:CODE,DS:DATA
-BEG:
-  MOV AX,DATA
-  MOV DS,AX
-	MOV AH,9
-  MOV DX, OFFSET MESG
-  INT 21H
-  MOV AH,4CH
-  INT 21H;back to dos
-CODE ENDS
-END BEG
+assume cs:code, ds:data, ss:stack
+
+data SEGMENT USE16
+       db 128 dup(0)
+data ENDS
+
+stack SEGMENT USE16
+       db 128 dup(0)
+stack ENDS
+
+code SEGMENT USE16
+  start:mov ax, stack
+        mov ss, ax
+        mov sp, 128
+
+        mov ax, data
+        mov ds, ax
+
+        
+
+        mov ah, 4cH
+        int 21H
+code ENDS
+
+end start

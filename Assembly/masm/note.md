@@ -60,18 +60,51 @@
 
 ### 指令执行过程
 
+<mark>CS, IP</mark> 
+
 - CUP从 当前的 CS 和 IP 指向的内存单元读取指令，然后将读取的指令存入指令缓冲器
 - IP = IP + 所读指令的字节数，从而指向下一条指令
 - 执行指令缓冲器中的内容， 回到第一步
 
-### 转移指令(jmp)
+### 转移指令(jmp， loop)
 
 > 改变 CS IP 寄存器的 汇编指令
+>
+> 可以修改 `IP` 或同时修改 `CS` 和 `IP`
+>
+> 所有条件转移指令都是短转移，转移范围 `-128～127`
+>
+> 
+
+- Jmp: 无条件转移指令
 
 ```assembly
 jmp 2AE3:0003 ; CS = 2AE3H , IP = 0003H
 jmp 0003 ; IP = 0003H
 ```
+
+- loop：条件转移指令
+
+<mark>CX</mark> 
+
+1. 将cx的值 -1
+2. 判断cx中的值，不为0则跳转（jmp）到 标号（内存地址）位置继续执行，等于0就执行下面的内容
+
+- jcxz：条件转移指令
+
+>  j = amp, cx, z = zero =0
+
+> 当 cx 寄存器中的值 = 0 时进行 jmp
+
+- CALL 和 RET 指令
+
+> 当执行 `ret` 指令时 相当于执行了 pop ip
+>
+> 当执行 `retf` 指令时 相当于执行了 pop ip , pop cs 
+
+> call word ptr = push ip, amp word ptr
+>
+> call dword ptr = push cs, push ip, amp dword ptr
 
 ### 移动指令(mov)
 
@@ -89,6 +122,8 @@ sub ax, ax ; ax = ax - ax
 
 ### 栈操作指令(push, pop)
 
+<mark>SS, SP</mark> 
+
 ```assembly
 push ax ; 将 ax寄存器 中的数据存入栈中
 ```
@@ -103,14 +138,50 @@ pop bx ; 将栈顶数据取出存入 bx寄存器 中
 inc ax ; 将 ax 寄存器中的值 + 1，等同于 add ax, 1，但指令只占用一个字节
 ```
 
-### 循环指令(loop)
-
-1. 将cx的值 -1
-2. 判断cx中的值，不为0则跳转（jmp）到 标号（内存地址）位置继续执行，等于0就执行下面的内容
-
 ### and（&） 和 or（｜） 指令
 
 二进制与或运算指令
+
+### 除法指令（div）
+
+<mark>AX, DX</mark> 
+
+- 被除数： 默认放在 AX 或者 AX 和 DX 中
+  - 如果除数为8位，被除数则为16位，默认存放在 AX 中
+  - 如果除数为16位， 被除数则为32位，DX存放高16位，AX存放低16位
+- 结果：
+  - 如果除数为8位，则 AL 存储商，AH 存储余数
+  - 如果除数为16为，则 AX 存储除法的伤， DX存储余数
+
+```assembly
+assume cs:code, ds:data, ss:stack
+
+code SEGMENT USE16
+	start:mov ax, 16   	; 被除数
+	      mov bl, 3    	; 除数
+
+	      div bl       	; al = 5, ah = 1
+
+	      mov ah, 4cH
+	      int 21
+code ENDS
+
+end start
+```
+
+除法指令的被除数存在ax中
+
+
+
+### 乘法指令(mul)
+
+> 两个相乘数，要么都是8位，要么都是16位
+>
+> 如果是8位，一个数字默认存放在al中，另一个数字存放在其他8位寄存器或者字节型内存单元中
+>
+> 如果是16位，一个数字默认存放在ax中，另一个数字存放在其他16位寄存器或者字型内存单元中
+>
+> 8位结果存放在ax中，16位结果存放在ax和dx中
 
 ## 栈（字型数据操作）
 
