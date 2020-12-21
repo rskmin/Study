@@ -9,6 +9,7 @@ class Counter extends React.Component {
         <p>{this.props.number}</p>
         <button onClick={this.props.asyncAdd}>+</button>
         <button onClick={this.props.minus}>-</button>
+        <button onClick={this.props.stop}>stop</button>
       </div>
     )
   }

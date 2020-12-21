@@ -1,22 +1,22 @@
-import { takeEvery, put } from '../redux-saga/effects';
+import { takeEvery, put, cps, take, all, fork, cancel, delay } from '../redux-saga/effects';
 import * as actionTypes from './action-types';
 
-function delay(ms) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  })
+function* add() {
+  while(true) {
+    yield delay(1000);
+    yield put({ type: actionTypes.ADD });
+  }
 }
 
-function* add() {
-  yield delay(1000);
-  yield put({ type: actionTypes.ADD });
+function* addWatcher() {
+  const task = yield fork(add);
+  console.log(task);
+  yield take(actionTypes.STOP_ADD);
+  yield cancel(task);
 }
 
 function* rootSaga() {
-  // yield watcherAddSaga();
-  yield takeEvery(actionTypes.ASYNC_ADD, add);
+  yield addWatcher();
 }
 
 export default rootSaga;

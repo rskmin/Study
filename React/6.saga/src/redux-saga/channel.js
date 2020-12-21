@@ -3,7 +3,7 @@ export default function stdChannel() {
   function take(actionType, next) {
     next.actionType = actionType;
     next.cancel = () => {
-      currentTakers = currentTakers.fill(item => item !== next);
+      currentTakers = currentTakers.filter(item => item !== next);
     }
     currentTakers.push(next);
   }

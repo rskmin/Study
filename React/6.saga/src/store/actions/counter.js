@@ -7,6 +7,9 @@ const actions = {
   },
   minus() {
     return { type: 'MINUS' };
+  },
+  stop() {
+    return { type: 'STOP_ADD' };
   }
 }
 
