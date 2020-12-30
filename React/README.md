@@ -163,6 +163,20 @@ const loading = loadingProps => OldComponent => {
 - 中间件的机制可以改变数据流，实现异步操作
 - 核心是改造dispatch方法
 
+#### redux-saga
+
+redux的异步中间件
+
+
+
+## dva
+
+`dva `是一个基于 `redux` 和 `redux-saga` 的数据流方案，为了简化开发体验，dva还额外内置了 `react-router` 和 `fetch` ，所以也可以理解为一个轻量级的应用框架
+
+
+
+![dva结构图](./images/dva.png)
+
 ## 面试题
 
 ### React单向数据流的好处

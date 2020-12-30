@@ -1,20 +1,24 @@
-var coinChange = function (coins, amount) {
-  let index = coins.length - 1;
-  let res = -1;
-  function dfs(surplus, count) {
-    if (surplus === 0) {
-      res = count;
-      return;
-    } else if (res !== -1 && count >= res - 1) {
-      console.log(surplus)
-      return;
-    }
-    for (let i = index; i >= 0; i--) {
-      if (coins[i] <= surplus) dfs(surplus - coins[i], count + 1);
+/**
+ * floyd 求最短路径
+ * @param {number[][]} map 
+ */
+function floyd(map) {
+  for (let k = 0; k < map.length; k++) {
+    for (let i = 0; i < map.length; i++) {
+      for (let j = 0; j < map.length; j++) {
+        map[i][j] = Math.min(map[i][j], map[i][k] + map[k][j]);
+      }
     }
   }
-  dfs(amount, 0);
-  return res;
-};
+  return map;
+}
 
-console.log('count: '+ coinChange([1, 3, 5], 9));
+const map = [
+  [0, 2, Infinity, 1, 8],
+  [6, 0, 3, 2, Infinity],
+  [Infinity, Infinity, 0, 4, Infinity],
+  [Infinity, Infinity, 2, 0, 3],
+  [3, Infinity, Infinity, Infinity, 0]
+];
+
+console.log(floyd(map));
