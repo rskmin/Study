@@ -41,6 +41,4 @@ JavaScript模块打包器，多用于JS库的打包
 
 ### Imgcook
 
-### WebAssembly
-
 ### 组件库多样化
